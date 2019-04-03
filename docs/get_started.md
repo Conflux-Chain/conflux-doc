@@ -10,7 +10,6 @@ To start Conflux manually, you need to edit the default configuration file `run/
 
 * Set `public_address` according to your public IP. The port should be 32323 by default.
 * Set `mining_author` to the account address to receive mining reward.
-
 * Conflux team has maintained some full nodes for the test net, and they have been provided as `bootnodes`. If you want to use other nodes to bootstrap your new node, you should edit this entry.
 
 Then you can run the following commands:
