@@ -1,0 +1,12 @@
+site_name: Conflux Documentation
+nav:
+    - Welcome to Conflux: index.md
+      #    - Overview: overview.md
+    - Installation: install.md
+    - Getting Started: get_started.md
+    - JSON-RPC API: json-rpc.md
+theme: mkdocs
+markdown_extensions:
+    - toc:
+        permalink: True
+    - fenced_code:
