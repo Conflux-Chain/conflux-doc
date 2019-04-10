@@ -65,7 +65,7 @@ To start running a Conflux full node, you can follow the instructions at [Runnin
 
 We have a test framework written in Python3 (version>=3.6). Required packages can be installed by running
 ```bash
-$ ./test/dev-support/dep_pip3.sh
+$ ./dev-support/dep_pip3.sh
 ```
 
 Solidity compiler `solc` is also required, and be installed as follows:
