@@ -65,30 +65,27 @@ To start running a Conflux full node, you can follow the instructions at [Runnin
 
 We have a test framework written in Python3 (version>=3.6). Required packages can be installed by running
 ```bash
-$ ./test/dev-support/dep_pip3.sh
+$ ./dev-support/dep_pip3.sh
 ```
 
 Solidity compiler `solc` is also required, and be installed as follows:
 
 * Ubuntu
 
-    ```bash
-    sudo add-apt-repository ppa:ethereum/ethereum
-    sudo apt-get update
-    sudo apt-get install solc
-    ```
+        sudo add-apt-repository ppa:ethereum/ethereum
+        sudo apt-get update
+        sudo apt-get install solc
 
 * OSX
 
-    ```bash
-    brew update
-    brew upgrade
-    brew tap ethereum/ethereum
-    brew install solidity
-    ```
+        brew update
+        brew upgrade
+        brew tap ethereum/ethereum
+        brew install solidity
 
 * Others
 
     You can follow the detailed instructions at [Installing the Solidity Compiler](https://solidity.readthedocs.io/en/v0.5.7/installing-solidity.html#binary-packages).
 
 To run tests, you can build the source code first and follow the instructions at [Running Test](get_started.md#running-test).
+
