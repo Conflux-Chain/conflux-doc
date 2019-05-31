@@ -24,10 +24,14 @@ We recommend installing Rust through [rustup](https://www.rustup.rs/). If you do
 * OSX:
 
         $ curl https://sh.rustup.rs -sSf | sh
+
+    You might need to install `brew` if you need to use it to install `clang`:
+
+        $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     
     `clang` comes with Xcode command line tools, and can also be installed with homebrew:
     
-        $ brew install --with-clang llvm
+        $ brew install --with-clang llvm    
 
 * Windows:
 
