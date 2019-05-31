@@ -37,6 +37,10 @@ You can list all CLI options by running  `$ ./conflux --help`. The vast majority
 public_address="127.0.0.1:32323"
 ```
 
+If you are going to set up a node and let it join the Conflux mainnet(testnet), you need to set the `public_address` appropriately. It should be set as the IP address of your node which can be accessed publicly from Internet. If your node is covered under a public gateway, you can get its public address by searching "ip" in [Baidu](https://www.baidu.com).
+
+If you want to let your node participate the mining process, you need to enable it by setting `start_mining` as "true" and `mining_author` as the account address that receives the mining reward. 
+
 ## Running Test
 
 We have both unit tests written in Rust and integration tests written in python. After you make some modifications to the code, you can run these tests to see if the system still runs correctly.
