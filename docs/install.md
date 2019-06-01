@@ -91,5 +91,7 @@ Solidity compiler `solc` is also required, and be installed as follows:
 
     You can follow the detailed instructions at [Installing the Solidity Compiler](https://solidity.readthedocs.io/en/v0.5.7/installing-solidity.html#binary-packages).
 
+    Note that latest solidity compiler may be incompatible with Conflux and may cause the integration test to fail. If you encounter such problem, please install solidity compiler version 0.5.2.
+
 To run tests, you can build the source code first and follow the instructions at [Running Test](get_started.md#running-test).
 
