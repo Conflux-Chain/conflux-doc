@@ -63,7 +63,7 @@ Then you can run the tests as follows
 
     To run python integration tests:
 
-        $ ./test/test_all.py
+        $ ./tests/test_all.py
 
     
 
