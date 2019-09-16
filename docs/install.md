@@ -4,22 +4,22 @@ Here is a step by step guide on how to build Conflux from the source code and ge
 
 ## Install Build Dependencies
 
-Conflux requires **latest stable Rust version** and `clang` to build.
+Conflux requires **latest stable Rust version**,  `clang`, and `sqlite` to build.
 
 We recommend installing Rust through [rustup](https://www.rustup.rs/). If you don't already have `rustup` or `clang`, you can install them like this:
 
 * Linux:
 
         $ curl https://sh.rustup.rs -sSf | sh
-    `clang` can be installed with:
+    `clang` and `sqlite` can be installed with:
 
     - Ubuntu:
 
-            $ sudo apt-get install clang
+            $ sudo apt-get install clang libsqlite3-dev
     
     - CentOS / RHEL: 
 
-            $ sudo yum install clang
+            $ sudo yum install clang sqlite-devel
 
 * OSX:
 
@@ -50,7 +50,7 @@ After installing the dependencies mentioned above, now you can clone our reposit
 # download Conflux code
 $ git clone https://github.com/Conflux-Chain/conflux-rust
 $ cd conflux-rust
-$ git checkout v0.1.2
+$ git checkout v0.1.7
 
 
 # build in release mode
