@@ -1,0 +1,16 @@
+{
+  "name": "conflux-doc",
+  "version": "1.0.0",
+  "repository": "https://github.com/Conflux-Chain/conflux-doc.git",
+  "license": "MIT",
+  "scripts": {
+    "doc-server": "python3 doc.py serve",
+    "doc-build": "python3 doc.py build --clean",
+    "jsdoc_to_md": "node jsdoc_to_md.js --input ./docs/javascript-api --output ./docs/javascript-api.md"
+  },
+  "dependencies": {
+    "commander": "^3.0.2",
+    "csv-xlsx": "^0.0.1",
+    "jsdoc-to-markdown": "^5.0.1"
+  }
+}
