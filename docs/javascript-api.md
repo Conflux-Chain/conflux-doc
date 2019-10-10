@@ -1,58 +1,2378 @@
-# ConfluxWeb: Conflux JavaScript API
 
-## Getting Started
+----------
+# #ConfluxWeb
 
-The conflux-web library is a collection of modules which contain specific functionality for the conflux ecosystem.
+- Getting Started
+  
 
-* The `conflux-web-cfx` is for the conflux blockchain and smart contracts
-* The `conflux-web-utils` contains useful helper functions for Dapp developers.
+  
+ The conflux-web library is a collection of modules which contain specific functionality for the conflux ecosystem.
+  
 
-### Adding conflux-web
+  
+ > The `conflux-web-cfx` is for the conflux blockchain and smart contracts.
+  
 
-First you need to get conflux-web into your project. This can be done using the following methods:
+  
+ > The `conflux-web-utils` contains useful helper functions for Dapp developers.
+  
 
-* npm: `npm install conflux-web`
+  
+ - Adding conflux-web
+  
 
-After that you need to create a web3 instance and set a provider. Normally you should connect to a remote/local node.
+  
+ First you need to get conflux-web into your project. This can be done using the following methods:
+  
 
-```javascript
-const ConfluxWeb = require('conflux-web');
-const confluxWeb = new ConfluxWeb('http://testnet-jsonrpc.conflux-chain.org:12537');
+  
+ npm: `npm install conflux-web`
+  
+
+  
+ After that you need to create a confluxWeb instance and set a provider. Normally you should connect to a remote/local node.
+  
+
+  
+ >
+  
+     const ConfluxWeb = require('conflux-web');
+  
+     const confluxWeb = new ConfluxWeb('http://testnet-jsonrpc.conflux-chain.org:12537');
+  
+
+  
+ That’s it! now you can use the confluxWeb object.
+  
+
+  
+ - Using Promises
+  
+
+  
+ All of functions use asynchronous HTTP requests and return promises by default:
+  
+
+  
+ >
+  
+     const ConfluxWeb = require('conflux-web');
+  
+     const confluxWeb = new ConfluxWeb('http://testnet-jsonrpc.conflux-chain.org:12537');
+  
+     confluxWeb.cfx.getEpochNumber().then(console.log);
+  
+
+  
+ - A note on big numbers
+  
+
+  
+ You will always get a BigNumber object for number values as JavaScript is not able to handle big numbers correctly. Look at the following examples:
+  
+
+  
+ >
+  
+     "101010100324325345346456456456456456456"
+  
+     // "101010100324325345346456456456456456456"
+  
+     101010100324325345346456456456456456456
+  
+     // 1.0101010032432535e+38
+  
+
+  
+ ConfluxWeb depends on the BN.js library for big numbers, See the [BN.js](https://github.com/indutny/bn.js/) documentation for details.
+
+## ConfluxWeb.providers
+
+> Class attribute
+
+`object`
+
+### Example
+
+```js
+ > ConfluxWeb.providers
+ { HttpProvider: [Function: HttpProvider$1],
+  WebsocketProvider: [Function: WebsocketProvider$1],
+  IpcProvider: [Function: IpcProvider$1] }
 ```
 
-That’s it! now you can use the confluxWeb object.
+## ConfluxWeb.modules
 
-### Using Promises
+> Class attribute
 
-All of functions use asynchronous HTTP requests and return promises by default:
+`object`
 
-```javascript
-const ConfluxWeb = require('conflux-web');
-const confluxWeb = new ConfluxWeb('http://testnet-jsonrpc.conflux-chain.org:12537');
-confluxWeb.cfx.getEpochNumber().then(console.log);
+### Example
+
+```js
+ > ConfluxWeb.modules
+ { Cfx: [Function: Cfx], Net: [Function: Net] }
 ```
 
-### A note on big numbers
+## ConfluxWeb.utils
 
-You will always get a BigNumber object for number values as JavaScript is not able to handle big numbers correctly. Look at the following examples:
+> Class attribute
+> Object attribute
 
-```javascript
-"101010100324325345346456456456456456456"
-// "101010100324325345346456456456456456456"
-101010100324325345346456456456456456456
-// 1.0101010032432535e+38
+Property of Web3 class and instance of Web3, See confluxWeb.utils for more.
+
+`object`
+
+### Example
+
+```js
+ > ConfluxWeb.utils
+ {...}
+
+ > confluxWeb.utils
+ {...}
 ```
 
-ConfluxWeb depends on the BN.js library for big numbers, See the [BN.js](https://github.com/indutny/bn.js/) documentation for details.
+## ConfluxWeb.version
 
-## API Reference
+> Object attribute
 
-### ConfluxWeb
+current version
 
-### ConfluxWeb.cfx
+`string`
 
-### ConfluxWeb.cfx.accounts
+### Example
 
-### ConfluxWeb.cfx.Contract
+```js
+ > confluxWeb.version
+ 0.1.21-alpha.0
+```
 
-### ConfluxWeb.utils
+## ConfluxWeb.currentProvider
+
+> Object attribute
+
+current provider instance
+
+`object`
+
+### Example
+
+```js
+ > confluxWeb.currentProvider;
+ HttpProvider {
+ host: 'http://testnet-jsonrpc.conflux-chain.org:12537',
+ ...
+ }
+```
+
+## ConfluxWeb.setProvider
+
+Will change the provider for its module.
+
+> NOTE: When called on the umbrella package cfx it will also set the provider for all sub modules confluxWeb.cfx, etc.
+
+`function setProvider(provider)`
+
+### Parameters
+
+Name     | Type   | Required | Default | Description
+---------|--------|----------|---------|------------------
+provider | object | true     |         | A valid provider.
+
+### Return
+
+`boolean` 
+
+### Example
+
+```js
+ > const ConfluxWeb = require('conflux-web');
+ > const confluxWeb = new ConfluxWeb('http://testnet-jsonrpc.conflux-chain.org:12537');
+ > confluxWeb.currentProvider
+ HttpProvider {
+  host: 'http://testnet-jsonrpc.conflux-chain.org:12537',
+  ...
+ }
+ > confluxWeb.setProvider(new ConfluxWeb.providers.WebsocketProvider('ws://localhost:8546'));
+ true
+ > confluxWeb.currentProvider
+ WebsocketProvider {
+   host: 'ws://localhost:8546'
+   ...
+ }
+```
+
+```js
+ > confluxWeb.setProvider('ws://localhost:8546'); // same as above
+ true
+```
+
+```js
+ > confluxWeb.currentProvider.constructor.name
+ "HttpProvider"
+ > confluxWeb.currentProvider.constructor.name
+ "HttpProvider"
+ > confluxWeb.setProvider('ws://localhost:8546') // change all provider
+ > confluxWeb.currentProvider.constructor.name
+ "WebsocketProvider"
+ > confluxWeb.currentProvider.constructor.name
+ "WebsocketProvider"
+```
+
+```js
+ > const ConfluxWeb = require('conflux-web');
+ > const net = require('net');
+ > const confluxWeb = new ConfluxWeb(new ConfluxWeb.providers.IpcProvider('/Users/myuser/Library/Ethereum/geth.ipc', net));
+ > confluxWeb.currentProvider
+ IpcProvider {
+   host: '/Users/myuser/Library/Ethereum/geth.ipc',
+   ...
+ }
+```
+----------
+# #ConfluxWeb.cfx.Contract
+
+
+
+## ConfluxWeb.cfx.Contract.abiModel
+
+abi object
+
+`Object`
+
+### Example
+
+```js
+ > contract.abiModel
+ AbiModel {
+  abi:
+   { methods:
+      { count: [AbiItemModel],
+        '0x06661abd': [AbiItemModel],
+        'count()': [AbiItemModel],
+        inc: [AbiItemModel],
+        '0x812600df': [AbiItemModel],
+        'inc(uint256)': [AbiItemModel],
+        contractConstructor: [AbiItemModel] },
+     events: {} } }
+```
+
+## ConfluxWeb.cfx.Contract.address
+
+The address used for this contract instance.
+All transactions generated by confluxWeb from this contract will contain this address as the "to".
+
+`string`
+
+### Example
+
+```js
+ > contract.address; // What you set when new contract.
+ "0xf02dbcf0eff48e174ca59f1975a7b0042c4d02b7"
+```
+
+## ConfluxWeb.cfx.Contract.defaultGas
+
+The default maximum gas provided for a transaction (gasLimit).
+
+`number`
+
+
+## ConfluxWeb.cfx.Contract.defaultGasPrice
+
+The default gas price in drip to use for transactions.
+
+`number`
+
+
+## ConfluxWeb.cfx.Contract.methods
+
+Creates a transaction object for that method, which then can be called, send, estimated.
+The methods of this smart contract are available through:
+  
+ - The name: myContract.methods.myMethod(123)
+  
+ - The name with parameters: myContract.methods['myMethod(uint256)'](123)
+  
+ - The signature: myContract.methods['0x58cf5f10'](123)
+This allows calling functions with same name but different parameters from the JavaScript contract object.
+
+`Proxy`
+
+### Example
+
+```js
+ > contract.address;
+ "0x079352147ce2de227af6fa963f603a35aed8e601"
+
+ > await contract.methods.count().call();
+ BigNumber { _hex: '0xfe' }
+
+ > await contract.methods.inc(1).call(); // call will get function return value
+ BigNumber { _hex: '0xff' }
+
+ > await contract.methods.count().call(); // can not change data in block chain by `call`
+ BigNumber { _hex: '0xfe' }
+
+ > await contract.methods.inc(1).send({
+    from: '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b',
+    gas: 100000000,
+    gasPrice: 100
+  }); // send a transaction
+ "0xa3b0ca9cfbbdc624db53fc5df39849560ffa2d952b7e9af894524d45479cfa0a"
+ > await confluxWeb.cfx.getTransactionReceipt('0xa3b0ca9cfbbdc624db53fc5df39849560ffa2d952b7e9af894524d45479cfa0a');
+ {
+   status: true,
+   ...
+ }
+ > await contract.methods.count().call(); // change data in block chain by `send`
+ BigNumber { _hex: '0xff' }
+```
+
+## ConfluxWeb.cfx.Contract.constructor
+
+Creates a new contract instance with all its methods and events defined in its json interface abi object.
+
+`function constructor(abi,address,options)`
+
+### Parameters
+
+Name             | Type          | Required | Default | Description
+-----------------|---------------|----------|---------|----------------------------------------------------------------------------------------------
+abi              | object\|array | true     |         | The abi json interface of the contract.
+address          | string        | false    |         | The address where the contract is deployed. If undefined, you should deploy contract by data.
+options          | object        | false    |         |
+options.data     | string        | false    |         | The byte code of the contract. Used when the contract gets deployed.
+options.from     | string        | false    |         | The address transactions should be made from.
+options.gasPrice | string        | false    |         | The gas price in drip to use for transactions.
+options.gas      | number        | false    |         | The maximum gas provided for a transaction (gasLimit).
+
+### Return
+
+`void`
+
+### Example
+
+```js
+ > confluxWeb.cfx.accounts.wallet.add('0xa816a06117e572ca7ae2f786a046d2bc478051d0717bf5cc4f5397923258d393'); // KEY
+ > const contract = new confluxWeb.cfx.Contract(
+ [
+ {
+        "constant": true,
+        "inputs": [],
+        "name": "count",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+ {
+        "constant": false,
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "num",
+            "type": "uint256"
+          }
+        ],
+        "name": "inc",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+       },
+ {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "num",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      }
+ ],
+ );
+```
+
+## ConfluxWeb.cfx.Contract.deploy
+
+
+
+`function deploy(options)`
+
+### Parameters
+
+Name              | Type   | Required | Default | Description
+------------------|--------|----------|---------|--------------------------------
+options           | object | true     |         |
+options.data      | string | false    |         | contract data
+options.arguments | array  | false    |         | contract constructor parameters
+
+### Return
+
+`string` Transaction hash.
+
+### Example
+
+```js
+ > await contract.deploy({arguments: [254]}).send({
+    from: '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b',
+    gas: 100000000,
+    gasPrice: 819
+ }); // deploy contract by `send`
+ "0x6d1b5d68540faac893e5d5dcfed7fc253a2fd6936634f917c82856a0b19c3838"
+
+ > await confluxWeb.cfx.getTransactionReceipt('0xd1d5b66b0d3d215f042f3e4907a3bf0acf5984972527fbca45eb67286835260d');
+ {
+   status: true,
+   contractCreated: '0x079352147ce2de227af6fa963f603a35aed8e601',
+   ...
+ }
+
+ > contract.address = '0x079352147ce2de227af6fa963f603a35aed8e601'; // after deploy, you should add address to contract
+```
+
+## ConfluxWeb.cfx.Contract.clone
+
+Clones the current contract instance.
+
+`function clone()`
+
+### Parameters
+
+`void`
+
+### Return
+
+`Object` The new contract instance.
+
+### Example
+
+```js
+ > const clone = contract.clone()
+ > contract.defaultGas === clone.defaultGas;
+ true
+
+ > contract.defaultGasPrice === clone.defaultGasPrice;
+ true
+
+ > contract.address === clone.address; // only address difference, and clone one address to be undefined
+ false
+```
+----------
+# #ConfluxWeb.cfx
+
+
+
+## ConfluxWeb.cfx.defaultAccount
+
+This default address is used as the default "from" property.
+
+20 Bytes: Any Conflux address. You should have the private key for that address in your node or keystore.
+
+`string|undefined`
+
+### Example
+
+```js
+ > confluxWeb.cfx.defaultAccount
+ undefined
+
+ > confluxWeb.cfx.defaultAccount = '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b';
+ > confluxWeb.cfx.defaultAccount
+ "0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b"
+```
+
+## ConfluxWeb.cfx.defaultEpoch
+
+When requests are made that act on the state of conflux,
+the default epoch parameter determines the height of the epoch.
+
+The following options are possible for the default epoch parameter:
+
+- `number`: An integer epoch number.
+- `"earliest"`: The earliest epoch where the genesis block in.
+- `"latest_state"`: The latest epoch where the latest block with an executed state in. (default)
+- `"latest_mined"`: The latest epoch where the latest mined block in.
+
+`number|string`
+
+### Example
+
+```js
+ > confluxWeb.cfx.defaultEpoch; // Default is "latest_state"
+ "latest_state"
+```
+
+## ConfluxWeb.cfx.currentProvider
+
+Will return the current provider, otherwise null
+
+`object|null`
+
+### Example
+
+```js
+ > confluxWeb.cfx.currentProvider
+ HttpProvider {
+  host: 'http://testnet-jsonrpc.conflux-chain.org:12537',
+  ...
+ }
+```
+
+## ConfluxWeb.cfx.setProvider
+
+Will change the provider for its module.
+
+`function setProvider(cfxProvider)`
+
+### Parameters
+
+Name        | Type   | Required | Default | Description
+------------|--------|----------|---------|------------------
+cfxProvider | object | true     |         | A valid provider.
+
+### Return
+
+`boolean` 
+
+### Example
+
+```js
+ > confluxWeb.currentProvider.constructor.name
+ "HttpProvider"
+ > confluxWeb.currentProvider.constructor.name
+ "HttpProvider"
+ > confluxWeb.cfx.setProvider('ws://localhost:8546') // change module provider
+ > confluxWeb.currentProvider.constructor.name
+ "HttpProvider"
+ > confluxWeb.currentProvider.constructor.name
+ "WebsocketProvider"
+```
+
+## ConfluxWeb.cfx.getGasPrice
+
+Returns the current gas price oracle.
+The gas price is determined by the last few blocks median gas price.
+
+`async function getGasPrice()`
+
+### Parameters
+
+`void`
+
+### Return
+
+`Promise.<string>` Number string of the current gas price in drip.
+
+### Example
+
+```js
+ > await confluxWeb.cfx.getGasPrice()
+ "0"
+```
+
+## ConfluxWeb.cfx.getEpochNumber
+
+Returns the current epoch number the client is on.
+
+`async function getEpochNumber()`
+
+### Parameters
+
+`void`
+
+### Return
+
+`Promise.<number>` 
+
+### Example
+
+```js
+ > await confluxWeb.cfx.getEpochNumber();
+ 990902
+```
+
+## ConfluxWeb.cfx.getBalance
+
+Get the balance of an address at a given epoch.
+
+`async function getBalance(address,defaultEpoch)`
+
+### Parameters
+
+Name         | Type           | Required | Default                       | Description
+-------------|----------------|----------|-------------------------------|--------------------------------------------------------------
+address      | string         | true     |                               | The address to get the balance of.
+defaultEpoch | number\|string | false    | `confluxWeb.cfx.defaultEpoch` | If you pass this parameter it will not use the default epoch.
+
+### Return
+
+`Promise.<string>` The current balance for the given address in drip.
+
+### Example
+
+```js
+ > await confluxWeb.cfx.getBalance("0x407d73d8a49eeb85d32cf465507dd71d507100c1");
+ "685539999999937000"
+
+ > await confluxWeb.cfx.getBalance("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "earliest");
+ "0"
+```
+
+## ConfluxWeb.cfx.getCode
+
+Get the code at a specific address.
+
+`async function getCode(address,defaultEpoch)`
+
+### Parameters
+
+Name         | Type           | Required | Default                       | Description
+-------------|----------------|----------|-------------------------------|--------------------------------------------------------------
+address      | string         | true     |                               | The address to get the code from.
+defaultEpoch | number\|string | false    | `confluxWeb.cfx.defaultEpoch` | If you pass this parameter it will not use the default epoch.
+
+### Return
+
+`Promise.<string>` The data at given address
+
+### Example
+
+```js
+ > await confluxWeb.cfx.getCode("0x407d73d8a49eeb85d32cf465507dd71d507100c1");
+ "0x"
+
+ > await confluxWeb.cfx.getCode("0x407d73d8a49eeb85d32cf465507dd71d507100c1", "earliest");
+ "0x"
+```
+
+## ConfluxWeb.cfx.getBlock
+
+Returns a block matching the block number or block hash.
+
+`async function getBlock(blockHashOrEpochNumber,returnTransactionObjects)`
+
+### Parameters
+
+Name                     | Type           | Required | Default | Description
+-------------------------|----------------|----------|---------|-----------------------------------------------------------------------------------------------------------------------------
+blockHashOrEpochNumber   | string\|number | true     |         | The block hash or epoch.
+returnTransactionObjects | boolean        | false    | false   | If true, the returned block will contain all transactions as objects, if false it will only contains the transaction hashes.
+
+### Return
+
+`Promise.<object>` The block object
+  
+ - `string` miner: The address of the beneficiary to whom the mining rewards were given.
+  
+ - `string|null` hash: Hash of the block. `null` when its pending block.
+  
+ - `string` parentHash: Hash of the parent block.
+  
+ - `string[]` refereeHashes: Array of referee hashes.
+  
+ - `number|null` epochNumber: The current block epoch number in the client's view. `null` when it's not in best block's past set.
+  
+ - `boolean` stable: Ff the block stable or not
+  
+ - `string` nonce: Hash of the generated proof-of-work. `null` when its pending block.
+  
+ - `number` gasLimit: The maximum gas allowed in this block.
+  
+ - `string` difficulty: Integer string of the difficulty for this block.
+  
+ - `number` height: The block heights. `null` when its pending block.
+  
+ - `number` size: Integer the size of this block in bytes.
+  
+ - `number` blame: 0 if there's nothing to blame; k if the block is blaming on the state info of its k-th ancestor.
+  
+ - `boolean` adaptive: If the block's weight adaptive or not.
+  
+ - `number` timestamp: The unix timestamp for when the block was collated.
+  
+ - `string` transactionsRoot: The hash of the transactions of the block.
+  
+ - `string[]` transactions: Array of transaction objects, or 32 Bytes transaction hashes depending on the last given parameter.
+  
+ - `string` deferredLogsBloomHash: The hash of the deferred block's log bloom filter
+  
+ - `string` deferredReceiptsRoot: The hash of the receipts of the block after deferred execution.
+  
+ - `string` deferredStateRoot: The root of the final state trie of the block after deferred execution.
+  
+ - `object` deferredStateRootWithAux: Information of deferred state root
+
+### Example
+
+```js
+ > await confluxWeb.cfx.getBlock("0xdf19947ee92cae1de92fd05d949c654afa4afb77ce42024533d5b47cb861575a");
+ {
+  "miner": "0x0000000000000000000000000000000000000015",
+  "hash": "0xdf19947ee92cae1de92fd05d949c654afa4afb77ce42024533d5b47cb861575a",
+  "parentHash": "0xa378c9e283c08eac0e2ac51a8c19e61717af812a157eb914d35b171ed20920b9",
+  "refereeHashes": [],
+  "epochNumber": 925836,
+  "stable": true,
+  "nonce": "0xaaa4a571ad424ec",
+  "gasLimit": 3000000000,
+  "difficulty": "21351313",
+  "height": 925836,
+  "size": 384,
+  "blame": 0,
+  "adaptive": false,
+  "timestamp": 1570608173,
+  "transactionsRoot": "0xbe7a9e531d55ed950a217272afa035f57f6c512ca249bae19e214cf2b470562e"
+  "transactions": [
+    "0x3910617de2a689f79bccd3d36866f4afd9ca93732c8e7be280a84190db701190"
+  ],
+  "deferredLogsBloomHash": "0xd397b3b043d87fcd6fad1291ff0bfd16401c274896d8c63a923727f077b8e0b5",
+  "deferredReceiptsRoot": "0x522717233b96e0a03d85f02f8127aa0e23ef2e0865c95bb7ac577ee3754875e4",
+  "deferredStateRoot": "0xc4ec82320df3b5ce48e22d33cc82f665a274dc920796a3e206be44682b7812a2",
+  "deferredStateRootWithAux": {
+    "auxInfo": {
+      "intermediateDeltaEpochId": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+      "previousSnapshotRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+    },
+    "stateRoot": {
+      "deltaRoot": "0xbc71c52f0dae840fd8815de081a2774927077714a5fe7c342b0e5e81f7bcd38e",
+      "intermediateDeltaRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+      "snapshotRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+    }
+  },
+}
+```
+
+```js
+ > await confluxWeb.cfx.getBlock("0xdf19947ee92cae1de92fd05d949c654afa4afb77ce42024533d5b47cb861575a", true);
+ {
+  "adaptive": false,
+  "blame": 0,
+  "deferredLogsBloomHash": "0xd397b3b043d87fcd6fad1291ff0bfd16401c274896d8c63a923727f077b8e0b5",
+  "deferredReceiptsRoot": "0x522717233b96e0a03d85f02f8127aa0e23ef2e0865c95bb7ac577ee3754875e4",
+  "deferredStateRoot": "0xc4ec82320df3b5ce48e22d33cc82f665a274dc920796a3e206be44682b7812a2",
+  "deferredStateRootWithAux": {
+    "auxInfo": {
+      "intermediateDeltaEpochId": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+      "previousSnapshotRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+    },
+    "stateRoot": {
+      "deltaRoot": "0xbc71c52f0dae840fd8815de081a2774927077714a5fe7c342b0e5e81f7bcd38e",
+      "intermediateDeltaRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+      "snapshotRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+    }
+  },
+  "difficulty": "21351313",
+  "epochNumber": 925836,
+  "gasLimit": 3000000000,
+  "hash": "0xdf19947ee92cae1de92fd05d949c654afa4afb77ce42024533d5b47cb861575a",
+  "height": 925836,
+  "miner": "0x0000000000000000000000000000000000000015",
+  "nonce": "0xaaa4a571ad424ec",
+  "parentHash": "0xa378c9e283c08eac0e2ac51a8c19e61717af812a157eb914d35b171ed20920b9",
+  "refereeHashes": [],
+  "size": 384,
+  "stable": true,
+  "timestamp": 1570608173,
+  "transactions": [
+    {
+      "blockHash": "0xdf19947ee92cae1de92fd05d949c654afa4afb77ce42024533d5b47cb861575a",
+      "contractCreated": null,
+      "data": "0x",
+      "from": "0xA70ddf9B9750c575Db453Eea6A041f4C8536785A",
+      "gas": 21000,
+      "gasPrice": "819",
+      "hash": "0x3910617de2a689f79bccd3d36866f4afd9ca93732c8e7be280a84190db701190",
+      "nonce": 921,
+      "r": "0x985743d5d627e8f93e243bfd71e401f7bf5c7b098afeb910952df789312cc7b1",
+      "s": "0xaaf07bc11d56516f90697fb0f1b8140ec9b252c66e8f3172799e2829d457775",
+      "status": "0x0",
+      "to": "0xbbd9E9bE525AB967e633BcDAEaC8bD5723ED4D6B",
+      "transactionIndex": 0,
+      "v": 1,
+      "value": "1000000000000000000"
+    }
+  ],
+  "transactionsRoot": "0xbe7a9e531d55ed950a217272afa035f57f6c512ca249bae19e214cf2b470562e"
+}
+```
+
+## ConfluxWeb.cfx.getTransaction
+
+Returns a transaction matching the given transaction hash.
+
+`async function getTransaction(transactionHash)`
+
+### Parameters
+
+Name            | Type   | Required | Default | Description
+----------------|--------|----------|---------|----------------------
+transactionHash | string | true     |         | The transaction hash.
+
+### Return
+
+`Promise.<object>` The transaction object
+  
+ - `string` blockHash: Hash of the block where this transaction was in and got executed. `null` when its pending.
+  
+ - `number` transactionIndex: Integer of the transactions index position in the block.
+  
+ - `string` hash: Hash of the transaction.
+  
+ - `nonce` number: The number of transactions made by the sender prior to this one.
+  
+ - `string` from: Address of the sender.
+  
+ - `string` to: Address of the receiver. null when its a contract creation transaction.
+  
+ - `string` value: Value transferred in Drip.
+  
+ - `string` data: The data send along with the transaction.
+  
+ - `number` gas: Gas provided by the sender.
+  
+ - `number` gasPrice: Gas price provided by the sender in Drip.
+  
+ - `string` status: '0x0' successful execution; '0x1' exception happened but nonce still increased; '0x2' exception happened and nonce didn't increase.
+  
+ - `string|null` contractCreated: The contract address created, if the transaction was a contract creation, otherwise null.
+  
+ - `string` r: ECDSA signature r
+  
+ - `string` s: ECDSA signature s
+  
+ - `string` v: ECDSA recovery id
+
+### Example
+
+```js
+ > await confluxWeb.cfx.getTransaction("0xdf19947ee92cae1de92fd05d949c654afa4afb77ce42024533d5b47cb861575a");
+ {
+  "blockHash": "0xdf19947ee92cae1de92fd05d949c654afa4afb77ce42024533d5b47cb861575a",
+  "transactionIndex": 0,
+  "hash": "0x3910617de2a689f79bccd3d36866f4afd9ca93732c8e7be280a84190db701190",
+  "nonce": 921,
+  "from": "0xA70ddf9B9750c575Db453Eea6A041f4C8536785A",
+  "to": "0xbbd9E9bE525AB967e633BcDAEaC8bD5723ED4D6B",
+  "value": "1000000000000000000"
+  "data": "0x",
+  "gas": 21000,
+  "gasPrice": "819",
+  "status": "0x0",
+  "contractCreated": null,
+  "r": "0x985743d5d627e8f93e243bfd71e401f7bf5c7b098afeb910952df789312cc7b1",
+  "s": "0xaaf07bc11d56516f90697fb0f1b8140ec9b252c66e8f3172799e2829d457775",
+  "v": 1,
+}
+```
+
+## ConfluxWeb.cfx.getTransactionCount
+
+Get the numbers of transactions sent from this address.
+
+`async function getTransactionCount(address,defaultEpoch)`
+
+### Parameters
+
+Name         | Type           | Required | Default                       | Description
+-------------|----------------|----------|-------------------------------|--------------------------------------------------------------
+address      | string         | true     |                               | The address to get the numbers of transactions from.
+defaultEpoch | number\|string | false    | `confluxWeb.cfx.defaultEpoch` | If you pass this parameter it will not use the default epoch.
+
+### Return
+
+`Promise.<number>` The number of transactions sent from the given address.
+
+### Example
+
+```js
+ > await confluxWeb.cfx.getTransactionCount("0xa70ddf9b9750c575db453eea6a041f4c8536785a");
+ 974
+
+ > await confluxWeb.cfx.getTransactionCount("0xa70ddf9b9750c575db453eea6a041f4c8536785a", 'earliest');
+ 0
+```
+
+## ConfluxWeb.cfx.sendSignedTransaction
+
+Sends an already signed transaction, generated for example using confluxWeb.cfx.accounts.signTransaction
+
+`async function sendSignedTransaction(signedTransactionData)`
+
+### Parameters
+
+Name                  | Type   | Required | Default | Description
+----------------------|--------|----------|---------|--------------------------------------
+signedTransactionData | string | true     |         | Signed transaction data in HEX format
+
+### Return
+
+`Promise.<string>` Transaction hash
+
+### Example
+
+```js
+ > const ConfluxTx = require('confluxjs-transaction');
+ > const tx = new ConfluxTx({
+    nonce: '0x03',
+    gasPrice: '0x01',
+    gasLimit: '0x5208', // 21000
+    to: '0x1ead8630345121d19ee3604128e5dc54b36e8ea6', // ADDRESS_TO
+    value: '0x01',
+  });
+ > tx.sign(Buffer.from('a816a06117e572ca7ae2f786a046d2bc478051d0717bf5cc4f5397923258d393', 'hex')); // KEY_FROM
+ > await confluxWeb.cfx.sendSignedTransaction('0x' + tx.serialize().toString('hex'));
+ 0x200b930e95b3c8c54978499c6407ef71fc96a83eced88640fae59b75e1d16ef4
+```
+
+## ConfluxWeb.cfx.signTransaction
+
+Signs a transaction. This account needs to be unlocked.
+
+`async function signTransaction(rawTx)`
+
+### Parameters
+
+Name           | Type                          | Required | Default                   | Description
+---------------|-------------------------------|----------|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------
+rawTx          | object                        | true     |                           |
+rawTx.from     | number                        | true     |                           | An address or index of a local wallet in confluxWeb.cfx.accounts.wallet.
+rawTx.to       | string                        | false    |                           | The destination address of the message, left undefined for a contract-creation transaction.
+rawTx.value    | number\|string\|BN\|BigNumber | false    |                           | The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
+rawTx.gas      | number                        | false    | `To-Be-Determined`        | The amount of gas to use for the transaction (unused gas is refunded).
+rawTx.gasPrice | number\|string\|BN\|BigNumber | false    | `confluxWeb.cfx.gasPrice` | The price of gas for this transaction in drip.
+rawTx.data     | string                        | false    |                           | Either a ABI byte string containing the data of the function call on a contract, or in the case of a contract-creation transaction the initialisation code.
+rawTx.nonce    | number                        | false    |                           | Integer of a nonce. This allows to overwrite your own pending transactions that use the same nonce.
+
+### Return
+
+`Promise.<object>` The RLP encoded transaction. The raw property can be used to send the transaction using confluxWeb.cfx.sendSignedTransaction.
+  
+ - `string` rawTransaction: Raw transaction string
+  
+ - `string` messageHash: Hash of transaction for calculating signature
+  
+ - `string` r: ECDSA signature r
+  
+ - `string` s: ECDSA signature s
+  
+ - `string` v: ECDSA recovery id
+
+### Example
+
+```js
+ > confluxWeb.cfx.accounts.wallet.add('a816a06117e572ca7ae2f786a046d2bc478051d0717bf5cc4f5397923258d393'); // KEY_FROM
+ > await confluxWeb.cfx.signTransaction({
+    from: 0, // index
+    nonce: 0, // make nonce appropriate
+    gasPrice: 10,
+    gas: 21000,
+    value: new BN('300000000000000000'), // 300000000000000000 drip === 0.3 cfx token
+    to: '0x1ead8630345121d19ee3604128e5dc54b36e8ea6', // ADDRESS_TO
+    data: '',
+  });
+
+ {
+  "messageHash": "53aec3cdccb8ab438303ece4559fc4464a118416828d8c7c0427f5debcd8feae",
+  "r": "0x1feaa7a3d6ae22c013b0987e8fa8e39ff1df1e6080c95d7d5e085e2cd9b02ff2",
+  "s": "0x0451df58547f0e0ad36d06058cd0c8cfa4eb201b4d09255f56ba0d750e520a67",
+  "v": "0x01",
+  "rawTransaction": "0xf867800a825208941ead8630345121d19ee3604128e5dc54b36e8ea6880429d069189e00008001a01feaa7a3d6ae22c013b0987e8fa8e39ff1df1e6080c95d7d5e085e2cd9b02ff2a00451df58547f0e0ad36d06058cd0c8cfa4eb201b4d09255f56ba0d750e520a67"
+ }
+```
+
+## ConfluxWeb.cfx.call
+
+Executes a message call transaction, which is directly executed in the VM of the node, but never mined into the blockchain.
+
+`async function call(callObject,defaultEpoch)`
+
+### Parameters
+
+Name         | Type           | Required | Default                  | Description
+-------------|----------------|----------|--------------------------|------------------------------------------------------------------------------------------------
+callObject   | object         | true     |                          | A transaction object, with the difference that for calls the from property is optional as well.
+defaultEpoch | string\|number | false    | conflux.cfx.defaultEpoch |
+
+### Return
+
+`Promise.<string>` The returned data of the call, e.g. A smart contract functions return value.
+
+### Example
+
+```js
+ > await confluxWeb.cfx.call({
+    to: "0x11f4d0a3c12e86b4b5f39b213f7e19d048276dae", // contract address
+    data: "0xc6888fa10000000000000000000000000000000000000000000000000000000000000003"
+  })
+ 0x000000000000000000000000000000000000000000000000000000000000000a
+```
+
+## ConfluxWeb.cfx.estimateGas
+
+Executes a message call or transaction and returns the amount of the gas used.
+
+`async function estimateGas(callObject)`
+
+### Parameters
+
+Name       | Type   | Required | Default | Description
+-----------|--------|----------|---------|------------------------------------------------------------------------------------------------
+callObject | object | true     |         | A transaction object, with the difference that for calls the from property is optional as well.
+
+### Return
+
+`Promise.<number>` - the used gas for the simulated call/transaction.
+
+### Example
+
+```js
+ > await confluxWeb.cfx.estimateGas({
+    to: "0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe",
+    data: "0xc6888fa10000000000000000000000000000000000000000000000000000000000000003"
+  })
+ 0x0000000000000000000000000000000000000000000000000000000000000015
+```
+
+## ConfluxWeb.cfx.getTransactionReceipt
+
+Returns the receipt of a transaction by transaction hash.
+
+> NOTE: The receipt is not available for pending transactions and returns null.
+
+`async function getTransactionReceipt(txHash)`
+
+### Parameters
+
+Name   | Type   | Required | Default | Description
+-------|--------|----------|---------|----------------------
+txHash | string | true     |         | The transaction hash.
+
+### Return
+
+`Promise.<object>` A transaction receipt object, or null when no receipt was found.
+  
+ - `boolean` status: `true` if the transaction was successful; `false`, if the EVM reverted the transaction.
+  
+ - `number` outcomeStatus: 1 status `true`; 0 status `false`.
+  
+ - `string` stateRoot: The state root of transaction execution.
+  
+ - `number` epochNumber: Epoch number where this transaction was in.
+  
+ - `string` blockHash: Hash of the block where this transaction was in.
+  
+ - `string` transactionHash: Hash of the transaction.
+  
+ - `number` index: Integer of the transactions index position in the block.
+  
+ - `string` from: Address of the sender.
+  
+ - `string` to: Address of the receiver. null when its a contract creation transaction.
+  
+ - `string|null` contractCreated: The contract address created, if the transaction was a contract creation, otherwise null.
+  
+ - `number` gasUsed: The amount of gas used by this specific transaction alone.
+  
+ - `[object]` logs: Array of log objects, which this transaction generated.
+  
+ - `[string]` logs[].address: The address of the contract executing at the point of the `LOG` operation.
+  
+ - `[string]` logs[].topics: The topics associated with the `LOG` operation.
+  
+ - `[string]` logs[].data: The data associated with the `LOG` operation.
+  
+ - `string` logsBloom:
+
+### Example
+
+```js
+ > await confluxWeb.cfx.getTransactionReceipt('0x689258ba9fe2c25bcdc43ebb5c9018d1b56d25b1c87de1b371a19f5548c16dc1');
+ {
+  status: true,
+  outcomeStatus: 0,
+  stateRoot: '0x75df853d267b40a98f6fe1103a510822bc1582894e8a9e95eb9ff0697545e4d2',
+  epochNumber: 1017673,
+  blockHash: '0xdefb3add0256b12c80f6e4fddde81da9c93ec88861cbee14051379f79624f911',
+  transactionHash: '0x689258ba9fe2c25bcdc43ebb5c9018d1b56d25b1c87de1b371a19f5548c16dc1',
+  index: 0,
+  from: '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b',
+  to: '0x1ead8630345121d19ee3604128e5dc54b36e8ea6',
+  contractCreated: null,
+  gasUsed: 21000,
+  logs: [],
+  logsBloom: '0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+ }
+```
+
+## ConfluxWeb.cfx.gasPastLogs
+
+Gets past logs, matching the given options.
+
+`async function gasPastLogs(options)`
+
+### Parameters
+
+Name              | Type                   | Required | Default | Description
+------------------|------------------------|----------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+options           | object                 | true     |         |
+options.fromEpoch | string                 | false    |         | The number of the earliest block
+options.toEpoch   | string                 | false    |         | The number of the latest block
+options.address   | string\|Array.<string> | true     |         | An address or a list of addresses to only get logs from particular account(s).
+options.topics    | array                  | true     |         | An array of values which must each appear in the log entries. The order is important, if you want to leave topics out use null, e.g. [null, '0x12...']. You can also pass an array for each topic with options for that topic e.g. [null, ['option1', 'option2']]
+
+### Return
+
+`Promise.<Array.<object>>` Array of log objects.
+
+### Example
+
+```js
+ > await confluxWeb.cfx.getPastLogs({
+    fromEpoch: '0x0',
+    toEpoch: 'latest_mined',
+    address: '0x169a10a431130B2F4853294A4a966803668af385'
+  });
+
+ [
+   {
+      "address": "0x169a10a431130B2F4853294A4a966803668af385",
+      "blockHash": "0x9f18cbbbc432d678b94ee6446e9305abf8f02deb0b03877cc0c71c0a71c08faf",
+      "epochNumber": "0x0",
+      "data": "0x",
+      "logIndex": 0,
+      "removed": false,
+      "topics": [
+        "0x44d6d25963f097ad14f29f06854a01f575648a1ef82f30e562ccd3889717e339",
+        "0x000000000000000000000000c24a31039a4dfc9ee9039bd9241a0c7848b92ae1"
+      ],
+      "transactionHash": "0xb777fc8ee9c5b5f6eb2b1c7d73106f07eb1692b9db08d9f65affafb82641559f",
+      "transactionIndex": 0,
+      "transactionLogIndex": "0x0",
+      "type": "mined",
+      "id": "log_0x5157483fef4019b6a231963496322bbf123b2559f73eef47f60dd5d1b1364fe4"
+    },
+   ...
+ ]
+```
+----------
+# #ConfluxWeb.cfx.account
+
+
+
+
+## ConfluxWeb.cfx.account.create
+
+Generates an account object with private key and public key.
+
+> NOTE: compare to eth latest, we don’t have sign methods in the return account object
+
+`function create(entropy)`
+
+### Parameters
+
+Name    | Type   | Required | Default | Description
+--------|--------|----------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------
+entropy | string | false    |         | A random string to increase entropy. If given it should be at least 32 characters. If none is given a random string will be generated using randomHex.
+
+### Return
+
+`object` The account object.
+
+### Example
+
+```js
+ > confluxWeb.cfx.accounts.create();
+ Account {
+  address: '0xbaE14daA250D6BCE69E695217AE8B3ce1dfF7AAe',
+  privateKey:
+   '0xed66cd654e2d714445dd159801f7e8144d227715c1eb33865d44c056d8e23399',
+  ...
+ }
+```
+
+## ConfluxWeb.cfx.account.privateKeyToAccount
+
+Creates an account object from a private key.
+
+> NOTE: compare to eth latest, we don’t have sign methods in the return account object
+
+`function privateKeyToAccount(privateKey)`
+
+### Parameters
+
+Name       | Type   | Required | Default | Description
+-----------|--------|----------|---------|----------------------------
+privateKey | string | true     |         | The private key to convert.
+
+### Return
+
+`object` The account object.
+
+### Example
+
+```js
+ > confluxWeb.cfx.accounts.privateKeyToAccount('0xed66cd654e2d714445dd159801f7e8144d227715c1eb33865d44c056d8e23399');
+ Account {
+  address: '0xbaE14daA250D6BCE69E695217AE8B3ce1dfF7AAe',
+  privateKey:
+   '0xed66cd654e2d714445dd159801f7e8144d227715c1eb33865d44c056d8e23399',
+  ...
+ }
+```
+
+## ConfluxWeb.cfx.account.recoverTransaction
+
+Recovers the Conflux address which was used to sign the given RLP encoded transaction.
+
+`function recoverTransaction(rawTransaction)`
+
+### Parameters
+
+Name           | Type   | Required | Default | Description
+---------------|--------|----------|---------|-----------------------------
+rawTransaction | string | true     |         | The RLP encoded transaction.
+
+### Return
+
+`` The Conflux address used to sign this transaction.
+
+### Example
+
+```js
+ > confluxWeb.cfx.accounts.recoverTransaction('0xf867800a825208941ead8630345121d19ee3604128e5dc54b36e8ea6880429d069189e00008001a01feaa7a3d6ae22c013b0987e8fa8e39ff1df1e6080c95d7d5e085e2cd9b02ff2a00451df58547f0e0ad36d06058cd0c8cfa4eb201b4d09255f56ba0d750e520a67');
+ "0xbbd9E9bE525AB967e633BcDAEaC8bD5723ED4D6B"
+```
+
+## ConfluxWeb.cfx.account.hashMessage
+
+
+
+`function hashMessage(message)`
+
+### Parameters
+
+Name    | Type   | Required | Default | Description
+--------|--------|----------|---------|--------------------------------------------------------------
+message | string | true     |         | A message to hash, if its HEX it will be UTF8 decoded before.
+
+### Return
+
+`string` The hashed message
+
+### Example
+
+```js
+ > confluxWeb.cfx.accounts.hashMessage("Hello World");
+ "0xa1de988600a42c4b4ab089b619297c17d53cffae5d5120d82d8a92d0bb3b78f2"
+
+ > confluxWeb.cfx.accounts.hashMessage(confluxWeb.cfx.utf8ToHex("Hello World")); // the below results in the same hash
+ "0xa1de988600a42c4b4ab089b619297c17d53cffae5d5120d82d8a92d0bb3b78f2"
+```
+
+## ConfluxWeb.cfx.account.sign
+
+Signs arbitrary data. This data is before UTF-8 HEX decoded and enveloped as follows:
+`"\x19Ethereum Signed Message:\n" + message.length + message`
+
+`function sign(data,privateKey)`
+
+### Parameters
+
+Name       | Type   | Required | Default | Description
+-----------|--------|----------|---------|------------------------------
+data       | string | true     |         | The data to sign.
+privateKey | string | true     |         | The private key to sign with.
+
+### Return
+
+`object` 
+
+### Example
+
+```js
+ > confluxWeb.cfx.accounts.sign('Hello World', 'a816a06117e572ca7ae2f786a046d2bc478051d0717bf5cc4f5397923258d393');
+ {
+  "message": "Hello World",
+  "messageHash": "0xa1de988600a42c4b4ab089b619297c17d53cffae5d5120d82d8a92d0bb3b78f2",
+  "v": "0x1b",
+  "r": "0x14e05a1ff41165dc420414e96acd7710a49ff05eecbd2caf520ac8d2e37426b0",
+  "s": "0x4236443a89cd5a5d14559bc5c115988b704d40dea7e39ed087ae80cd7822f99c",
+  "signature": "0x14e05a1ff41165dc420414e96acd7710a49ff05eecbd2caf520ac8d2e37426b04236443a89cd5a5d14559bc5c115988b704d40dea7e39ed087ae80cd7822f99c1b"
+ }
+```
+
+## ConfluxWeb.cfx.account.recover
+
+Recovers the Conflux address which was used to sign the given data.
+
+> confluxWeb.cfx.accounts.recover(message, signature [, preFixed]);
+
+> confluxWeb.cfx.accounts.recover(message, v, r, s [, preFixed]);
+
+> confluxWeb.cfx.accounts.recover(signatureObject);
+
+`function recover(message,signature,r,s,v,preFixed,signatureObject)`
+
+### Parameters
+
+Name                        | Type    | Required | Default | Description
+----------------------------|---------|----------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+message                     | string  | true     |         |
+signature                   | string  | true     |         | The raw RLP encoded signature, OR parameter 2-4 as v, r, s values.
+r                           | string  | true     |         | First 32 bytes of the signature
+s                           | string  | true     |         | Next 32 bytes of the signature
+v                           | string  | true     |         | Recovery value + 27
+preFixed                    | boolean | false    | false   | If the last parameter is true, the given message will NOT automatically be prefixed with "\x19Ethereum Signed Message:\n" + message.length + message, and assumed to be already prefixed.
+signatureObject             | object  | true     |         |
+signatureObject.messageHash | string  | true     |         | The hash of the given message already prefixed with "\x19Ethereum Signed Message:\n" + message.length + message.
+signatureObject.r           | string  | true     |         | same as `r`
+signatureObject.s           | string  | true     |         | same as `s`
+signatureObject.v           | string  | true     |         | same as `v`
+
+### Return
+
+`string` The Ethereum address used to sign this data.
+
+### Example
+
+```js
+ > confluxWeb.cfx.accounts.recover({
+    messageHash: '0x1da44b586eb0729ff70a73c326926f6ed5a25f5b056e7f47fbc6e58d86871655',
+    v: '0x1c',
+    r: '0xb91467e570a6466aa9e9876cbcd013baba02900b8979d43fe208a4a4f339f5fd',
+    s: '0x6007e74cd82e037b800186422fc2da167c747ef045e5d18a5f5d4300f8e1a029'
+ })
+ "0x2c7536E3605D9C16a7a3D7b1898e529396a65c23"
+
+ > confluxWeb.cfx.accounts.recover('Some data', '0xb91467e570a6466aa9e9876cbcd013baba02900b8979d43fe208a4a4f339f5fd6007e74cd82e037b800186422fc2da167c747ef045e5d18a5f5d4300f8e1a0291c'); // message, signature
+ "0x2c7536E3605D9C16a7a3D7b1898e529396a65c23"
+
+ > confluxWeb.cfx.accounts.recover('Some data', '0x1c', '0xb91467e570a6466aa9e9876cbcd013baba02900b8979d43fe208a4a4f339f5fd', '0x6007e74cd82e037b800186422fc2da167c747ef045e5d18a5f5d4300f8e1a029'); // message, v, r, s
+ "0x2c7536E3605D9C16a7a3D7b1898e529396a65c23"
+```
+----------
+# #ConfluxWeb.cfx.account.wallet
+
+
+
+
+## ConfluxWeb.cfx.account.wallet.create
+
+Generates one or more accounts in the wallet. If wallets already exist they will not be overridden.
+
+`function create(numberOfAccounts,entropy)`
+
+### Parameters
+
+Name             | Type   | Required | Default | Description
+-----------------|--------|----------|---------|------------------------------------------------------------------------------------------------------------------------------
+numberOfAccounts | number | true     |         | Number of accounts to create. Leave empty to create an empty wallet.
+entropy          | string | false    |         | A string with random characters as additional entropy when generating accounts. If given it should be at least 32 characters.
+
+### Return
+
+`object` The wallet object
+
+### Example
+
+```js
+ > confluxWeb.cfx.accounts.wallet.create(2);
+ Wallet {
+   ...
+   accounts: {
+     '0':
+      Account {
+        address: '0x52B2a035bbC4263D46a327376195e86dbaAF0b42',
+        privateKey:
+         '0x9887b79bd08ac7ee5897a24c50ee366450edd706cd8cec637cbb91234638d6bb',
+        accounts: [Accounts] },
+     '1':
+      Account {
+        address: '0x52B2a035bbC4263D46a327376195e86dbaAF0b42',
+        privateKey:
+         '0x9887b79bd08ac7ee5897a24c50ee366450edd706cd8cec637cbb91234638d6bb',
+        accounts: [Accounts] },
+   },
+   ...
+ }
+```
+
+## ConfluxWeb.cfx.account.wallet.add
+
+Adds an account using a private key or account object to the wallet.
+
+`function add(account)`
+
+### Parameters
+
+Name    | Type           | Required | Default | Description
+--------|----------------|----------|---------|-------------------------------------------------------------------------------
+account | string\|object | true     |         | A private key or account object created with confluxWeb.cfx.accounts.create().
+
+### Return
+
+`object` The added account
+
+### Example
+
+```js
+ > confluxWeb.cfx.accounts.wallet.add('a816a06117e572ca7ae2f786a046d2bc478051d0717bf5cc4f5397923258d393');
+ Account {
+  address: '0x4060E99f892E052dF9F59126D3F1eF2240A5df97',
+  privateKey:
+   'a816a06117e572ca7ae2f786a046d2bc478051d0717bf5cc4f5397923258d393',
+  ...
+ }
+```
+
+## ConfluxWeb.cfx.account.wallet.remove
+
+Removes an account from the wallet.
+
+`function remove(address)`
+
+### Parameters
+
+Name    | Type           | Required | Default | Description
+--------|----------------|----------|---------|---------------------------------------------
+address | string\|number | true     |         | The account address, or index in the wallet.
+
+### Return
+
+`boolean` true if the wallet was removed. false if it couldn’t be found.
+
+### Example
+
+```js
+ > confluxWeb.cfx.accounts.wallet.remove('0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b');
+ true
+
+ > confluxWeb.cfx.accounts.wallet.remove(0);
+ true
+```
+
+## ConfluxWeb.cfx.account.wallet.clear
+
+Securely empties the wallet and removes all its accounts.
+
+`function clear()`
+
+### Parameters
+
+`void`
+
+### Return
+
+`Object` The wallet object.
+
+### Example
+
+```js
+ > confluxWeb.cfx.accounts.wallet.clear();
+ Wallet {
+   accounts: {},
+   accountsIndex: 0
+   ...
+ }
+```
+----------
+# #ConfluxWeb.cfx.Contract.methods
+
+
+
+
+## ConfluxWeb.cfx.Contract.methods.encodeABI
+
+Encodes the ABI for this method.
+This can be used to send a transaction, call a method,
+or pass it into another smart contracts method as arguments.
+
+> NOTE: contract instance create code see Contract.constructor
+
+`function encodeABI()`
+
+### Parameters
+
+`void`
+
+### Return
+
+`string` The encoded ABI byte code to send via a transaction or call.
+
+### Example
+
+```js
+ > await contract.methods.inc(1).encodeABI();
+ "0x812600df0000000000000000000000000000000000000000000000000000000000000001"
+
+ > await contract.methods.count().encodeABI();
+ "0x06661abd"
+```
+
+## ConfluxWeb.cfx.Contract.methods.estimateGas
+
+Will call estimate the gas a method execution will take when executed in the EVM without.
+The estimation can differ from the actual gas used when later sending a transaction,
+as the state of the smart contract can be different at that time.
+
+> NOTE: contract instance create code see Contract.constructor
+
+`async function estimateGas()`
+
+### Parameters
+
+`void`
+
+### Return
+
+`Promise.<number>` 
+
+### Example
+
+```js
+ > await contract.methods.inc(1).estimateGas();
+ 26928
+
+ > await contract.methods.count().estimateGas();
+ 21655
+```
+
+## ConfluxWeb.cfx.Contract.methods.call
+
+Will call a “constant” method and execute its smart contract method in the EVM without sending any transaction.
+Note calling can not alter the smart contract state.
+
+> NOTE: contract instance create code see Contract.constructor
+
+`async function call()`
+
+### Parameters
+
+`void`
+
+### Return
+
+`Promise` contract method return value
+
+### Example
+
+```js
+ > await contract.methods.inc(1).call();
+ BigNumber { _hex: '0xff' }
+
+ > await contract.methods.count().call();
+ BigNumber { _hex: '0xfe' }
+```
+
+## ConfluxWeb.cfx.Contract.methods.send
+
+Will send a transaction to the smart contract and execute its method.
+Note this can alter the smart contract state.
+
+> NOTE: contract instance create code see Contract.constructor
+
+`async function send(options)`
+
+### Parameters
+
+Name             | Type                          | Required | Default                  | Description
+-----------------|-------------------------------|----------|--------------------------|-----------------------------------------------------------
+options          | object                        | true     |                          |
+options.from     | string                        | true     |                          | The address the transaction should be sent from.
+options.gasPrice | string                        | false    | contract.defaultGasPrice | The gas price in wei to use for this transaction.
+options.gas      | number                        | false    | contract.defaultGas      | The maximum gas provided for this transaction (gas limit).
+options.value    | number\|string\|BN\|BigNumber | false    |                          | The value transferred for the transaction in drip.
+
+### Return
+
+`Promise.<string>` Transaction hash.
+
+### Example
+
+```js
+ > await contract.methods.inc(1).send({
+    from: '0xbbd9e9be525ab967e633bcdaeac8bd5723ed4d6b',
+    gas: 100000000,
+    gasPrice: 819
+ });
+ "0xb01101228cbd8619ab1f8f017530ff945b655472be211eb828b31bc7c97b9d5c"
+```
+----------
+# #ConfluxWeb.utils
+
+
+
+
+## ConfluxWeb.utils.randomHex
+
+The randomHex library to generate cryptographically strong pseudo-random HEX strings from a given byte size.
+
+`function randomHex(bytesSize)`
+
+### Parameters
+
+Name      | Type   | Required | Default | Description
+----------|--------|----------|---------|----------------
+bytesSize | number | true     |         | given byte size
+
+### Return
+
+`string` The generated random HEX string.
+
+### Example
+
+```js
+ > confluxWeb.utils.randomHex(32)
+ 0xd3185018552117d2c4b5277307c455b4746267b27ea133abd288c0b136c3865c
+
+ > confluxWeb.utils.randomHex(4)
+ 0x472ace2a
+
+ > confluxWeb.utils.randomHex(2)
+ 0x52ed
+
+ > confluxWeb.utils.randomHex(1)
+ 0x3b
+
+ > confluxWeb.utils.randomHex(0)
+ 0x
+```
+
+## ConfluxWeb.utils.isBN
+
+Checks if a given value is a BN.js instance.
+
+`function isBN(bn)`
+
+### Parameters
+
+Name | Type | Required | Default | Description
+-----|------|----------|---------|------------------
+bn   | BN   | true     |         | An BN.js instance
+
+### Return
+
+`boolean` 
+
+### Example
+
+```js
+ > const bn = new BN(10)
+ > confluxWeb.utils.isBN(bn)
+ true
+```
+
+## ConfluxWeb.utils.sha3
+
+Will calculate the sha3 of the input.
+
+`function sha3(str)`
+
+### Parameters
+
+Name | Type   | Required | Default | Description
+-----|--------|----------|---------|-----------------
+str  | string | true     |         | A string to hash
+
+### Return
+
+`string` the result hash.
+
+### Example
+
+```js
+ > confluxWeb.utils.sha3('234');
+ "0xc1912fee45d61c87cc5ea59dae311904cd86b84fee17cc96966216f811ce6a79"
+
+ > confluxWeb.utils.keccak256('234'); // alias
+ "0xc1912fee45d61c87cc5ea59dae311904cd86b84fee17cc96966216f811ce6a79"
+```
+
+## ConfluxWeb.utils.soliditySha3
+
+Will calculate the sha3 of given input parameters in the same way solidity would.
+This means arguments will be ABI converted and tightly packed before being hashed.
+
+`function soliditySha3(args)`
+
+### Parameters
+
+Name    | Type                                 | Required | Default | Description
+--------|--------------------------------------|----------|---------|------------
+...args | Array.<(string\|number\|object\|BN)> | false    |         |
+
+### Return
+
+`void`
+
+### Example
+
+```js
+ > confluxWeb.utils.soliditySha3('234564535', '0xfff23243', true, -10);
+ "0x3e27a893dc40ef8a7f0841d96639de2f58a132be5ae466d40087a2cfa83b7179"
+
+ > confluxWeb.utils.soliditySha3('Hello!%'); // auto detects: string
+ "0x661136a4267dba9ccdf6bfddb7c00e714de936674c4bdb065a531cf1cb15c7fc"
+
+ > confluxWeb.utils.soliditySha3('234'); // auto detects: uint256
+ "0x61c831beab28d67d1bb40b5ae1a11e2757fa842f031a2d0bc94a7867bc5d26c2"
+
+ > confluxWeb.utils.soliditySha3(0xea); // same as above
+ "0x61c831beab28d67d1bb40b5ae1a11e2757fa842f031a2d0bc94a7867bc5d26c2"
+
+ > confluxWeb.utils.soliditySha3(new BN('234')); // same as above
+ "0x61c831beab28d67d1bb40b5ae1a11e2757fa842f031a2d0bc94a7867bc5d26c2"
+
+ > confluxWeb.utils.soliditySha3({type: 'uint256', value: '234'}); // same as above
+ "0x61c831beab28d67d1bb40b5ae1a11e2757fa842f031a2d0bc94a7867bc5d26c2"
+
+ > confluxWeb.utils.soliditySha3({t: 'uint', v: new BN('234')}); // same as above
+ "0x61c831beab28d67d1bb40b5ae1a11e2757fa842f031a2d0bc94a7867bc5d26c2"
+
+ > confluxWeb.utils.soliditySha3('0x407D73d8a49eeb85D32Cf465507dd71d507100c1');
+ "0x4e8ebbefa452077428f93c9520d3edd60594ff452a29ac7d2ccc11d47f3ab95b"
+
+ > confluxWeb.utils.soliditySha3({t: 'bytes', v: '0x407D73d8a49eeb85D32Cf465507dd71d507100c1'}); // same result as above
+ "0x4e8ebbefa452077428f93c9520d3edd60594ff452a29ac7d2ccc11d47f3ab95b"
+
+ > confluxWeb.utils.soliditySha3({t: 'address', v: '0x407D73d8a49eeb85D32Cf465507dd71d507100c1'}); // same as above, but will do a checksum check, if its multi case
+ "0x4e8ebbefa452077428f93c9520d3edd60594ff452a29ac7d2ccc11d47f3ab95b"
+
+ > confluxWeb.utils.soliditySha3({t: 'bytes32', v: '0x407D73d8a49eeb85D32Cf465507dd71d507100c1'}); // different result as above
+ "0x3c69a194aaf415ba5d6afca734660d0a3d45acdc05d54cd1ca89a8988e7625b4"
+
+ > confluxWeb.utils.soliditySha3({t: 'string', v: 'Hello!%'}, {t: 'int8', v:-23}, {t: 'address', v: '0x85F43D8a49eeB85d32Cf465507DD71d507100C1d'});
+ "0xa13b31627c1ed7aaded5aecec71baf02fe123797fffd45e662eac8e06fbe4955"
+```
+
+## ConfluxWeb.utils.isHex
+
+Checks if a given string is a HEX string.
+
+`function isHex(hex)`
+
+### Parameters
+
+Name | Type   | Required | Default | Description
+-----|--------|----------|---------|----------------------
+hex  | string | true     |         | The given HEX string.
+
+### Return
+
+`boolean` 
+
+### Example
+
+```js
+ > confluxWeb.utils.isHex('0xc1912');
+ true
+
+ > confluxWeb.utils.isHex(0xc1912);
+ true
+
+ > confluxWeb.utils.isHex('c1912');
+ true
+
+ > confluxWeb.utils.isHex(345); // this is tricky, as 345 can be a a HEX representation or a number, be careful when not having a 0x in front!
+ true
+
+ > confluxWeb.utils.isHex('0xZ1912');
+ false
+
+ > confluxWeb.utils.isHex('Hello');
+ false
+```
+
+## ConfluxWeb.utils.isHexStrict
+
+Checks if a given string is a HEX string. Difference to isHex() is that it expects HEX to be prefixed with 0x.
+
+`function isHexStrict(hex)`
+
+### Parameters
+
+Name | Type   | Required | Default | Description
+-----|--------|----------|---------|----------------------
+hex  | string | true     |         | The given HEX string.
+
+### Return
+
+`boolean` 
+
+### Example
+
+```js
+ > confluxWeb.utils.isHexStrict('0xc1912');
+ true
+
+ > confluxWeb.utils.isHexStrict(0xc1912);
+ false
+
+ > confluxWeb.utils.isHexStrict('c1912');
+ false
+
+ > confluxWeb.utils.isHexStrict(345); // this is tricky, as 345 can be a a HEX representation or a number, be careful when not having a 0x in front!
+ false
+
+ > confluxWeb.utils.isHexStrict('0xZ1912');
+ false
+
+ > confluxWeb.utils.isHex('Hello');
+ false
+```
+
+## ConfluxWeb.utils.isAddress
+
+Checks if a given string is a valid Conflux address. It will also check the checksum, if the address has upper and lowercase letters.
+
+`function isAddress(address)`
+
+### Parameters
+
+Name    | Type   | Required | Default | Description
+--------|--------|----------|---------|-------------------
+address | string | true     |         | An address string.
+
+### Return
+
+`string` The checksum address.
+
+### Example
+
+```js
+ > confluxWeb.utils.isAddress('0xc1912fee45d61c87cc5ea59dae31190fffff232d');
+ true
+
+ > confluxWeb.utils.isAddress('c1912fee45d61c87cc5ea59dae31190fffff232d');
+ true
+
+ > confluxWeb.utils.isAddress('0XC1912FEE45D61C87CC5EA59DAE31190FFFFF232D'); // as all is uppercase, no checksum will be checked
+ true
+
+ > confluxWeb.utils.isAddress('0xc1912fEE45d61C87Cc5EA59DaE31190FFFFf232d');
+ true
+
+ > confluxWeb.utils.isAddress('0xC1912fEE45d61C87Cc5EA59DaE31190FFFFf232d'); // wrong checksum
+ false
+```
+
+## ConfluxWeb.utils.toChecksumAddress
+
+Will convert an upper or lowercase Ethereum address to a checksum address.
+
+`function toChecksumAddress(address)`
+
+### Parameters
+
+Name    | Type   | Required | Default | Description
+--------|--------|----------|---------|-------------------
+address | string | true     |         | An address string.
+
+### Return
+
+`void`
+
+### Example
+
+```js
+ > confluxWeb.utils.toChecksumAddress('0xc1912fee45d61c87cc5ea59dae31190fffff2323');
+ "0xc1912fEE45d61C87Cc5EA59DaE31190FFFFf232d"
+
+ > confluxWeb.utils.toChecksumAddress('0XC1912FEE45D61C87CC5EA59DAE31190FFFFF232D'); // same as above
+ "0xc1912fEE45d61C87Cc5EA59DaE31190FFFFf232d"
+```
+
+## ConfluxWeb.utils.checkAddressChecksum
+
+Checks the checksum of a given address. Will also return false on non-checksum addresses.
+
+`function checkAddressChecksum(address)`
+
+### Parameters
+
+Name    | Type   | Required | Default | Description
+--------|--------|----------|---------|-------------------
+address | string | true     |         | An address string.
+
+### Return
+
+`boolean` true when the checksum of the address is valid, false if its not a checksum address, or the checksum is invalid.
+
+### Example
+
+```js
+ > confluxWeb.utils.checkAddressChecksum('0xc1912fEE45d61C87Cc5EA59DaE31190FFFFf232d');
+ true
+```
+
+## ConfluxWeb.utils.toHex
+
+Will auto convert any given value to HEX. Number strings will interpreted as numbers.
+Text strings will be interpreted as UTF-8 strings.
+
+`function toHex(value)`
+
+### Parameters
+
+Name  | Type                          | Required | Default | Description
+------|-------------------------------|----------|---------|-----------------------------
+value | string\|number\|BN\|BigNumber | true     |         | The input to convert to HEX.
+
+### Return
+
+`string` The resulting HEX string.
+
+### Example
+
+```js
+ > confluxWeb.utils.toHex('234');
+ "0xea"
+
+ > confluxWeb.utils.toHex(234);
+ "0xea"
+
+ > confluxWeb.utils.toHex(new BN('234'));
+ "0xea"
+
+ > confluxWeb.utils.toHex(new BigNumber('234'));
+ "0xea"
+
+ > confluxWeb.utils.toHex('I have 100€');
+ "0x49206861766520313030e282ac"
+```
+
+## ConfluxWeb.utils.toBN
+
+Will safely convert any given value (including BigNumber.js instances) into a BN.js instance, for handling big numbers in JavaScript.
+
+> NOTE: For just the BN.js class use utils.BN
+
+`function toBN(num)`
+
+### Parameters
+
+Name | Type           | Required | Default | Description
+-----|----------------|----------|---------|-----------------------------------
+num  | number\|string | true     |         | Number to convert to a big number.
+
+### Return
+
+`BN` The BN.js instance.
+
+### Example
+
+```js
+ > confluxWeb.utils.toBN(1234).toString();
+ "1234"
+
+ > confluxWeb.utils.toBN('1234').add(confluxWeb.utils.toBN('1')).toString();
+ "1235"
+
+ > confluxWeb.utils.toBN('0xea').toString();
+ "234"
+```
+
+## ConfluxWeb.utils.hexToNumber
+
+Returns the number representation of a given HEX value.
+
+> NOTE: This is not useful for big numbers, rather use utils.toBN instead.
+
+`function hexToNumber(hex)`
+
+### Parameters
+
+Name | Type   | Required | Default | Description
+-----|--------|----------|---------|------------------
+hex  | string | true     |         | A string to hash.
+
+### Return
+
+`number` 
+
+### Example
+
+```js
+ > confluxWeb.utils.hexToNumber('0xea');
+ 234
+```
+
+## ConfluxWeb.utils.hexToNumberString
+
+Returns the number representation of a given HEX value as a string.
+
+`function hexToNumberString(hex)`
+
+### Parameters
+
+Name | Type   | Required | Default | Description
+-----|--------|----------|---------|-----------------
+hex  | string | true     |         | A string to hash
+
+### Return
+
+`string` The number as a string
+
+### Example
+
+```js
+ > confluxWeb.utils.hexToNumberString('0xea');
+ "234"
+```
+
+## ConfluxWeb.utils.numberToHex
+
+Returns the HEX representation of a given number value.
+
+`function numberToHex(num)`
+
+### Parameters
+
+Name | Type                          | Required | Default | Description
+-----|-------------------------------|----------|---------|------------------------------
+num  | number\|string\|BN\|BigNumber | true     |         | A number as string or number.
+
+### Return
+
+`string` The HEX value of the given number.
+
+### Example
+
+```js
+ > confluxWeb.utils.numberToHex('234');
+ '0xea'
+```
+
+## ConfluxWeb.utils.hexToUtf8
+
+Returns the UTF-8 string representation of a given HEX value.
+
+`function hexToUtf8(hex)`
+
+### Parameters
+
+Name | Type   | Required | Default | Description
+-----|--------|----------|---------|-------------------------------------------
+hex  | string | true     |         | A HEX string to convert to a UTF-8 string.
+
+### Return
+
+`string` The UTF-8 string.
+
+### Example
+
+```js
+ > confluxWeb.utils.hexToUtf8('0x49206861766520313030e282ac');
+ "I have 100€"
+```
+
+## ConfluxWeb.utils.hexToAscii
+
+Returns the ASCII string representation of a given HEX value.
+
+`function hexToAscii(hex)`
+
+### Parameters
+
+Name | Type   | Required | Default | Description
+-----|--------|----------|---------|-------------------------------------------
+hex  | string | true     |         | A HEX string to convert to a ASCII string.
+
+### Return
+
+`string` The ASCII string.
+
+### Example
+
+```js
+ > confluxWeb.utils.hexToAscii('0x4920686176652031303021');
+ "I have 100!"
+```
+
+## ConfluxWeb.utils.utf8ToHex
+
+Returns the HEX representation of a given UTF-8 string.
+
+`function utf8ToHex(str)`
+
+### Parameters
+
+Name | Type   | Required | Default | Description
+-----|--------|----------|---------|-------------------------------------------
+str  | string | true     |         | A UTF-8 string to convert to a HEX string.
+
+### Return
+
+`string` The HEX string
+
+### Example
+
+```js
+ > confluxWeb.utils.utf8ToHex('I have 100€');
+ "0x49206861766520313030e282ac"
+```
+
+## ConfluxWeb.utils.asciiToHex
+
+Returns the HEX representation of a given ASCII string.
+
+> NOTE: it behaves differently from 1.2.1
+
+`function asciiToHex(str)`
+
+### Parameters
+
+Name | Type   | Required | Default | Description
+-----|--------|----------|---------|-------------------------------------------
+str  | string | true     |         | A ASCII string to convert to a HEX string.
+
+### Return
+
+`string` The HEX string
+
+### Example
+
+```js
+ > confluxWeb.utils.asciiToHex('I have 100!');
+ "0x4920686176652031303021"
+```
+
+## ConfluxWeb.utils.hexToBytes
+
+Returns a byte array from the given HEX string.
+
+> NOTE: it behaves differently from 1.2.1
+
+`function hexToBytes(hex)`
+
+### Parameters
+
+Name | Type   | Required | Default | Description
+-----|--------|----------|---------|------------------
+hex  | string | true     |         | A HEX to convert.
+
+### Return
+
+`array` The byte array.
+
+### Example
+
+```js
+ > confluxWeb.utils.hexToBytes('0x000000ea');
+ [ 0, 0, 0, 234 ]
+
+ > confluxWeb.utils.hexToBytes(0x000000ea);
+ [ 234 ]
+```
+
+## ConfluxWeb.utils.bytesToHex
+
+Returns a HEX string from a byte array.
+
+`function bytesToHex(byteArray)`
+
+### Parameters
+
+Name      | Type  | Required | Default | Description
+----------|-------|----------|---------|-------------------------
+byteArray | array | true     |         | A byte array to convert.
+
+### Return
+
+`string` The HEX string
+
+### Example
+
+```js
+ > confluxWeb.utils.bytesToHex([ 72, 101, 108, 108, 111, 33, 36 ]);
+ "0x48656c6c6f2124"
+```
+
+## ConfluxWeb.utils.toDrip
+
+Converts any ether value value into drip.
+
+> NOTE: "drip" are the smallest conflux unit, and you should always make calculations in drip and convert only for display reasons.
+
+> NOTE: can not pass a Number, only string or BN are acceptable
+
+`function toDrip(str,unit)`
+
+### Parameters
+
+Name | Type       | Required | Default | Description
+-----|------------|----------|---------|-----------------------------------------------------------------------
+str  | string\|BN | true     |         | The value
+unit | string     | false    | "cfx"   | The ether to convert from. Possible units are ['cfx', 'gdrip', 'drip']
+
+### Return
+
+`string|BN` If a number, or string is given it returns a number string, otherwise a BN.js instance.
+
+### Example
+
+```js
+ > confluxWeb.utils.toDrip('1');
+ "1000000000000000000"
+
+ > confluxWeb.utils.toDrip('1', 'cfx');
+ "1000000000000000000"
+
+ > confluxWeb.utils.toDrip('1', 'gdrip');
+ "1000000000"
+
+ > confluxWeb.utils.toDrip('1', 'drip');
+ "1"
+```
+
+## ConfluxWeb.utils.fromDrip
+
+Converts any drip value into a cfx value.
+
+> NOTE: "drip" are the smallest conflux unit, and you should always make calculations in drip and convert only for display reasons.
+
+> NOTE: can not pass a Number, only string or BN are acceptable
+
+`function fromDrip(str,unit)`
+
+### Parameters
+
+Name | Type       | Required | Default | Description
+-----|------------|----------|---------|-------------------------------------------------------------------
+str  | string\|BN | true     |         | The value in drip
+unit | string     | false    | "cfx"   | The cfx to convert to. Possible units are ['cfx', 'gdrip', 'drip']
+
+### Return
+
+`string|BN` If a number, or string is given it returns a number string, otherwise a BN.js instance.
+
+### Example
+
+```js
+ > confluxWeb.utils.fromDrip('1');
+ "0.000000000000000001"
+
+ > confluxWeb.utils.fromDrip('1', 'cfx');
+ "0.000000000000000001"
+
+ > confluxWeb.utils.fromDrip('1', 'gdrip');
+ "0.000000001"
+
+ > confluxWeb.utils.fromDrip('1', 'gdrip');
+ "1"
+```
+
+## ConfluxWeb.utils.padLeft
+
+Adds a padding on the left of a string, Useful for adding paddings to HEX strings.
+
+`function padLeft(value,characterAmount,sign)`
+
+### Parameters
+
+Name            | Type   | Required | Default | Description
+----------------|--------|----------|---------|-------------------------------------------------------
+value           | string | true     |         | The string to add padding on the left.
+characterAmount | number | true     |         | The number of characters the total string should have.
+sign            | string | false    | "0"     | The character sign to use.
+
+### Return
+
+`string` The padded string.
+
+### Example
+
+```js
+ > confluxWeb.utils.padLeft('0x3456ff', 20);
+ "0x000000000000003456ff"
+
+ > confluxWeb.utils.padLeft(0x3456ff, 20);
+ "0x000000000000003456ff"
+
+ > confluxWeb.utils.padLeft('Hello', 20, 'x');
+ "xxxxxxxxxxxxxxxHello"
+```
+
+## ConfluxWeb.utils.padRight
+
+Adds a padding on the right of a string, Useful for adding paddings to HEX strings.
+
+`function padRight(value,characterAmount,sign)`
+
+### Parameters
+
+Name            | Type   | Required | Default | Description
+----------------|--------|----------|---------|-------------------------------------------------------
+value           | string | true     |         | The string to add padding on the right.
+characterAmount | number | true     |         | The number of characters the total string should have.
+sign            | string | false    | "0"     | The character sign to use.
+
+### Return
+
+`string` The padded string.
+
+### Example
+
+```js
+ > confluxWeb.utils.padRight('0x3456ff', 20);
+ "0x3456ff00000000000000"
+
+ > confluxWeb.utils.padRight(0x3456ff, 20);
+ "0x3456ff00000000000000"
+
+ > confluxWeb.utils.padRight('Hello', 20, 'x');
+ "Helloxxxxxxxxxxxxxxx"
+```
+
+## ConfluxWeb.utils.toTwosComplement
+
+Converts a negative numer into a two’s complement.
+
+`function toTwosComplement(value)`
+
+### Parameters
+
+Name  | Type                      | Required | Default | Description
+------|---------------------------|----------|---------|-----------------------
+value | number\|string\|BigNumber | true     |         | The number to convert.
+
+### Return
+
+`string` The converted hex string.
+
+### Example
+
+```js
+ > confluxWeb.utils.toTwosComplement('-1');
+ "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+ > confluxWeb.utils.toTwosComplement(-1);
+ "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+
+ > confluxWeb.utils.toTwosComplement('0x1');
+ "0x0000000000000000000000000000000000000000000000000000000000000001"
+
+ > confluxWeb.utils.toTwosComplement(-15);
+ "0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1"
+
+ > confluxWeb.utils.toTwosComplement('-0x1');
+ "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+```
