@@ -5,6 +5,7 @@ nav:
     - Installation: install.md
     - Getting Started: get_started.md
     - JSON-RPC API: json-rpc.md
+    - JavaScript API: javascript-api.md
 theme: mkdocs
 markdown_extensions:
     - toc:
