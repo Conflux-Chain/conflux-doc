@@ -1238,7 +1238,7 @@ message | string | true     |         | A message to hash, if its HEX it will be
 ## ConfluxWeb.cfx.account.sign
 
 Signs arbitrary data. This data is before UTF-8 HEX decoded and enveloped as follows:
-`"\x19Conflux Signed Message:\n" + message.length + message`
+`"\x19Ethereum Signed Message:\n" + message.length + message`
 
 `function sign(data,privateKey)`
 
@@ -1288,9 +1288,9 @@ signature                   | string  | true     |         | The raw RLP encoded
 r                           | string  | true     |         | First 32 bytes of the signature
 s                           | string  | true     |         | Next 32 bytes of the signature
 v                           | string  | true     |         | Recovery value
-preFixed                    | boolean | false    | false   | If the last parameter is true, the given message will NOT automatically be prefixed with "\x19Conflux Signed Message:\n" + message.length + message, and assumed to be already prefixed.
+preFixed                    | boolean | false    | false   | If the last parameter is true, the given message will NOT automatically be prefixed with "\x19Ethereum Signed Message:\n" + message.length + message, and assumed to be already prefixed.
 signatureObject             | object  | true     |         |
-signatureObject.messageHash | string  | true     |         | The hash of the given message already prefixed with "\x19Conflux Signed Message:\n" + message.length + message.
+signatureObject.messageHash | string  | true     |         | The hash of the given message already prefixed with "\x19Ethereum Signed Message:\n" + message.length + message.
 signatureObject.r           | string  | true     |         | same as `r`
 signatureObject.s           | string  | true     |         | same as `s`
 signatureObject.v           | string  | true     |         | same as `v`
@@ -1477,7 +1477,7 @@ or pass it into another smart contracts method as arguments.
 
 ## ConfluxWeb.cfx.Contract.methods.estimateGas
 
-Will call estimate the gas a method execution will take when executed in the EVM without. The estimation can differ from the actual gas used when later sending a transaction, as the state of the smart contract can be different at that time.
+Will call estimate the gas a method execution will take when executed in the EVM without sending any transaction. The estimation can differ from the actual gas used when later sending a transaction, as the state of the smart contract can be different at that time.
 
 > NOTE: contract instance create code see Contract.constructor
 
