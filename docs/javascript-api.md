@@ -1070,11 +1070,11 @@ txHash | string | true     |         | The transaction hash.
  }
 ```
 
-## ConfluxWeb.cfx.gasPastLogs
+## ConfluxWeb.cfx.getPastLogs
 
 Gets past logs, matching the given options.
 
-`async function gasPastLogs(options)`
+`async function getPastLogs(options)`
 
 ### Parameters
 
