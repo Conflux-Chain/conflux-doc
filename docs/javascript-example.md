@@ -194,7 +194,7 @@ async function fund(cfx_htlc_addr) {
       return logs[i].topics[1];
 }
 ```
-##Check
+## Check
 We can will use a 'constant' call to getContract method to check the hash timed lock we created, make sure its parameters is correct:
 ```js
 // check if created HTLC is valid using a "constant" call
@@ -218,7 +218,7 @@ async function checkHTLC(cfx_htlc_addr, htlc_id) {
   return true;
 }
 ```
-##Withdraw
+## Withdraw
 Now we want to withdraw the money. Similar to fund, we call withdraw method to do this:
 ```js
 async function withdraw(cfx_htlc_addr, htlc_id) {
