@@ -377,7 +377,7 @@ options.arguments | array  | false    |         | contract constructor parameter
 
 ### Return
 
-`string` Transaction hash.
+`Object` 
 
 ### Example
 
@@ -638,7 +638,7 @@ returnTransactionObjects | boolean        | false    | false   | If true, the re
   
  - `number|null` epochNumber: The current block epoch number in the client's view. `null` when it's not in best block's past set.
   
- - `boolean` stable: Ff the block stable or not
+ - `boolean` stable: If the block stable or not
   
  - `string` nonce: Hash of the generated proof-of-work. `null` when its pending block.
   
@@ -784,7 +784,7 @@ transactionHash | string | true     |         | The transaction hash.
   
  - `string` hash: Hash of the transaction.
   
- - `nonce` number: The number of transactions made by the sender prior to this one.
+ - `number` nonce: The number of transactions made by the sender prior to this one.
   
  - `string` from: Address of the sender.
   
@@ -903,7 +903,7 @@ Name           | Type                          | Required | Default             
 rawTx          | object                        | true     |                           |
 rawTx.from     | number                        | true     |                           | An address or index of a local wallet in confluxWeb.cfx.accounts.wallet.
 rawTx.to       | string                        | false    |                           | The destination address of the message, left undefined for a contract-creation transaction.
-rawTx.value    | number\|string\|BN\|BigNumber | false    |                           | The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
+rawTx.value    | number\|string\|BN\|BigNumber | false    |                           | The value transferred for the transaction in drip, also the endowment if it’s a contract-creation transaction.
 rawTx.gas      | number                        | false    | `To-Be-Determined`        | The amount of gas to use for the transaction (unused gas is refunded).
 rawTx.gasPrice | number\|string\|BN\|BigNumber | false    | `confluxWeb.cfx.gasPrice` | The price of gas for this transaction in drip.
 rawTx.data     | string                        | false    |                           | Either a ABI byte string containing the data of the function call on a contract, or in the case of a contract-creation transaction the initialisation code.
@@ -1070,11 +1070,11 @@ txHash | string | true     |         | The transaction hash.
  }
 ```
 
-## ConfluxWeb.cfx.gasPastLogs
+## ConfluxWeb.cfx.getPastLogs
 
 Gets past logs, matching the given options.
 
-`async function gasPastLogs(options)`
+`async function getPastLogs(options)`
 
 ### Parameters
 
@@ -1282,7 +1282,7 @@ Recovers the Conflux address which was used to sign the given data.
 ### Parameters
 
 Name                        | Type    | Required | Default | Description
-----------------------------|---------|----------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------|---------|----------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 message                     | string  | true     |         |
 signature                   | string  | true     |         | The raw RLP encoded signature, OR parameter 2-4 as v, r, s values.
 r                           | string  | true     |         | First 32 bytes of the signature
