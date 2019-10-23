@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Installation - Conflux Documentation</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="..">Conflux Documentation</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="..">Welcome to Conflux</a>
+                            </li>
+                            <li class="active">
+                                <a href="./">Installation</a>
+                            </li>
+                            <li >
+                                <a href="../get_started/">Getting Started</a>
+                            </li>
+                            <li >
+                                <a href="../json-rpc/">JSON-RPC API</a>
+                            </li>
+                            <li >
+                                <a href="../javascript-api/">JavaScript API</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="..">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../get_started/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#installation">Installation</a></li>
+            <li><a href="#install-build-dependencies">Install Build Dependencies</a></li>
+            <li><a href="#build-from-source-code">Build from Source Code</a></li>
+            <li><a href="#install-test-dependencies">Install Test Dependencies</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
+<p>Here is a step by step guide on how to build Conflux from the source code and get a node running.</p>
+<h2 id="install-build-dependencies">Install Build Dependencies<a class="headerlink" href="#install-build-dependencies" title="Permanent link">&para;</a></h2>
+<p>Conflux requires <strong>latest stable Rust version</strong>,  <code>clang</code>, and <code>sqlite</code> to build.</p>
+<p>We recommend installing Rust through <a href="https://www.rustup.rs/">rustup</a>. If you don't already have <code>rustup</code> or <code>clang</code>, you can install them like this:</p>
+<ul>
+<li>
+<p>Linux:</p>
+<pre><code>$ curl https://sh.rustup.rs -sSf | sh
+</code></pre>
+<p><code>clang</code> and <code>sqlite</code> can be installed with:</p>
+<ul>
+<li>
+<p>Ubuntu:</p>
+<pre><code>$ sudo apt-get install clang libsqlite3-dev
+</code></pre>
+</li>
+<li>
+<p>CentOS / RHEL: </p>
+<pre><code>$ sudo yum install clang sqlite-devel
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>OSX:</p>
+<pre><code>$ curl https://sh.rustup.rs -sSf | sh
+</code></pre>
+<p>You might need to install <code>brew</code> if you need to use it to install <code>clang</code>:</p>
+<pre><code>$ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+</code></pre>
+<p><code>clang</code> comes with Xcode command line tools, and can also be installed with homebrew:</p>
+<pre><code>$ brew install --with-clang llvm
+</code></pre>
+</li>
+<li>
+<p>Windows:</p>
+<p>Make sure you have Visual Studio 2015 with C++ support installed. Next, download and run the <code>rustup</code> installer from https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe, start "VS2015 x64 Native Tools Command Prompt", and use the following command to install and set up the <code>msvc</code> toolchain:</p>
+<pre><code>$ rustup default stable-x86_64-pc-windows-msvc
+</code></pre>
+<p><code>clang</code> can be installed with LLVM. Pre-built binaries can be downloaded from <a href="https://releases.llvm.org/download.html#8.0.0">Download LLVM</a>. Make sure to add LLVM to the system PATH as instructed.</p>
+</li>
+</ul>
+<p>Make sure that these binaries are in your <code>PATH</code> (the instruction will be shown after installing <code>rustup</code>). After that, you should be able to build Conflux from source.</p>
+<h2 id="build-from-source-code">Build from Source Code<a class="headerlink" href="#build-from-source-code" title="Permanent link">&para;</a></h2>
+<p>After installing the dependencies mentioned above, now you can clone our repository and start building the executable binary:</p>
+<pre><code class="bash"># download Conflux code
+$ git clone https://github.com/Conflux-Chain/conflux-rust
+$ cd conflux-rust
+$ git checkout v0.1.7
+
+
+# build in release mode
+$ cargo build --release
+</code></pre>
+
+<p>This produces an executable in the <code>./target/release</code> subdirectory.</p>
+<p>Note, when compiling a crate and you receive errors, it's in most cases your outdated version of Rust, or some of your crates have to be recompiled. Cleaning the repository will most likely solve the issue if you are on the latest stable version of Rust, try:</p>
+<pre><code class="bash">$ cargo clean &amp;&amp; cargo update
+</code></pre>
+
+<p>To start running a Conflux full node, you can follow the instructions at <a href="../get_started/#running-conflux-full-node">Running Conflux Full Node</a>.</p>
+<h2 id="install-test-dependencies">Install Test Dependencies<a class="headerlink" href="#install-test-dependencies" title="Permanent link">&para;</a></h2>
+<p>We have a test framework written in Python3 (version&gt;=3.6). Required packages can be installed by running</p>
+<pre><code class="bash">$ ./dev-support/dep_pip3.sh
+</code></pre>
+
+<p>Solidity compiler <code>solc</code> is also required, and be installed as follows:</p>
+<ul>
+<li>
+<p>Ubuntu</p>
+<pre><code>sudo add-apt-repository ppa:ethereum/ethereum
+sudo apt-get update
+sudo apt-get install solc
+</code></pre>
+</li>
+<li>
+<p>OSX</p>
+<pre><code>brew update
+brew upgrade
+brew tap ethereum/ethereum
+brew install solidity
+</code></pre>
+</li>
+<li>
+<p>Others</p>
+<p>You can follow the detailed instructions at <a href="https://solidity.readthedocs.io/en/v0.5.7/installing-solidity.html#binary-packages">Installing the Solidity Compiler</a>.</p>
+<p>Note that latest solidity compiler may be incompatible with Conflux and may cause the integration test to fail. If you encounter such problem, please install solidity compiler version 0.5.2.</p>
+</li>
+</ul>
+<p>To run tests, you can build the source code first and follow the instructions at <a href="../get_started/#running-test">Running Test</a>.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
