@@ -1,8 +1,6 @@
 
 ----------
-# ConfluxWeb
-
-- Getting Started
+# Getting Started with ConfluxWeb
 
 The conflux-web library is a collection of modules which contain specific functionality for the conflux ecosystem.
 
@@ -47,6 +45,15 @@ You will always get a BigNumber object for number values as JavaScript is not ab
 ```
 
 ConfluxWeb depends on the BN.js library for big numbers, See the [BN.js](https://github.com/indutny/bn.js/) documentation for details.
+
+# ConfluxWeb by Example
+
+## Hash Time Locked Contract (HTLC)
+
+[Here](javascript-example.md) we brought you a ConfluxWeb example. 
+You can learn how to develop a Hash Time Locked Contract(HTLC) with ConfluxWeb API.
+
+# ConfluxWeb API Reference
 
 ## ConfluxWeb.providers
 
