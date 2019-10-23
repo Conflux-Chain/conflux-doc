@@ -34,3 +34,6 @@ Temporary Items
 *.iml
 out
 gen
+
+# mkdocs
+site
