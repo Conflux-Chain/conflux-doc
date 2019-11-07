@@ -6,7 +6,8 @@ nav:
     - Getting Started: get_started.md
     - JSON-RPC API: json-rpc.md
     - JavaScript API: javascript-api.md
-theme: mkdocs
+    - CLI Sub-commands: cli.md
+theme: readthedocs
 markdown_extensions:
     - toc:
         permalink: True
