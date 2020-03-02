@@ -7,6 +7,7 @@ nav:
     - JSON-RPC API: json-rpc.md
     - JavaScript API: javascript-api.md
     - CLI Sub-commands: cli.md
+    - Design & Implementation: design.md
 theme: readthedocs
 markdown_extensions:
     - toc:
