@@ -31,7 +31,7 @@ We recommend installing Rust through [rustup](https://www.rustup.rs/). If you do
     
     `clang` comes with Xcode command line tools, and can also be installed with homebrew:
     
-        $ brew install --with-clang llvm    
+        $ brew install llvm    
 
 * Windows:
 
