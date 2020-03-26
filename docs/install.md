@@ -61,11 +61,10 @@ $ cargo build --release
 
 This produces an executable in the `./target/release` subdirectory.
 
-You may encouter issues for compiling rust-openssl that Conflux depends on in
-Ubuntu. If so, you will want to install libssl-dev pacakge with the following
-command:
+You may encounter dependency issues in Ubuntu. If so, you will want to install
+libssl-dev and cmake pacakges with the following command:
 
-    |   $ sudo apt-get install pkg-config libssl-dev
+    |   $ sudo apt-get install pkg-config libssl-dev cmake
 
 Note, when compiling a crate and you receive errors, it's in most cases your
 outdated version of Rust, or some of your crates have to be recompiled.

@@ -1,8 +1,44 @@
 #How to Set an Independent Conflux Chain
 
-To have your independent Conflux chain, you need to ensure that your nodes can
-be connected to other nodes in this chain, and will not connect to other chains
-(like our testnet).
+You may want to run Conflux on a single node chain to develop and test smart
+contracts. You can run Conflux as your indepdent chain with several machines.
+
+## Run Single Node Development Chain
+
+In roder to run a single node Conflux chain for development, you can follow the
+following steps:
+
+1. Get executable Conflux binary file (use precompiled binary or build from the
+latest source code). You can refer to the document
+[Installation](https://conflux-chain.github.io/conflux-doc/install/).
+
+2. Create a directory and prepare a configuration file `development.toml`. You
+can copy the `default.toml` provided in the directory and start from there
+following the guide [Getting
+Started](https://conflux-chain.github.io/conflux-doc/get_started/). 
+
+3. Set the `bootnodes` parameter in the configuration file to empty (or comment
+the setting line).
+
+4. Set the `mode` parameter to "dev". If you copy from `default.toml`, you
+should find the line being commented and you can uncomment it.
+
+5. Set the `dev_block_interval_ms` parameter to the block generation interval
+you want. In the development mode, Conflux will automatically generate a block
+in a fixed interval.
+
+6. Run Conflux binary with `development.toml` as the configuration file. For
+example:
+
+    ```bash
+    $ ../target/release/conflux --config development.toml
+    ``` 
+
+## Run Multiple Node Production Chain
+
+To have your independent Conflux chain with multiple nodes in the production
+mode, you need to ensure that your nodes can be connected to other nodes in
+this chain, and will not connect to other chains (like our testnet).
 
 To achieve this, you should setup your own boot node, and let other nodes
 connect to it. Then they will connect to others with our discovery protocol.
@@ -33,22 +69,14 @@ Started](https://conflux-chain.github.io/conflux-doc/get_started/).
     ```
 
     If you are editing based on our provided `default.toml`, you need to
-    comment out the `bootnode` entry. And edit `log.yaml` (which is set in
-    `default.toml` with `log_conf="log.yaml"`) to change the log level from
-    `info` to `debug`.
+    comment out the `bootnode` entry. Otherwise the node will connect to the
+    existing Conflux net. 
 
-    ```yaml
-    loggers:
-    	network:
-    		# level: info
-    		level: debug
-    ```
-
-3. Launch the bootnode, and find the node id in the log file. The log for node
-id is `Self node id: $ID` where `$ID` is the 0x-prefixed node id of this
-bootnode. Remove the 0x prefix and you'll get the node id `$NODEID` .
-
-    If you are using the log format set in `log.yaml`, you can get the node id with
+3. Launch the bootnode, and find the node id in the console print out. The
+information for node id is `Self node id: $ID` where `$ID` is the 0x-prefixed
+node id of this bootnode. Remove the 0x prefix and you'll get the node id
+`$NODEID`. If you missed the line from the screen, you can look at the log file
+with:
 
     ```bash
     grep "Self node id" log/conflux.log|awk '{print $9}'|tr -d '0x'
@@ -106,14 +134,12 @@ like
 0f947e34fc907008968ec99baa1dbb677b927531="1000000000000"
 ab4a32bca7500d94a2cc1f3150e12686c692c590="1000000000000"
 ```
-
 Every line is an account. The key is the account address, and the value is a
-string representing its balance in Drip.
+string representing its balance in Drip. Note that `genesis_accounts` does not
+apply if `mode` is `test` or `dev`.
 
 If the `mode` is `test` or `dev,` you can setup the genesis accounts with their
 secret keys by setting `genesis_secrets`. Each line is an account private key
 without 0x-prefix. The balance of each account is set to
 `10000000000000000000000` by default.
-
-Note that `genesis_accounts` does not apply if `mode` is `test` or `dev`.
 
