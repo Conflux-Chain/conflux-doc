@@ -4,6 +4,7 @@ nav:
       #    - Overview: overview.md
     - Installation: install.md
     - Getting Started: get_started.md
+    - Run an Indepdent Chain: setup_independent_chain.md
     - JSON-RPC API: json-rpc.md
     - JavaScript API: javascript-api.md
     - CLI Sub-commands: cli.md

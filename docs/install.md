@@ -4,13 +4,14 @@ Here is a step by step guide on how to build Conflux from the source code and ge
 
 ## Install Build Dependencies
 
-Conflux requires **latest stable Rust version**,  `clang`, and `sqlite` to build.
+Conflux requires **Rust 1.42.0** to build,  `clang`, and `sqlite` to build.
 
 We recommend installing Rust through [rustup](https://www.rustup.rs/). If you don't already have `rustup` or `clang`, you can install them like this:
 
 * Linux:
 
         $ curl https://sh.rustup.rs -sSf | sh
+        $ rustup install 1.42.0
     `clang` and `sqlite` can be installed with:
 
     - Ubuntu:
@@ -24,6 +25,7 @@ We recommend installing Rust through [rustup](https://www.rustup.rs/). If you do
 * OSX:
 
         $ curl https://sh.rustup.rs -sSf | sh
+        $ rustup install 1.42.0
 
     You might need to install `brew` if you need to use it to install `clang`:
 
@@ -59,7 +61,15 @@ $ cargo build --release
 
 This produces an executable in the `./target/release` subdirectory.
 
-Note, when compiling a crate and you receive errors, it's in most cases your outdated version of Rust, or some of your crates have to be recompiled. Cleaning the repository will most likely solve the issue if you are on the latest stable version of Rust, try:
+You may encounter dependency issues in Ubuntu. If so, you will want to install
+libssl-dev and cmake pacakges with the following command:
+
+    |   $ sudo apt-get install pkg-config libssl-dev cmake
+
+Note, when compiling a crate and you receive errors, it's in most cases your
+outdated version of Rust, or some of your crates have to be recompiled.
+Cleaning the repository will most likely solve the issue if you are on the
+latest stable version of Rust, try:
 
 ```bash
 $ cargo clean && cargo update
