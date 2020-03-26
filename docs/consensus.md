@@ -3,8 +3,8 @@
 The Conflux consensus layer processes all incoming blocks received from the
 synchronization layer, produces the total order of blocks based on the Conflux
 GHAST consensus algorithm, and invokes the underlying **transaction execution
-engine** to run transactions in the determined order. It provides necessary
-information to assist **block generator** to prepare the block skeleton of new
+engine** to run transactions in the determined order. It provides the
+information necessary to assist **block generator** to prepare the block skeleton of new
 blocks. It also notifies the **transaction pool** about processed transactions
 so that the pool can make better transaction selection decisions. 
 
@@ -22,7 +22,7 @@ consistently.
 
 2. We want to minimize the memory usage of each block in the consensus graph.
 Even with the checkpoint mechanism, the graph will contain 300K-500K blocks in
-normal case and more than 1M blocks when facing liveness attacks. This may
+the normal case and more than 1M blocks when facing liveness attacks. This may
 stress the memory.
 
 3. We want to process each block fast. Because full/archive nodes have to
@@ -31,7 +31,7 @@ network from scratch, fast block process is important to keep the catch up
 period short.
 
 4. Robust against potential attacks. Malicious attackers may generate bad
-blocks at arbitrary position in the tree graph.
+blocks at arbitrary positions in the tree graph.
 
 ## Structures and Components
 
@@ -39,18 +39,18 @@ blocks at arbitrary position in the tree graph.
 
 `ConsensusGraph` (core/src/consensus/mod.rs) is the main struct of the
 consensus layer. The synchronization layer construct `ConsensusGraph` with a
-`BlockDataManager` which stores all block metadata information in disk.
+`BlockDataManager` which stores all block metadata information on disk.
 `ConsensusGraph::on_new_block()` is the key function to send new blocks to the
 `ConsensusGraph` struct to process. It also provides a set of public functions
 to query the status of blocks/transactions. This should be the main interface
-which other components interact.
+with which other components interact.
 
 ### ConsensusGraphInner
 
 `ConsensusGraphInner` (core/src/consensus/consensus_inner/mod.rs) is the inner
 structure of `ConsensusGraph`. `ConsensusGraph::on_new_block()` acquires the
-write lock of the inner struct at the start of the function. For the rest of
-query functions, they only acquire read lock. 
+write lock of the inner struct at the start of the function. The rest are
+query functions that only acquire read locks.
 
 The internal structure of `ConsensusGraphInner` is fairly complicated.
 Generally speaking, it maintains two kinds of information. The first kind of
@@ -73,16 +73,16 @@ implementations.
 set of routines for processing a new block. In theory, this code could be part
 of `ConsensusGraphInner` because it mostly manipulates the inner struct.
 However, these routines are all subroutine of the `on_new_block()` and the
-consensus_inner/mod.rs is already very complicated. We therefore decide to put
+consensus_inner/mod.rs is already very complicated. We therefore decided to put
 them into a separate file.
 
 ### ConsensusExecutor
 
 `ConsensusExecutor` (core/src/consensus/consensus_inner/consensus_executor.rs)
 is the interface struct for the standalone transaction execution thread.
-`ConsensusExecutor::enqueue_epoch()` allow other struct to send an execution
+`ConsensusExecutor::enqueue_epoch()` allows other threads to send an execution
 task to execute the epoch of a given pivot chain block asynchronously. Once the
-computation finishes, the result stateroot will be stored into
+computation finishes, the resulting state root will be stored into
 `BlockDataManager`. Other threads can call
 `ConsensusExecutor::wait_for_result()` to wait for the execution of an epoch if
 desired. In the current implementation, `ConsensusExecutor` also contains the
@@ -101,11 +101,11 @@ confirmation if we decide to provide such RPC.
 
 `AnticoneCache` (core/src/consensus/anticone_cache.rs) and `PastsetCache`
 (core/src/consensus/pastset_cache.rs) are two structs that implement customized
-cache for data structures in `ConsensusGraphInner`. In the implementation of
+caches for data structures in `ConsensusGraphInner`. In the implementation of
 the inner struct, we need to calculate and store the anticone set and the past
 set of each block. However, it is not possible to store all of these sets in
 memory. We therefore implement cache style data structures to store sets for
-recently inserted/accessed blocks. If a anticone/past set is not found in the
+recently inserted/accessed blocks. If an anticone/past set is not found in the
 cache, we will recalculate the set in the current inner struct implementation. 
 
 ## Important Algorithmic Mechanisms
@@ -130,14 +130,14 @@ chain.
 
 2. The transaction validity and the block validity are *independent*. A
 transaction is invalid if it was included before or it cannot carry out due to
-insufficient balance. Such invalid transaction will become noop during the
+insufficient balance. Such invalid transactions will become noop during the
 execution. However, *unlike Bitcoin and Ethereum blocks containing such
 transactions will not become invalid*.
 
 In `ConsensusGraphInner`, the arena index of the current pivot chain blocks are
 stored in order in the `pivot_chain[]` vector. To maintain it, we calculate the
-least common ancestor (LCA) between the new inserted block and the current best
-block following the GHAST rule. If the fork corresponding to the new inserted
+least common ancestor (LCA) between the newly inserted block and the current best
+block following the GHAST rule. If the fork corresponding to the newly inserted
 block for the LCA ended up to be heavier. We will update the `pivot_chain[]` from
 the forked point.
 
@@ -150,10 +150,10 @@ accurately, with heaviest accumulated difficulties) similar to the Bitcoin
 consensus algorithm of finding the longest chain. The arena index of this
 longest timer chain will be stored into `timer_chain[]`. 
 
-The rationale of the timer chain is to provide a coarse grained measurement of
-the time that cannot be influenced by malicious attacker. Because timer blocks
+The rationale of the timer chain is to provide a coarse-grained measurement of
+the time that cannot be influenced by a malicious attacker. Because timer blocks
 are rare and generated slowly (if `timer_chain_difficulty_ratio` is properly
-high), malicious attacker cannot prevent the growth of the timer chain unless
+high), a malicious attacker cannot prevent the growth of the timer chain unless
 it has the majority of the computation power. Therefore how many timer chain
 blocks appear in the past set of a block is a good indication about the latest
 possible generation time of the block. We compute this value for each block and
@@ -163,7 +163,7 @@ store it in `timer_chain_height` field of the block.
 
 To effectively maintain the pivot chain, we need to query the total weight of a
 subtree. Conflux uses a Link-Cut Tree data structure to maintain the subtree
-weights in O(log n). Link-Cut Tree can also calculates the LCA of any two nodes
+weights in O(log n). The Link-Cut Tree can also calculate the LCA of any two nodes
 in the TreeGraph in O(log n). The `weight_tree` field in `ConsensusGraphInner`
 is the link-cut tree that stores the subtree weight of every node. Note that
 the implementation of the Link-Cut Tree is in the utils/link-cut-tree
@@ -173,18 +173,18 @@ directory.
 
 If the TreeGraph is under a liveness attack, it may fail to converge under one
 block for a while. To handle this situation, the GHAST algorithm idea is to
-start generate adaptive blocks, i.e., blocks whose weights are redistributed
+start to generate adaptive blocks, i.e., blocks whose weights are redistributed
 significantly so that there will be many zero weight blocks with a rare set of
 very heavy blocks. Specifically, if the PoW quality of an adaptive block is
 `adaptive_heavy_block_ratio` higher than the supposed difficulty, the block
-will have the weight of `adaptive_heavy_block_ratio`. Otherwise, the block will
-have the weight of zero. This effectively slows down the confirmation
+will have a weight of `adaptive_heavy_block_ratio`. Otherwise, the block will
+have a weight of zero. This effectively slows down the confirmation
 temporarily but will ensure the consensus progress.
 
 Because adaptive weight is a mechanism to defend against rare liveness attacks,
 it should not be turned on during the normal scenario. A new block is adaptive
-only if 1) one of its ancestor block is still not the dominant subtree
-comparing to its siblings and 2) a significantly long period of time has past
+only if 1) one of its ancestor blocks is still not the dominant subtree
+comparing to its siblings and 2) a significantly long period of time has passed
 between the generation of the ancestor block and the new block (i.e., the
 difference of `timer_chain_height`). `ConsensusGraphInner::adaptive_weight()`
 and its subroutines implement the algorithm to determine whether a block is
@@ -248,11 +248,11 @@ anticone set of a new block. Note that because the anticone set may be very
 large, we have two implementation level optimizations. First, we represent the
 anticone set as a set of barrier nodes in the TreeGraph, i.e., a set of
 subtrees where each block in the subtrees is in the anticone set. Second, we
-will only maintain the anticone set of the recently accessed/inserted blocks
+will maintain the anticone set of the recently accessed/inserted blocks
 only. When checking whether a block is valid in its past view or not (e.g., in
 `adaptive_weight()` and in `check_correct_parent()`), we first cut all barrier
 subtrees from the link-cut weight trees accordingly to get the state of the
-past view. After the computation, we restore these anticone subtrees back.
+past view. After the computation, we restore these anticone subtrees.
 
 ### Check Correct Parent
 
@@ -282,7 +282,7 @@ block in the barrier set when we do the link-cut tree chopping. To this end, we
 implemented a brute force routine `compute_subtree_weights()` to compute the
 subtree weights of each block in a past view for O(n). We also implement
 `check_correct_parent_brutal()` and `adaptive_weight_impl_brutal()` to use the
-brute-forcely computed subtree weight to do the checking instead. 
+brute-force computed subtree weight to do the checking instead. 
 
 ### Force Confirmation
 
@@ -320,8 +320,8 @@ ledger view values to get the past view values.
 
 ### Era
 
-In order to implement checkpoint, the Conflux consensus algorithm split the
-graph in eras. Every era contains `era_epoch_count` epochs. For example, if the
+In order to implement the checkpoint mechanism, the Conflux consensus algorithm split the
+graph into eras. Every era contains `era_epoch_count` epochs. For example, if the
 `era_epoch_count` is 50000, then there is a new era every 50000 epochs. The
 pivot chain block at the height 50000 will be the genesis of a new era.
 At the era boundary, there are several differences from the normal case.
@@ -351,7 +351,7 @@ block become a new checkpoint (i.e., `cur_era_genesis_height` moves) if:
 2. In the anticone of this block, there is no timer chain block.
 
 `should_move_stable_height()` and `should_form_checkpoint_at()` in
-`ConsensusNewBlockHandler` are invoked after every new inserted block to test
+`ConsensusNewBlockHandler` are invoked after every newly inserted block to test
 the above two conditions. Generally speaking, the stable block will never be
 reverted off the pivot chain. Any block in the past set of the checkpoint block
 is no longer required for the future computation of the consensus layer.
@@ -370,7 +370,7 @@ is not going to be executed.
 
 2. If the past set of the new block does not contain the stable era block, we
 do not need to check the partial invalid status of this block. This is because
-this block will not change the timer chain (note our assumption that timer
+this block will not change the timer chain (note our assumption that the timer
 chain will not reorg more than `timer_chain_beta`) and new blocks can reference
 this block directly (more than `tiemr_chain_beta` difference).
 
@@ -389,7 +389,7 @@ are computed implicitly during the transaction execution. In Conflux, the block
 reward is by the base reward and the penalty ratio based on the total weight of
 its anticone blocks dividing its own difficulty. This anticone set only
 considers blocks appearing within the next `REWARD_EPOCH_COUNT` epochs.
-Specially, if there is a new era then this anticone set will not count across
+Specifically, if there is a new era then this anticone set will not count across
 the era boundary as well. `get_pivot_reward_index()` in `ConsensusExecutor`
 counts this reward anticone threshold.
 `get_reward_execution_info_from_index()` in `ConsensusExecutor` and its
@@ -403,18 +403,18 @@ would need to execute all transactions in a different order in the past view of
 that block. Instead, we will only ask the full nodes to validate the state root
 results on the current pivot chain. It then fills a blame number to indicate
 how many levels ancestors from the parent who do not have correct state root.
-When this number is greater than zero, the filled deferred state root because a
+When this number is greater than zero, the filled deferred state root becomes a
 Merkel H256 vector that contains the corrected state roots of the ancestors
 along with the correct one. `get_blame_and_deferred_state_for_generation()` in
 `ConsensusGraph` computes the blame information for the block generation.
 `first_trusted_header_starting_from()` is ``ConsensusGraph`` is a useful helper
-function to compute the first trust worthy header that based the subtree blame
+function to compute the first trustworthy header that based the subtree blame
 information.
 
 ## Multi-Thread Design
 
-The consensus layer has one thread dedicated to process new blocks from the
-synchronization layer and one thread dedicated to execute transaction. It of
+The consensus layer has one thread dedicated to processing new blocks from the
+synchronization layer and one thread dedicated to executing transactions. It of
 course also has a set of interface APIs that RPC threads and synchronization
 threads may call.
 
@@ -430,9 +430,9 @@ ancestor/past blocks are already delivered to the consensus before it is
 delivered. This enables the consensus layer to always deal with a complete
 direct acyclic graph without holes.
 
-One advantage of having a single thread to be dedicated on the consensus
+One advantage of having a single thread to be dedicated to the consensus
 protocol is that it simplifies the protocol implementation a lot. Because the
-detail of the consensus protocol is complicated and the implementation involves
+details of the consensus protocol are complicated and the implementation involves
 many sophisticated data structure manipulations, the single thread design makes
 sure that we do not need to worry about deadlocks or races. Upon the entrance
 of `consensus::on_new_block()`, the thread acquires the write lock of the inner
@@ -445,8 +445,8 @@ layer.
 `Consensus Execution Worker` is a thread created at the start of the consensus
 layer. It is dedicated to transaction execution. There is a channel connecting
 `Consensus Worker` with `Consensus Execution Worker`. Once the consensus
-protocol determines the order of the pivot chain, it will send `ExecutionTask`
-for each epoch in the pivot chain to the channel. These tasks will be pick up
+protocol determines the order of the pivot chain, it will send an `ExecutionTask`
+for each epoch in the pivot chain to the channel. These tasks will be picked up
 by the `Consensus Execution Worker` thread one by one. The thread loads the
 previous state before the executed epoch from the storage layer as the input,
 runs all transactions in the executed epoch (see
@@ -463,11 +463,11 @@ results from coming back.
 
 ## Key Assumptions, Invariants, and Rules
 
-If you want to write code to interact with the Conflux consensus layer. It is
+If you want to write code to interact with the Conflux consensus layer, it is
 very important to understand the following assumptions and rules.
 
 1. The consensus layer assumes that the passed `BlockDataManager` is in a
-consistent state. It means that the `BlockDataManager` contains correct current
+consistent state. It means that the `BlockDataManager` contains the correct current
 checkpoint/stable height. Blocks before the checkpoint and the stable height
 are properly checked during previous execution and they are persisted into the
 `BlockDataManager` properly. The consensus layer **does not check** the results
@@ -478,5 +478,5 @@ layer will execute incorrectly or crash!
 lock of the inner struct**! Right now the only exception for this rule is
 `assemble_new_block_impl()` because of computing the adaptive field and this is
 not good we plan to change it. Acquiring the write lock of the inner struct
-will very likely to cause deadlock given the complexity of the Consensus layer
+is very likely to cause deadlock given the complexity of the Consensus layer
 and its dependency with many other components. Always try to avoid this!
