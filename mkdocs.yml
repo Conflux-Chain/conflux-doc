@@ -9,6 +9,7 @@ nav:
     - JavaScript API: javascript-api.md
     - CLI Sub-commands: cli.md
     - Design & Implementation: design.md
+    - My First Transaction: send_transaction.md
 theme: readthedocs
 markdown_extensions:
     - toc:
