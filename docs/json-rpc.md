@@ -73,6 +73,26 @@ Example for [cfx_getbestblockhash](#cfx_getbestblockhash)
 curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBestBlockHash","params":[],"id":1}' -H "Content-Type: application/json" http://localhost:12345
 ```
 
+## Migrating from Ethereum JSON-RPC
+There is a correspondence between some JSON-RPCs from Ethereum and Conflux. 
+
+Even though the details of JSON-RPC may defer from each other, the following mapping table could be helpful on migrating from Ethereum to Conflux:
+
+* eth_gasPrice => cfx_gasPrice
+* eth_blockNumber => cfx_epochNumber
+* eth_getBalance => cfx_getBalance
+* eth_getStorageAt => cfx_getStorageAt
+* eth_getTransactionCount => cfx_getNextNonce
+* eth_getCode => cfx_getCode
+* eth_sendRawTransaction => cfx_sendRawTransaction
+* eth_call => cfx_call
+* eth_estimateGas => cfx_estimateGasAndCollateral
+* eth_getBlockByHash => cfx_getBlockByHash
+* eth_getBlockByNumber => cfx_getBlockByEpochNumber
+* eth_getTransactionByHash => cfx_getTransactionByHash
+* eth_getTransactionReceipt => cfx_getTransactionReceipt
+* eth_getLogs => cfx_getLogs
+
 ## JSON-RPC methods
 #### cfx_getTransactionByHash 
 Returns the information about a transaction requested by transaction hash.
