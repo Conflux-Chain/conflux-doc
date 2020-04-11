@@ -1,4 +1,12 @@
-# My First Transaction
+---
+id: send_transaction
+title: My First Transaction
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/send_transaction.md
+keywords:
+  - conflux
+  - transaction
+  - sdk
+---
 
 This document will guide you to compose and send your first transaction into the Conflux network, including the introduction of technical specs of Conflux's transaction, and the basic techniques to track the status of sent transactions in Conflux network and error handling.
 
