@@ -1092,7 +1092,7 @@ Name              | Type                   | Required | Default | Description
 options           | object                 | true     |         |
 options.fromEpoch | string                 | false    |         | The number of the earliest block
 options.toEpoch   | string                 | false    |         | The number of the latest block
-options.address   | string\|Array.<string> | true     |         | An address or a list of addresses to only get logs from particular account(s).
+options.address   | string\|Array[string]  | true     |         | An address or a list of addresses to only get logs from particular account(s).
 options.topics    | array                  | true     |         | An array of values which must each appear in the log entries. The order is important, if you want to leave topics out use null, e.g. [null, '0x12...']. You can also pass an array for each topic with options for that topic e.g. [null, ['option1', 'option2']]
 
 #### Return
