@@ -67,11 +67,11 @@ You should remove these directories manually.
 ## Random Tracing Test
 
 `tests/conflux_tracing.py` is a random testing script with the failure
-injection capability. It will start a conflux network with a fixed number of
+injection capability. It will start a Conflux network with a fixed number of
 nodes and inject node crashes, db crashes, and node restarts during. During the
 running, it keep fetches states from different node and verify that these nodes
-have the consensus for the TreeGraph and block state. To run conflux tracing,
-you need to first compie the release version of the Conflux Rust implementation
+have the consensus for the TreeGraph and block state. To run Conflux tracing,
+you need to first compile the release version of the Conflux Rust implementation
 from the source code. Then you can invoke the script as follows:
 
 ```bash
@@ -85,7 +85,7 @@ least one hour.
 
 In case of errors, it will generate trace files `snapshot*.json` and
 `txs*.json` to help diagnose the issue. Note that if you terminate this script
-brutally (which you will liekly do). It also generates these files so you may
+brutally (which you will likely do). It also generates these files so you may
 want to clean them manually.
 
 ## Transaction Propagation and Performance Test
@@ -95,20 +95,22 @@ same directory provide an automatic deployment of Conflux network on AWS for
 testing the simple payment TPS and transaction pool performance. You can run
 this test as follows:
 
-1. First you need to download and install AWS cli tools. Properly configure the
-AWS credential for the cli tool.
+1. First you need to download and install AWS CLI tools. Properly configure the
+AWS credential for the CLI tool.
 
 2. Make your default public key registered as a named key pair in *the us-west-2 region*.
 
-3. Decide the branch of the conflux repo you want to test. Note that this
-script pulls the source code from the github Conflux repo and compile them on
-the fly. You cannot run your local Conflux copy with this script.
+3. Decide the branch of the Conflux repo you want to test. Note that this
+script pulls the source code from a GitHub repo that contains the Conflux rust
+implementation and compile them on the fly. You cannot run your local Conflux
+copy with this script. If you do not specify the repo/branch name, it will pull
+from the official Conflux-rust repo from the GitHub.
 
 4. Run the following command:
 
 ```bash
 $ cd tests/scripts
-$ ./one_click.sh key-pair-name 20 false branch-name
+$ ./one_click.sh key-pair-name 20 branch-name [repo-name]
 ```
 
 This will start 20 instances at the us-west-2 region together with a random
