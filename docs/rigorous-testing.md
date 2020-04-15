@@ -39,7 +39,7 @@ generation-processing-comparing process. To run this fuzzing tool:
 ```bash
 $ cd core/benchmark/consensus/test
 $ g++ -O2 -o gen-random-graph gen-random-graph.cpp
-$ ./iter-gen-random.py 10000 3 10 10 10 100
+$ ./iter-gen-random.py 10000 3 30 10 10 100
 ```
 
 The python script will not stop until it finds an error or you manually
@@ -116,7 +116,7 @@ $ ./one_click.sh key-pair-name 20 branch-name [repo-name]
 This will start 20 instances at the us-west-2 region together with a random
 transaction generator. It will take roughly 15 minutes to setup the experiments
 and then 20 minutes to finish the run. In the end, it will report the TPS
-performance. The expected good TPS number is >4000TPS. If you get lower than
-this number, it indicates a performance regression at the transaction pool or
-at the storage layer. For every release, we run this script to test its
-performance.
+performance. The expected good TPS number is ~4000TPS. If you get a TPS number
+much lower than the expectation, there is a performance regression at the
+transaction pool or at the storage layer. For every release, we run this script
+to test its performance.
