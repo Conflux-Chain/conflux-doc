@@ -120,3 +120,39 @@ performance. The expected good TPS number is ~4000TPS. If you get a TPS number
 much lower than the expectation, there is a performance regression at the
 transaction pool or at the storage layer. For every release, we run this script
 to test its performance.
+
+## Storage Benchmark Test
+
+The storage layer in Conflux is often the performance bottleneck.
+`core/benchmark/storage` therefore contains a benchmark tool to measure the
+performance of the storage layer, eliminating other layer from the execution.
+We also converted Ethereum network history payment transactions (first ~4m
+blocks) as the benchmark traces. Here are steps to run the storage benchmark
+test:
+
+1. From the AWS S3 `conflux-storage-bench` bucket, download `foundation.json`
+and `eth_from_0_to_4141811_txs.rlp.tar.gz`.
+
+2. Untar the rlp history file to obtain `eth_from_0_to_4141811_txs.rlp`.
+
+3. Go to `core/benchmark/storage` and run `cargo build --release` to compile
+the binary `storage_bench`.
+
+4. Create a temporary directory `tmp_storage_db` for holding the blockchain
+database generated in the experiment.
+
+5. Invoke the following command:
+
+```bash
+$ cd core/benchmark/storage
+$ RUST_BACKTRACE=full target/release/storage_bench run -g /path/to/foundation.json -t /path/to/eth_from_0_to_4141811_txs.rlp -d /path/to/tmp_storage_db --txs_to_process 30000000 --skip 1156773812
+```
+
+This command will process the first 30 million transactiosn from the parsed
+history file and then quit. It is a good idea to time the running time of this
+command for computing the achieved processing throughput of the storage layer.
+The performance will largely depend on the quality of the underlying disk I/O.
+In MacBook Pro 2019, the throughput is 25000-30000 TPS. In m5a.xlarge, the
+throughput is 15000-20000 TPS. If the performance is lower than the
+expectation, it indicates a potential regression at the storage layer. For
+every relealse, we will run this test to check the storage layer performance.
