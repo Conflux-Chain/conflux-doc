@@ -71,15 +71,12 @@ A graph node may be in the following 5 status:
 const BLOCK_INVALID: u8 = 0;
 // Just get the header of the block.
 const BLOCK_HEADER_ONLY: u8 = 1;
-// The headers of all the blocks on the path from genesis to this block have
-// already entered synchronization graph. 
-const BLOCK_HEADER_PARENTAL_TREE_READY: u8 = 2;
 // The headers of all the blocks in the past set of this block have already entered
 // synchronization graph. 
-const BLOCK_HEADER_GRAPH_READY: u8 = 3;
+const BLOCK_HEADER_GRAPH_READY: u8 = 2;
 // Both the headers and bodies of all the blocks in the past set of this block have
 // entered synchronization graph.
-const BLOCK_GRAPH_READY: u8 = 4;
+const BLOCK_GRAPH_READY: u8 = 3;
 ```
 
 When a block header just enters the synchronization graph and triggers a new graph node being created and added in the graph, the initial status of the node is `BLOCK_HEADER_ONLY`. 
@@ -89,9 +86,8 @@ During this traversal process, for each node,
 1) if it is invalid, all its descendants are invalid; 
 2) if it is new to be `BLOCK_HEADER_GRAPH_READY`, some graph-related validity checks (6~9) are applied on it. 
 If it passes these checks, it is then checked whether its block body has already entered synchronization graph (by checking the `block_ready` field of the graph node). 
-If so, this block is ready to be relayed. And this block may make some of its descendants become `BLOCK_HEADER_PARENTAL_TREE_READY` or `BLOCK_HEADER_GRAPH_READY`. 
+If so, this block is ready to be relayed. And this block may make some of its descendants become `BLOCK_HEADER_GRAPH_READY`. 
 Note that this cannot make its descendants become `BLOCK_GRAPH_READY` since the original node (at the starting point of the BFS process) for the newly arrived block header can only be `BLOCK_HEADER_GRAPH_READY`; 
-3) if it is new to be `BLOCK_HEADER_PARENTAL_TREE_READY`, it may make some of its descendants (following the child edge) become `BLOCK_HEADER_PARENTAL_TREE_READY`.
 
 When a block body just enters the synchronization graph, the corresponding graph node should already exist in synchronization graph, otherwise, the block will be ignored (this may happen if it is garbage collected). 
 The `block_ready` field of this node will be set as true now. 
