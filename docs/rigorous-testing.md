@@ -56,9 +56,10 @@ detecting bugs.
 
 The python script will also print out the processing speed of the consensus
 graph in the test. The expected speed is ~1000 blocks per second (on a Mac Book
-Pro 2019 laptop). If the reported speed is significantly lower than expected,
-it typically means a potential performance issue. For every release, we execute
-this fuzzing for at least one hour using the default parameters.
+Pro 2019 laptop) and ~350 blocks per second on m5a.xlarge. If the reported
+speed is significantly lower than expected, it typically means a potential
+performance issue. For every release, we execute this fuzzing for at least one
+hour using the default parameters.
 
 Note that if you terminate this script brutally (which you will like do). It
 leaves two to three temporary directories with the `__` prefix and `sqlite_db`.
@@ -156,3 +157,42 @@ In MacBook Pro 2019, the throughput is 25000-30000 TPS. In m5a.xlarge, the
 throughput is 15000-20000 TPS. If the performance is lower than the
 expectation, it indicates a potential regression at the storage layer. For
 every relealse, we will run this test to check the storage layer performance.
+
+## Consensus Performance Benchmark Tool
+
+The consensus implementation is typically fast and can process close to one
+thousand blocks per second in the normal scenarios. However, if the TreeGraph
+is unstable and it contains a lot of forks, the consensus component may fail
+back to slow routines. Its performance under such unstable scenarios is
+critical because it corresponds to the catch-up speed during DoS attacks.
+`tests/attack_bench` contains a list of python scripts to benchmark the
+consensus performance under attack scenarios:
+
+1. `fork_same_height_merge.py` creates a unstable TreeGraph with roughly 95000
+blocks. In the TreeGraph, it has three branches and in each branch there are
+star shape forks attached at a fixed height. It corresponds to one worst case
+scenario for the consensus procesing engine. The expected speed is ~70 blocks/s
+on MacBook Pro 2019 and ~45 blocks/s on m5a.xlarge.
+
+2. `fork_same_height_hiding.py` tests the scenario where an attacker tries to
+actively mine at a fixed height, hides the mined blocks, and release them
+together. It measures the block generation capaiblity of the victim at this
+scenario. The expected generation speed is always faster than 1000 blocks in
+less than 1 minutes. 
+
+3. `fork_same_height_attack.py` tests a similar attack as 2 but the attacker
+does not hide the blocks. The expected generation speed is always afster than
+100 blocks in less than 10 seconds.
+
+4. `fork_chain_hiding.py` tests the scenario where an attacker tries to
+actively mine a saperate chain, hides the mined blocks, and release them
+together. The expected generation speed of the victim is always faster than 100
+blocks in less than 10 seconds.
+
+5. `fork_chain_attack.py` tests a similar attack as 4 but the attacker does not
+hide the blocks. The expected generation speed of the victim is always faster
+than 100 blocks in less than 10 seconds.
+
+Note that 2, 3, and 5 are long running test scripts and you can terminate the
+execution after the speed stablizes. For every release, we run these scripts to
+make sure that there is no performance regression.
