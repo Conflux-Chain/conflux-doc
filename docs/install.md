@@ -7,8 +7,6 @@ keywords:
   - install
 ---
 
-# Installation
-
 Here is a step by step guide on how to build Conflux from the source code and get a node running.
 
 ## Install Build Dependencies

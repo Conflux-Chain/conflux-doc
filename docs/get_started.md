@@ -9,8 +9,6 @@ keywords:
   - full node
 ---
 
-# Getting Started
-
 Here we walk through how to quickly setup conflux full node to join the testnet and how to use Conflux wallet to manage your account, transfer Conflux token, and deploy smart contract.
 
 ## Running Conflux Full Node
