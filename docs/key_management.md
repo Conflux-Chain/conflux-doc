@@ -10,7 +10,7 @@ $ git clone ssh://git@base.conflux-chain.org:2222/source/conflux-rust.git
 $ cd conflux-rust/key_manager/cli
 $ cargo build
 ```
-The binary of **keymgr** is then under the folder <code><span style="color:black">conflux-rust/key_manager/cli/target/</span></code>.
+The binary of **keymgr** is then under the folder `conflux-rust/key_manager/cli/target/`.
 
 ## Create Key Pair Using KeyMgr
 You can use **keymgr** to create your own secret/public key-pair.
