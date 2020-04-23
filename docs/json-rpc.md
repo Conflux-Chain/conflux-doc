@@ -45,21 +45,22 @@ When encoding **UNFORMATTED DATA** (byte arrays, account addresses, hashes, byte
 ## The epoch number parameter
 The following methods have an epoch number parameter:
 
-* cfx_getNextNonce
-* cfx_getBalance
+* cfx_call
+* cfx_epochNumber
+* cfx_estimateGasAndCollateral
+* cfx_getAccumulateInterestRate
 * cfx_getAdmin
+* cfx_getBalance
+* cfx_getBlockByEpochNumber
+* cfx_getBlocksByEpoch
+* cfx_getCode
+* cfx_getCollateralForStorage
+* cfx_getInterestRate
+* cfx_getNextNonce
 * cfx_getSponsorInfo
 * cfx_getStakingBalance
-* cfx_getCollateralForStorage
-* cfx_getCode
 * cfx_getStorageAt
-* cfx_call
-* cfx_estimateGasAndCollateral
-* cfx_getInterestRate
-* cfx_getAccumulateInterestRate
-* cfx_getBlockByEpochNumber
-* cfx_epochNumber
-* cfx_getBlocksByEpoch
+* cfx_getStorageRoot
 
 When requests are made that act on the state of conflux, the epoch number parameter determines the height of the epoch. The following options are possible for the epoch number parameter:
 
@@ -518,6 +519,55 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStorageAt","params":["0x8
   "jsonrpc": "2.0",
   "result": "0x000000000000000000000000000000000000000000000000000000000000162e",
   "id": 1
+}
+```
+
+---
+
+#### cfx_getStorageRoot
+
+Returns the storage root of a given contract.
+
+##### Parameters
+1. `DATA`, 20 Bytes - address to contract.
+2. `QUANTITY|TAG` - integer epoch number, or the string "latest_mined", "latest_state", "earliest", see the [epoch number parameter](#the-epoch-number-parameter)
+```
+params: [
+    '0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f',
+    'latest_state'
+]
+```
+
+##### Returns
+
+`Object` - A storage root object, or `null` if the contract does not exist:
+
+* `delta`: `DATA`, 32 Bytes - storage root in the delta trie.
+* `intermediate`: `DATA`, 32 Bytes - storage root in the intermediate trie.
+* `snapshot`: `DATA`, 32 Bytes - storage root in the snapshot.
+
+If all three of these fields match for two invocations of this RPC, the contract's storage is guaranteed to be identical.
+If they do not match, storage has likely changed (or the system transitioned into a new era).
+
+<!---
+TODO: Add links to snapshot/checkpoint documentation.
+-->
+
+##### Example
+
+```
+// Request
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStorageRoot","params":["0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f","latest_state"],"id":1}'
+
+// Result
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "delta": "0x0240a5a3486ac1cee71db22b8e12f1bb6ac9f207ecd81b06031c407663c20a94",
+    "intermediate": "0x314a41f277b678a1dc811a1fc0393b6d30c35e900cb27762ec9e9042bfdbdd49",
+    "snapshot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+  },
+  "id" :1
 }
 ```
 

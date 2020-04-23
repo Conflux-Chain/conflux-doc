@@ -1,4 +1,11 @@
-# Installation
+---
+id: installation
+title: Installation
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/install.md
+keywords:
+  - conflux
+  - install
+---
 
 Here is a step by step guide on how to build Conflux from the source code and get a node running.
 

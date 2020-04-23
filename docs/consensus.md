@@ -11,7 +11,8 @@ so that the pool can make better transaction selection decisions.
 This document is to provide a high-level overview for readers who want to
 understand the rust implementation of the Conflux consensus layer (in directory
 core/src/consensus). For more implementation details, see inlined comments in
-the code. For more information about the Conflux consensus algorithm, see XXX. 
+the code. For more information about the Conflux consensus algorithm, see 
+Conflux Protocol Specification and Conflux paper (https://arxiv.org/abs/1805.03870). 
 
 ## Design Goals
 
@@ -31,14 +32,14 @@ network from scratch, fast block process is important to keep the catch up
 period short.
 
 4. Robust against potential attacks. Malicious attackers may generate bad
-blocks at arbitrary positions in the tree graph.
+blocks at arbitrary positions in the TreeGraph.
 
 ## Structures and Components
 
 ### ConsensusGraph
 
 `ConsensusGraph` (core/src/consensus/mod.rs) is the main struct of the
-consensus layer. The synchronization layer construct `ConsensusGraph` with a
+consensus layer. The synchronization layer constructs `ConsensusGraph` with a
 `BlockDataManager` which stores all block metadata information on disk.
 `ConsensusGraph::on_new_block()` is the key function to send new blocks to the
 `ConsensusGraph` struct to process. It also provides a set of public functions
@@ -54,7 +55,7 @@ query functions that only acquire read locks.
 
 The internal structure of `ConsensusGraphInner` is fairly complicated.
 Generally speaking, it maintains two kinds of information. The first kind of
-information is the state of the whole tree graph, i.e., the current *pivot
+information is the state of the whole TreeGraph, i.e., the current *pivot
 chain*, *timer chain*, *difficulty*, etc.. The second kind of information is
 the state of each block (i.e., `ConsensusGraphNode` struct for each block).
 Each block corresponds to a `ConsensusGraphNode` struct for its information.
@@ -94,7 +95,7 @@ routines for the calculation for block rewards, including
 `ConfirmationMeter` (core/src/consensus/consensus_inner/confirmation_meter.rs)
 conservatively calculates the confirmation risk of each pivot chain block. Its
 result will be useful for the storage layer to determine when it is *safe* to
-discard old snapshots. It also can be used to serve RPC queries about block
+discard old snapshots. It can also be used to serve RPC queries about block
 confirmation if we decide to provide such RPC.
 
 ### AnticoneCache and PastsetCache
@@ -128,7 +129,7 @@ differences:
 1. *almost every block* will go into the total order, not just the agreed pivot
 chain.
 
-2. The transaction validity and the block validity are *independent*. A
+2. The transaction validity and the block validity are *independent*. For example, a
 transaction is invalid if it was included before or it cannot carry out due to
 insufficient balance. Such invalid transactions will become noop during the
 execution. However, *unlike Bitcoin and Ethereum blocks containing such
@@ -136,22 +137,22 @@ transactions will not become invalid*.
 
 In `ConsensusGraphInner`, the arena index of the current pivot chain blocks are
 stored in order in the `pivot_chain[]` vector. To maintain it, we calculate the
-least common ancestor (LCA) between the newly inserted block and the current best
+lowest common ancestor (LCA) between the newly inserted block and the current best
 block following the GHAST rule. If the fork corresponding to the newly inserted
-block for the LCA ended up to be heavier. We will update the `pivot_chain[]` from
+block for the LCA ended up to be heavier, we will update the `pivot_chain[]` from
 the forked point.
 
 ### Timer Chain
 
-Blocks whose PoW quality is `timer_chain_difficulty_ratio` times higher than the supposed
+Blocks whose PoW quality is `timer_chain_difficulty_ratio` times higher than the target
 difficulty are *timer blocks*. The `is_timer` field of the block will be set to
 True. The consensus algorithm then finds the longest timer block chain (more
-accurately, with heaviest accumulated difficulties) similar to the Bitcoin
+accurately, with greatest accumulated difficulty) similar to the Bitcoin
 consensus algorithm of finding the longest chain. The arena index of this
 longest timer chain will be stored into `timer_chain[]`. 
 
 The rationale of the timer chain is to provide a coarse-grained measurement of
-the time that cannot be influenced by a malicious attacker. Because timer blocks
+time that cannot be influenced by a malicious attacker. Because timer blocks
 are rare and generated slowly (if `timer_chain_difficulty_ratio` is properly
 high), a malicious attacker cannot prevent the growth of the timer chain unless
 it has the majority of the computation power. Therefore how many timer chain
@@ -176,17 +177,17 @@ block for a while. To handle this situation, the GHAST algorithm idea is to
 start to generate adaptive blocks, i.e., blocks whose weights are redistributed
 significantly so that there will be many zero weight blocks with a rare set of
 very heavy blocks. Specifically, if the PoW quality of an adaptive block is
-`adaptive_heavy_block_ratio` higher than the supposed difficulty, the block
-will have a weight of `adaptive_heavy_block_ratio`. Otherwise, the block will
+`adaptive_heavy_block_ratio` times of the target difficulty, the block
+will have a weight of `adaptive_heavy_block_ratio`; otherwise, the block will
 have a weight of zero. This effectively slows down the confirmation
 temporarily but will ensure the consensus progress.
 
 Because adaptive weight is a mechanism to defend against rare liveness attacks,
 it should not be turned on during the normal scenario. A new block is adaptive
-only if 1) one of its ancestor blocks is still not the dominant subtree
-comparing to its siblings and 2) a significantly long period of time has passed
-between the generation of the ancestor block and the new block (i.e., the
-difference of `timer_chain_height`). `ConsensusGraphInner::adaptive_weight()`
+only if: 1) one of its ancestor blocks is still not the dominant subtree
+comparing to its siblings, and 2) a significantly long period of time has passed
+between the generation of that ancestor block and the new block (i.e., the
+difference of `timer_chain_height` is sufficiently large). `ConsensusGraphInner::adaptive_weight()`
 and its subroutines implement the algorithm to determine whether a block is
 adaptive or not. Note that the implementation uses another link-cut-tree
 `adaptive_tree` as a helper. Please see the inlined comments for the
@@ -200,7 +201,7 @@ of a new block, other full nodes could determine whether it chooses the correct
 parent block and whether it should be adaptive or not. 
 
 The Conflux consensus algorithm defines those blocks who choose incorrect
-parents or fill in incorrect adaptive status as partial invalid blocks. For a
+parents or fill in incorrect adaptive status as *partial invalid blocks*. For a
 partial invalid block, the `partial_invalid` field will be set to True. The
 algorithm requires the partial invalid blocks being treated differently from
 the normal blocks in three ways:
@@ -229,8 +230,8 @@ partial invalid block. `activate_block()` will be called on a block only when
 `active_cnt` of the block becomes zero. The field `activated` denotes whether a
 block is active or not. For partially invalid blocks, their activation will be
 delayed till the current timer chain height of the ledger is `timer_chain_beta`
-higher than the invalid block. New generated blocks will not reference any
-inactive blocks, i.e., these inactive blocks are treated as if they are not in
+higher than the invalid block. Newly generated blocks will not reference any
+inactive blocks, i.e., these inactive blocks are treated as if they were not in
 the TreeGraph.
 
 ### Anticone, Past View, and Ledger View
@@ -257,8 +258,8 @@ past view. After the computation, we restore these anticone subtrees.
 ### Check Correct Parent
 
 To check whether a new block chooses a correct parent block or not, we first
-compute the set of blocks inside the epoch of the new block as if the new block
-is on the pivot chain. We store this set to the field
+compute the set of blocks inside the epoch of the new block assuming that 
+the new block is on the pivot chain. We store this set to the field
 `blockset_in_own_view_of_epoch`. We then iterate over every candidate block in
 this set to make sure that the chosen parent block is better than it.
 Specifically, we find out the two fork blocks of the candidate block and the
@@ -313,7 +314,7 @@ Specifically, any fork before the force confirm height is ignored.
 Note that this force confirm rule is also defined based on *past view* of each
 block. With the computed anticone information, `compute_timer_chain_tuple()` in
 `ConsensusGraphInner` computes the timer chain related information of each
-block under its past view. The results of this function is the difference of
+block under its past view. The results of this function include the difference of
 the `timer_chain[]`, `timer_chain_accumulative_lca[]`, and `timer_chain_height`
 between the ledger view and the past view. We can use the diff and the current
 ledger view values to get the past view values.
@@ -327,32 +328,32 @@ pivot chain block at the height 50000 will be the genesis of a new era.
 At the era boundary, there are several differences from the normal case.
 
 1. A block will enter the total order for execution only if 1) it is under the
-subtree of the previous era and 2) it is inside the past set of the next era in
+subtree of the previous era genesis and 2) it is inside the past set of the next era genesis in
 the pivot chain.
 
-2. Anticone penalty calculation for the block reward does not go over the era
+2. Anticone penalty calculation for the block reward does not go across the era
 boundary.
 
 ### Checkpoint
 
 Inside `ConsensusGraphInner`, there are two key height pointers, the current
 checkpoint era genesis block height (`cur_era_genesis_height`) and the current
-stable era block height (`cur_era_stable_height`). These two height pointers
+stable era genesis block height (`cur_era_stable_height`). These two height pointers
 will always point to some era genesis (being a multiple of `era_epoch_count`).
 Initially, both of these two pointers will point to the true genesis (height
 0).
 
-A new era genesis block become stable (i.e., `cur_era_stable_height` moves) if
-the block is *force confirmed* in the current TreeGraph. A new era genesis
-block become a new checkpoint (i.e., `cur_era_genesis_height` moves) if:
+A new era genesis block becomes stable (i.e., `cur_era_stable_height` moves) if
+the block is *force confirmed* in the current TreeGraph. A stable era genesis
+block becomes a new checkpoint (i.e., `cur_era_genesis_height` moves) if:
 
-1. The block is *force confirmed in the past view of the stable genesis block*. 
+1. The block is *force confirmed in the past view of the stable era genesis block*. 
 
 2. In the anticone of this block, there is no timer chain block.
 
 `should_move_stable_height()` and `should_form_checkpoint_at()` in
 `ConsensusNewBlockHandler` are invoked after every newly inserted block to test
-the above two conditions. Generally speaking, the stable block will never be
+the above two conditions. Generally speaking, the stable era genesis block will never be
 reverted off the pivot chain. Any block in the past set of the checkpoint block
 is no longer required for the future computation of the consensus layer.
 Therefore, after a new checkpoint is formed, `make_checkpoint_at()` in
@@ -362,53 +363,53 @@ the future set of the new checkpoint.
 Note that the checkpoint mechanism also changes how we handle a new block. For
 a new block:
 
-1. If the new block is outside the subtree of the current checkpoint. We only
-need to insert a stub into our data structure (because two blocks under the
-subtree may indirectly reference each other via this block). We do not need to
-care about this block because it is not going to change the timer chain and it
+1. If the new block is outside the subtree of the current checkpoint, we only
+need to insert a stub into our data structure (because a block under the
+subtree may be indirectly referenced via this stub block). We do not need to
+care about such a block because it is not going to change the timer chain and it
 is not going to be executed.
 
-2. If the past set of the new block does not contain the stable era block, we
+2. If the past set of the new block does not contain the stable era genesis block, we
 do not need to check the partial invalid status of this block. This is because
-this block will not change the timer chain (note our assumption that the timer
-chain will not reorg more than `timer_chain_beta`) and new blocks can reference
-this block directly (more than `tiemr_chain_beta` difference).
+this block will not change the timer chain (recall our assumption that the timer
+chain will not reorg for more than `timer_chain_beta` blocks) and future blocks can reference
+this block directly (since the timer chain difference is already more than `timer_chain_beta`).
 
 ### Deferred Execution
 
 Because the TreeGraph pivot chain may oscillate temporarily, we defer the
 transaction execution for `DEFERRED_STATE_EPOCH_COUNT` epochs (default 5).
 After a pivot chain update, `activate_block()` routine will enqueue the
-execution task of the new pivot chain except the last five epochs. It calls
+execution task of the new pivot chain except for the last five epochs. It calls
 `enqueue_epoch()` in `ConsensusExecutor` to enqueue each task.
 
 ### Block Reward Calculation
 
 Because there is no explicit coinbase transaction in Conflux, all block rewards
 are computed implicitly during the transaction execution. In Conflux, the block
-reward is by the base reward and the penalty ratio based on the total weight of
-its anticone blocks dividing its own difficulty. This anticone set only
-considers blocks appearing within the next `REWARD_EPOCH_COUNT` epochs.
-Specifically, if there is a new era then this anticone set will not count across
+reward is determined by the base reward and the penalty ratio based on the total weight of
+its anticone blocks divided by its epoch pivot block's target difficulty. This anticone set only
+considers blocks appearing no later than the next `REWARD_EPOCH_COUNT` epochs.
+Specifically, if there is a new era then the anticone set will not count across
 the era boundary as well. `get_pivot_reward_index()` in `ConsensusExecutor`
 counts this reward anticone threshold.
 `get_reward_execution_info_from_index()` in `ConsensusExecutor` and its
 subroutines compute this anticone set given the threshold point in the pivot
 chain.
 
-### Blame Mechanism
+### Blaming Mechanism
 
-It is not feasible to validate the filled state root of a block because we
+It is infeasible to validate the filled state root of a block because we
 would need to execute all transactions in a different order in the past view of
-that block. Instead, we will only ask the full nodes to validate the state root
+that block. Instead, we will only ask full nodes to validate the state root
 results on the current pivot chain. It then fills a blame number to indicate
 how many levels ancestors from the parent who do not have correct state root.
 When this number is greater than zero, the filled deferred state root becomes a
 Merkel H256 vector that contains the corrected state roots of the ancestors
 along with the correct one. `get_blame_and_deferred_state_for_generation()` in
 `ConsensusGraph` computes the blame information for the block generation.
-`first_trusted_header_starting_from()` is ``ConsensusGraph`` is a useful helper
-function to compute the first trustworthy header that based the subtree blame
+`first_trusted_header_starting_from()` in ``ConsensusGraph`` is a useful helper
+function to compute the first trustworthy header based on the subtree blame
 information.
 
 ## Multi-Thread Design
@@ -426,8 +427,8 @@ the synchronization thread and the consensus worker thread. The consensus work
 thread consumes each block one by one and invokes `consensus::on_new_block()`
 to process it. Note that the synchronization layer ensures the new block to be
 *header-ready* when it is delivered to `Consensus Worker`, i.e., all of its
-ancestor/past blocks are already delivered to the consensus before it is
-delivered. This enables the consensus layer to always deal with a complete
+ancestor/past blocks are already delivered to the consensus layer before itself. 
+This enables the consensus layer to always deal with a well-defined
 direct acyclic graph without holes.
 
 One advantage of having a single thread to be dedicated to the consensus
@@ -458,7 +459,7 @@ protocol implementation is for performance. With our *blaming mechanism*, the
 execution result state is completely separated from the consensus protocol
 implementation. The *deferred execution mechanism* gives us extra room to
 pipeline the consensus protocol and the transaction execution. It is therefore
-not wise to block the `ConsensusWorker` thread to wait for the execution
+not wise to block the `Consensus Worker` thread to wait for the execution
 results from coming back.
 
 ## Key Assumptions, Invariants, and Rules

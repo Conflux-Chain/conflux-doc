@@ -1,4 +1,13 @@
-# Getting Started
+---
+id: get_started
+title: Getting Started
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/get_started.md
+keywords:
+  - conflux
+  - started
+  - running
+  - full node
+---
 
 Here we walk through how to quickly setup conflux full node to join the testnet and how to use Conflux wallet to manage your account, transfer Conflux token, and deploy smart contract.
 
