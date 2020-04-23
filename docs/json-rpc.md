@@ -1,4 +1,12 @@
-# Conflux JSON-RPC API
+---
+id: json_rpc
+title: JSON RPC
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/json-rpc.md
+keywords:
+  - conflux
+  - json-rpc
+  - sdk
+---
 
 The Conflux JSON-RPC API is a collection of interfaces which allow you to interact with a local or remote Conflux node, using an HTTP connection in JSON-RPC protocol.
 

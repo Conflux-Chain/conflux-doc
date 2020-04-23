@@ -1,4 +1,13 @@
-# Conflux CLI Sub-commands
+---
+id: cli_sub_commands
+title: CLI Sub-commands
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/cli.md
+keywords:
+  - conflux
+  - cli
+  - sdk
+---
+
 Conflux CLI sub-commands is a collection of command line interfaces which allows you to interact with a local or remote Conflux node.
 
 ## Manage Accounts
