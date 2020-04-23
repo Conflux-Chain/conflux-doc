@@ -1,3 +1,14 @@
+---
+id: independent_chain 
+title: Run An Independent Chain
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/setup_independent_chain.md
+keywords:
+  - conflux
+  - run
+  - chain
+  - independent
+---
+
 #How to Set an Independent Conflux Chain
 
 You may want to run Conflux on a single node chain to develop and test smart
