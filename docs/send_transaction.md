@@ -24,11 +24,11 @@ The following document will use [js-conflux-sdk](https://github.com/Conflux-Chai
 
 ### Create an account with Conflux Portal
 
-1. Install [Conflux Protal](https://github.com/Conflux-Chain/conflux-portal).
+1. Install [Conflux Portal](https://github.com/Conflux-Chain/conflux-portal).
 
 2. Generate a new account.
 
-3. Get and test-net token from the faucet.
+3. Get test-net tokens from the faucet.
 
 4. Export and copy your private key to somewhere, we'll use it later.
 

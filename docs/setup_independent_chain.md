@@ -16,7 +16,7 @@ contracts. You can run Conflux as your indepdent chain with several machines.
 
 ## Run Single Node Development Chain
 
-In roder to run a single node Conflux chain for development, you can follow the
+In order to run a single node Conflux chain for development, you can follow the
 following steps:
 
 1. Get executable Conflux binary file (use precompiled binary or build from the
