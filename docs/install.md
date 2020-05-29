@@ -17,29 +17,33 @@ We recommend installing Rust through [rustup](https://www.rustup.rs/). If you do
 
 * Linux:
 
-    ```bash
-    $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    $ rustup install 1.42.0
-    ```
-    Other dependencies including `clang` and `sqlite` can be installed with:
+        $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+        $ rustup install 1.42.0
+    
+    Other dependencies including `clang`, `cmake (version >= 3.1)` and `sqlite (version >= 3.8.3)` can be installed with:
 
     - Ubuntu 18.04:
 
-        ```bash
-        $ sudo apt-get install clang libsqlite3-dev pkg-config libssl-dev cmake
-        ```
-
-    - CentOS 7 / RHEL: 
-
-        ```bash
-        $ sudo yum install epel-release
-        $ sudo yum install clang sqlite-devel gcc gcc-c++ openssl-devel cmake3
+            $ sudo apt-get install clang libsqlite3-dev pkg-config libssl-dev cmake
         
-        # This may fail if you have installed cmake with version 2.8. 
-        # You can choose to uninstall cmake first.
-        $ sudo ln -s /usr/bin/cmake3 /usr/bin/cmake
-        ```
+    - CentOS 7 / RHEL: 
+    
+            $ sudo yum install epel-release
+            $ sudo yum install clang gcc gcc-c++ openssl-devel cmake3 wget
 
+            # This may fail if you have installed cmake with version 2.8. 
+            # You can choose to uninstall cmake first.
+            $ sudo ln -s /usr/bin/cmake3 /usr/bin/cmake
+
+            # The official sqlite version on CentOS 7 is 3.7.17, so we need to install the latest version from the source code.
+            # The source code have be downloaded from https://www.sqlite.org/download.html
+            $ wget https://www.sqlite.org/2020/sqlite-autoconf-3320100.tar.gz
+            $ tar xfvz sqlite-autoconf-3320100.tar.gz
+            $ cd sqlite-autoconf-3320100
+            $ ./configure
+            $ make
+            $ sudo make install
+    
 * OSX:
 
         $ curl https://sh.rustup.rs -sSf | sh
