@@ -17,17 +17,28 @@ We recommend installing Rust through [rustup](https://www.rustup.rs/). If you do
 
 * Linux:
 
-        $ curl https://sh.rustup.rs -sSf | sh
-        $ rustup install 1.42.0
-    `clang` and `sqlite` can be installed with:
+    ```bash
+    $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    $ rustup install 1.42.0
+    ```
+    Other dependencies including `clang` and `sqlite` can be installed with:
 
-    - Ubuntu:
+    - Ubuntu 18.04:
 
-            $ sudo apt-get install clang libsqlite3-dev
-    
-    - CentOS / RHEL: 
+        ```bash
+        $ sudo apt-get install clang libsqlite3-dev pkg-config libssl-dev cmake
+        ```
 
-            $ sudo yum install clang sqlite-devel
+    - CentOS 7 / RHEL: 
+
+        ```bash
+        $ sudo yum install epel-release
+        $ sudo yum install clang sqlite-devel gcc gcc-c++ openssl-devel cmake3
+        
+        # This may fail if you have installed cmake with version 2.8. 
+        # You can choose to uninstall cmake first.
+        $ sudo ln -s /usr/bin/cmake3 /usr/bin/cmake
+        ```
 
 * OSX:
 
@@ -59,7 +70,7 @@ After installing the dependencies mentioned above, now you can clone our reposit
 # download Conflux code
 $ git clone https://github.com/Conflux-Chain/conflux-rust
 $ cd conflux-rust
-$ git checkout v0.1.7
+$ git checkout v0.5.0.4
 
 
 # build in release mode
@@ -67,11 +78,6 @@ $ cargo build --release
 ```
 
 This produces an executable in the `./target/release` subdirectory.
-
-You may encounter dependency issues in Ubuntu. If so, you will want to install
-libssl-dev and cmake pacakges with the following command:
-
-    |   $ sudo apt-get install pkg-config libssl-dev cmake
 
 Note, when compiling a crate and you receive errors, it's in most cases your
 outdated version of Rust, or some of your crates have to be recompiled.
