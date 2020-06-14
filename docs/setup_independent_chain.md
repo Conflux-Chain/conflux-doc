@@ -9,7 +9,7 @@ keywords:
   - independent
 ---
 
-#How to Set an Independent Conflux Chain
+# How to Set an Independent Conflux Chain
 
 You may want to run Conflux on a single node chain to develop and test smart
 contracts. You can run Conflux as your indepdent chain with several machines.
