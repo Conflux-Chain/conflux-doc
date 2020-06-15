@@ -673,14 +673,13 @@ Virtually call a contract, return the output data.
 
 ##### Parameters
 1. `Object` - A call request object:
-
-      * `from`: `DATA`, 20 Bytes - (optional, default: random address) address of sender.
-* `to`: `DATA`, 20 Bytes - (optional, default: `null` for contract creation) address of receiver.
-* `gasPrice`: `QUANTITY` - (optional, default: `0`) gas price provided by the sender in Drip.
-* `gas`: `QUANTITY` - (optional, default: `500000000`) gas provided by the sender.
-* `value`: `QUANTITY` - (optional, default: `0`) value transferred in Drip.
-* `data`: `DATA` - (optional, default: `0x`) the data send along with the transaction.
-* `nonce`: `QUANTITY` - (optional, default: `0`) the number of transactions made by the sender prior to this one.
+  * `from`: `DATA`, 20 Bytes - (optional, default: random address) address of sender.
+  * `to`: `DATA`, 20 Bytes - (optional, default: `null` for contract creation) address of receiver.
+  * `gasPrice`: `QUANTITY` - (optional, default: `0`) gas price provided by the sender in Drip.
+  * `gas`: `QUANTITY` - (optional, default: `500000000`) gas provided by the sender.
+  * `value`: `QUANTITY` - (optional, default: `0`) value transferred in Drip.
+  * `data`: `DATA` - (optional, default: `0x`) the data send along with the transaction.
+  * `nonce`: `QUANTITY` - (optional, default: `0`) the number of transactions made by the sender prior to this one.
 
 2. `QUANTITY|TAG` - integer epoch number, or the string "latest_mined",  "latest_state", "earliest", see the [epoch number parameter](#the-epoch-number-parameter)
 
