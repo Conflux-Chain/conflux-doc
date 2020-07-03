@@ -1,4 +1,4 @@
-#Test Framework
+# Test Framework
 
 The framework is written in `python3`. It can setup multiple Conflux nodes and test the distributed system behavior locally. It controls the nodes behavior by setting the node configurations, calling their RPCs, or sending them P2P messages directly.
 
@@ -67,7 +67,7 @@ This example tries to get the genesis block header from node 0 with P2P requests
 
 `WaitHandler` will wait for the first message of the designated message type and run a function on this received message. `p2p.send_protocol_msg` is used to send a rlp-encodable message. `h.wait()` waits and handles the first received `GET_BLOCK_HEADERS_RESPONSE` message. Note that `WaitHandler` starts listening right after it's initialized.
 
-##Configurations
+## Configurations
 
 By default, tests will use the release version executable binary built by `cargo`. If you want to use a file at another path (e.g., a debug version binary), you can set the environment variable `CONFLUX` to the full path of the used binary file before running the tests.
 
