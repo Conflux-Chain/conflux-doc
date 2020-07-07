@@ -626,8 +626,8 @@ Returns the next nonce should be used by given address.
 2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-    '0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8',
-    'latest_state' // state at the latest executed epoch
+    "0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8",
+    "latest_state" // state at the latest executed epoch
 ]
 ```
 ##### Returns
@@ -636,7 +636,7 @@ params: [
 ##### Example
 ```
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getNextNonce","params":["0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8", 'latest_state'],"id":1}'
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getNextNonce","params":["0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8", "latest_state"],"id":1}'
 
 // Result
 {
