@@ -108,7 +108,7 @@ After the provider got the cfx_sendRawTransaction RPC call, it will try to do th
 
 ### 2. got stucked in the transaction pool
 
-However, the transaction hash you got doesn't mean it's successfully executed. Conflux transaction will store as much verified transactions in the pool as possible, even the transactions whose nonce doesn' match expected one or the balance is not enough to pay the ```gas * gasPrice + value```. 
+However, the transaction hash you got doesn't mean it's successfully executed. Conflux transaction will store as much verified transactions in the pool as possible, even the transactions whose nonce doesn' match expected one or the balance is not enough to pay the ```gas * gasPrice + value```. if you are changing state of a contract you also need extra balance for storage collateral.
 
 So if you wait for 1 minute and still cannot find the transaction in ConfluxScan after sending it, it very likely got stuck in the transaction pool. 
 
@@ -123,14 +123,20 @@ And compare the result with value + gas * gasPrice.
 curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getNextNonce","params":["0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8"],"id":1}' -H "Content-Type: application/json" http://testnet-jsonrpc.conflux-chain.org:12537
 
 ```
-And compare the result with nonce you filled in.
+And compare the result with nonce you filled in. 
 
 You can always get the transaction details by cfx_getTransactionByHash:
 ```
 curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getTransactionByHash","params":["0x53fe995edeec7d241791ff32635244e94ecfd722c9fe90f34ddf59082d814514"],"id":1}' -H "Content-Type: application/json" http://testnet-jsonrpc.conflux-chain.org:12537
 ```
 
+Normally you can check these things to find the stuck reason:
+1. Your trancation nonce should equal to the result of `cfx_getNextNonce`. Normally a nonce bigger than the result of `cfx_getNextNonce` will cause transaction stuck in transaction pool.
+2. Your balance should enough to pay the ```gas * gasPrice + value```, if you are interact with contract and try to change the state of it, you should also set the storageLimit to the value of `cfx_estimateGasAndCollateral`.
+3. Sometimes the value of `cfx_estimateGasAndCollateral` is not accurate, you can multiply them by 1.1 or 1.2 to make them a little bigger.
+
 In this situation, you may want to send a new transaction after fixing the nonce or balance problem. Note that, replacing a transaction in the pool with the same nonce, a higher gasPrice is necessary.
+
 
 ### 3. mined but skipped
 
