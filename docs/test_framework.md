@@ -48,7 +48,7 @@ The framework will
 
 After running `self.setup_nodes()`, `self.nodes` is a list of `TestNode`, and each can be used to interact with the corresponding Conflux node. For example, to get the number of blocks in node 0 by calling the RPC named `getblockcount`, you simply call `self.nodes[0].getblockcount` and an integer will be returned.
 
-`connect_nodes(self.nodes, 0, 1)` connects nodes 0 and 1. `sync_blocks(self.nodes)` waits until all nodes have the same pivot chain tip. Them are both implemented by calling RPCs, and more useful functions will be introduced in [Utility Function List][#utility-function-list].
+`connect_nodes(self.nodes, 0, 1)` connects nodes 0 and 1. `sync_blocks(self.nodes)` waits until all nodes have the same pivot chain tip. Them are both implemented by calling RPCs, and more useful functions will be introduced in [Utility Function List](#utility-function-list).
 
 ## Sending P2P Messages
 
