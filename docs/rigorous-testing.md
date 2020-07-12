@@ -185,7 +185,7 @@ does not hide the blocks. The expected generation speed is always afster than
 100 blocks in less than 10 seconds.
 
 4. `fork_chain_hiding.py` tests the scenario where an attacker tries to
-actively mine a saperate chain, hides the mined blocks, and release them
+actively mine a separate chain, hides the mined blocks, and release them
 together. The expected generation speed of the victim is always faster than 100
 blocks in less than 10 seconds.
 
