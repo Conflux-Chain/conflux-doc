@@ -181,7 +181,7 @@ scenario. The expected generation speed is always faster than 1000 blocks in
 less than 1 minutes. 
 
 3. `fork_same_height_attack.py` tests a similar attack as 2 but the attacker
-does not hide the blocks. The expected generation speed is always afster than
+does not hide the blocks. The expected generation speed is always faster than
 100 blocks in less than 10 seconds.
 
 4. `fork_chain_hiding.py` tests the scenario where an attacker tries to
