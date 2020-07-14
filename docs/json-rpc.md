@@ -81,14 +81,14 @@ The curl options below might return a response where the node complains about th
 
 The examples also include the URL/IP & port combination which must be the last argument given to curl e.x. ```http://localhost:12345```
 
-Example for [cfx_getbestblockhash](#cfx_getbestblockhash)
+Example for [cfx_getBestBlockHash](#cfx_getbestblockhash)
 
 ```
 curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBestBlockHash","params":[],"id":1}' -H "Content-Type: application/json" http://localhost:12345
 ```
 
 ## Migrating from Ethereum JSON-RPC
-There is a correspondence between some JSON-RPCs from Ethereum and Conflux. 
+There is a correspondence between some JSON-RPCs from Ethereum and Conflux.
 
 Even though the details of JSON-RPC may defer from each other, the following mapping table could be helpful on migrating from Ethereum to Conflux:
 
@@ -114,7 +114,7 @@ Returns the information about a transaction requested by transaction hash.
  1. DATA, 32 Bytes - hash of a transaction
 ```
 params: [
-    '0x88df016429689c079f3b2f6ad39fa052532c56795b733da78a91ebe6a713944b',
+    "0x88df016429689c079f3b2f6ad39fa052532c56795b733da78a91ebe6a713944b"
 ]
 ```
 ##### Returns
@@ -173,7 +173,7 @@ Returns information about a block by hash.
   2. `Boolean` - If `true` it returns the full transaction objects, if `false` only the hashes of the transactions.
 ```
 params: [
-    '0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331',
+    "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
     true
 ]
 ```
@@ -182,7 +182,7 @@ params: [
 
 * `adaptive`: `Boolean` - If `true` the weight of the block is adaptive under GHAST rule, if `false` otherwise.
 * `blame`: `QUANTITY` - If 0, then no blocks are blamed on its parent path, If greater than 0, then the nearest blamed block on the parent path is `blame` steps away.
-* `deferredLogsBloomHash`: `DATA`, 32 Bytes - The bloom hash of deferred logs. 
+* `deferredLogsBloomHash`: `DATA`, 32 Bytes - The bloom hash of deferred logs.
 * `deferredReceiptsRoot`: `DATA`, 32 Bytes - the hash of the receipts of the block after deferred execution.
 * `deferredStateRoot`: `DATA`, 32 Bytes - the root of the final state trie of the block after deferred execution.
 * `difficulty`: `QUANTITY` - integer of the difficulty for this block.
@@ -246,7 +246,7 @@ Returns information about a block by epoch number.
   2. `Boolean` - If `true` it returns the full transaction objects, if `false` only the hashes of the transactions.
 ```
 params: [
-    'latest_mined',
+    "latest_mined",
     true
 ]
 ```
@@ -321,7 +321,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_gasPrice","params":[],"id":1
     "jsonrpc" : "2.0",
     "id" : 1,
     "result" : "0x09184e72a000"
-} 
+}
 ```
 
 ---
@@ -365,8 +365,8 @@ Returns the balance of the account of given address.
 2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-   '0xc94770007dda54cF92009BFF0dE90c06F603a09f',
-   'latest_state'
+   "0xc94770007dda54cF92009BFF0dE90c06F603a09f",
+   "latest_state"
 ]
 ```
 ##### Returns
@@ -393,8 +393,8 @@ Returns the balance of the staking account of given address.
 2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-   '0xc94770007dda54cF92009BFF0dE90c06F603a09f',
-   'latest_state'
+   "0xc94770007dda54cF92009BFF0dE90c06F603a09f",
+   "latest_state"
 ]
 ```
 ##### Returns
@@ -422,8 +422,8 @@ Returns the size of the collateral storage of given address, in Byte.
 2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-   '0xc94770007dda54cF92009BFF0dE90c06F603a09f',
-   'latest_state'
+   "0xc94770007dda54cF92009BFF0dE90c06F603a09f",
+   "latest_state"
 ]
 ```
 ##### Returns
@@ -450,8 +450,8 @@ Returns the admin of given contract.
 2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-    '0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f',
-    'latest_state'
+    "0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f",
+    "latest_state"
 ]
 ```
 ##### Returns
@@ -478,8 +478,8 @@ Returns the code of given contract.
 2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-    '0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f',
-    'latest_state'
+    "0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f",
+    "latest_state"
 ]
 ```
 ##### Returns
@@ -507,9 +507,9 @@ Returns storage entries from a given contract.
 3. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-    '0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f',
-    '0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9',
-    'latest_state'
+    "0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f",
+    "0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9",
+    "latest_state"
 ]
 ```
 ##### Returns
@@ -538,8 +538,8 @@ Returns the storage root of a given contract.
 2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-    '0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f',
-    'latest_state'
+    "0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f",
+    "latest_state"
 ]
 ```
 
@@ -585,8 +585,8 @@ Returns the sponsor info of given contract.
 2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-    '0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f',
-    'latest_state'
+    "0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f",
+    "latest_state"
 ]
 ```
 ##### Returns
@@ -626,8 +626,8 @@ Returns the next nonce should be used by given address.
 2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-    '0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8',
-    'latest_state' // state at the latest executed epoch
+    "0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8",
+    "latest_state" // state at the latest executed epoch
 ]
 ```
 ##### Returns
@@ -636,7 +636,7 @@ params: [
 ##### Example
 ```
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getNextNonce","params":["0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8", 'latest_state'],"id":1}'
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getNextNonce","params":["0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8", "latest_state"],"id":1}'
 
 // Result
 {
@@ -653,7 +653,7 @@ Creates new message call transaction or a contract creation for signed transacti
 `DATA`, The signed transaction data.
 ```
 params: [
-    '0xf86eea8201a28207d0830f4240943838197c0c88d0d5b13b67e1bfdbdc132d4842e389056bc75e2d631000008080a017b8b26f473820475edc49bd153660e56b973b5985bbdb2828fceacb4c91f389a03452f9a69da34ef35acc9c554d7b1d63e9041141674b42c3abb1b57b9f83a2d3'
+    "0xf86eea8201a28207d0830f4240943838197c0c88d0d5b13b67e1bfdbdc132d4842e389056bc75e2d631000008080a017b8b26f473820475edc49bd153660e56b973b5985bbdb2828fceacb4c91f389a03452f9a69da34ef35acc9c554d7b1d63e9041141674b42c3abb1b57b9f83a2d3"
 ]
 ```
 ##### Returns
@@ -680,25 +680,25 @@ Virtually call a contract, return the output data.
 1. `Object` - A call request object:
 
       * `from`: `DATA`, 20 Bytes - (optional, default: random address) address of sender.
-* `to`: `DATA`, 20 Bytes - (optional, default: `null` for contract creation) address of receiver.
-* `gasPrice`: `QUANTITY` - (optional, default: `0`) gas price provided by the sender in Drip.
-* `gas`: `QUANTITY` - (optional, default: `500000000`) gas provided by the sender.
-* `value`: `QUANTITY` - (optional, default: `0`) value transferred in Drip.
-* `data`: `DATA` - (optional, default: `0x`) the data send along with the transaction.
-* `nonce`: `QUANTITY` - (optional, default: `0`) the number of transactions made by the sender prior to this one.
+      * `to`: `DATA`, 20 Bytes - (optional, default: `null` for contract creation) address of receiver.
+      * `gasPrice`: `QUANTITY` - (optional, default: `0`) gas price provided by the sender in Drip.
+      * `gas`: `QUANTITY` - (optional, default: `500000000`) gas provided by the sender.
+      * `value`: `QUANTITY` - (optional, default: `0`) value transferred in Drip.
+      * `data`: `DATA` - (optional, default: `0x`) the data send along with the transaction.
+      * `nonce`: `QUANTITY` - (optional, default: `0`) the number of transactions made by the sender prior to this one.
 
 2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 
 ```
 params: [
     {
-        "from":"0xf6B7219AF657e14B5103e915839dD12f51cDBA68",
-        "to":"0x63428378C5D7d168c9Ef2809a76812d40E018Ac9",
-        "data":"0x",
-        "gasPrice":"0x2540be400",
+        "from": "0xf6B7219AF657e14B5103e915839dD12f51cDBA68",
+        "to": "0x63428378C5D7d168c9Ef2809a76812d40E018Ac9",
+        "data": "0x",
+        "gasPrice": "0x2540be400",
         "nonce": "0x0"
     },
-    'latest_state' // state at the latest executed epoch
+    "latest_state" // state at the latest executed epoch
 ]
 ```
 ##### Returns
@@ -706,7 +706,7 @@ params: [
 ##### Example
 ```
 // Request
-curl -X POST --data '{"method":"cfx_call","id":1,"jsonrpc":"2.0","params":[{"from":"0xf6B7219AF657e14B5103e915839dD12f51cDBA68","to":"0x63428378C5D7d168c9Ef2809a76812d40E018Ac9","data":"0x","gasPrice":"0x2540be400", "nonce": "0x0"}]}'
+curl -X POST --data '{"method":"cfx_call","id":1,"jsonrpc":"2.0","params":[{"from":"0xf6B7219AF657e14B5103e915839dD12f51cDBA68","to":"0x63428378C5D7d168c9Ef2809a76812d40E018Ac9","data":"0x","gasPrice":"0x2540be400","nonce":"0x0"}]}'
 
 // Result
 {
@@ -727,13 +727,13 @@ See [cfx_call](#cfx_call).
 ```
 params: [
     {
-        "from":"0xf6B7219AF657e14B5103e915839dD12f51cDBA68",
-        "to":"0x63428378C5D7d168c9Ef2809a76812d40E018Ac9",
-        "data":"0x",
-        "gasPrice":"0x2540be400",
+        "from": "0xf6B7219AF657e14B5103e915839dD12f51cDBA68",
+        "to": "0x63428378C5D7d168c9Ef2809a76812d40E018Ac9",
+        "data": "0x",
+        "gasPrice": "0x2540be400",
         "nonce": "0x0"
     },
-    'latest_state' // state at the latest executed epoch
+    "latest_state" // state at the latest executed epoch
 ]
 ```
 ##### Returns
@@ -744,7 +744,7 @@ params: [
 ##### Example
 ```
 // Request
-curl -X POST --data '{"method":"cfx_estimateGasAndCollateral","id":1,"jsonrpc":"2.0","params":[{"from":"0xf6B7219AF657e14B5103e915839dD12f51cDBA68","to":"0x63428378C5D7d168c9Ef2809a76812d40E018Ac9","data":"0x","gasPrice":"0x2540be400", "nonce": "0x0"}]}'
+curl -X POST --data '{"method":"cfx_estimateGasAndCollateral","id":1,"jsonrpc":"2.0","params":[{"from":"0xf6B7219AF657e14B5103e915839dD12f51cDBA68","to":"0x63428378C5D7d168c9Ef2809a76812d40E018Ac9","data":"0x","gasPrice":"0x2540be400","nonce":"0x0"}]}'
 
 // Result
 {
@@ -839,7 +839,7 @@ Returns the information about a transaction receipt requested by transaction has
  1. DATA, 32 Bytes - hash of a transaction
 ```
 params: [
-    '0x53fe995edeec7d241791ff32635244e94ecfd722c9fe90f34ddf59082d814514',
+    "0x53fe995edeec7d241791ff32635244e94ecfd722c9fe90f34ddf59082d814514",
 ]
 ```
 ##### Returns
@@ -892,8 +892,8 @@ Return account related states of the given account
 2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-   '0xc94770007dda54cF92009BFF0dE90c06F603a09f',
-   'latest_state'
+   "0xc94770007dda54cF92009BFF0dE90c06F603a09f",
+   "latest_state"
 ]
 ```
 ##### Returns
@@ -937,7 +937,7 @@ Returns the interest rate of given parameter.
 `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-   'latest_state'
+   "latest_state"
 ]
 ```
 ##### Returns
@@ -963,7 +963,7 @@ Returns the accumulate interest rate of given parameter.
 `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-   'latest_state'
+   "latest_state"
 ]
 ```
 ##### Returns
