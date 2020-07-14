@@ -7,6 +7,7 @@ nav:
     - Run an Indepdent Chain: setup_independent_chain.md
     - JSON-RPC API: json-rpc.md
     - JavaScript API: javascript-api.md
+    - Publish-Subscribe API: pubsub.md
     - CLI Sub-commands: cli.md
     - Design & Implementation: design.md
     - My First Transaction: send_transaction.md
