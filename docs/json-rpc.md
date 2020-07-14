@@ -74,7 +74,7 @@ When requests are made that act on the state of conflux, the epoch number parame
 TODO: Add links to deferred execution documentation.
 -->
 
-Noticed that for performance optimization concern, the lasted mined epochs are not executed, so there is no state available in these epochs. For most of RPCs related to state query, the `"latest_state"` is recommended.
+Please note that due to performance optimization, the latest mined epochs are not executed, so there is no state available for these epochs. For most RPCs related to state query, `"latest_state"` is recommended.
 
 ## Curl Examples Explained
 The curl options below might return a response where the node complains about the content type, this is because the --data option sets the content type to application/x-www-form-urlencoded . If your node does complain, manually set the header by placing -H "Content-Type: application/json" at the start of the call.
