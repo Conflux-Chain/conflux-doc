@@ -10,9 +10,7 @@ keywords:
 
 The Publish-Subscribe API of Conflux (also called pub-sub) makes it possible to query certain items on an ongoing basis, without polling through the JSON-RPC HTTP interface. You can use this API on top of a TCP or WebSocket connection.
 
-To use the pub-sub API, please make sure that you have access to a node with its TPC or WebSocket port open. If you maintain your own node, you can set these using the `--jsonrpc-tcp-port PORT` and `--jsonrpc-ws-port PORT` CLI flags (see `conflux --help`) or through the `jsonrpc_tcp_port` and `jsonrpc_ws_port` configuration parameters (see `run/default.toml`). In this document, we will use the default TPC (`12536`) and WebSocket (`12535`) ports.
-
----
+To use the pub-sub API, please make sure that you have access to a node with its TCP or WebSocket port open. If you maintain your own node, you can set these using the `--jsonrpc-tcp-port PORT` and `--jsonrpc-ws-port PORT` CLI flags (see `conflux --help`) or through the `jsonrpc_tcp_port` and `jsonrpc_ws_port` configuration parameters (see `run/default.toml`). In this document, we will use the default TCP (`12536`) and WebSocket (`12535`) ports.
 
 ## Subscriptions
 
@@ -42,8 +40,6 @@ The following example shows how to create a subscription over a WebSocket connec
 
 Currently, we support the following topics: `newHeads`, `epochs`, `logs`.
 
----
-
 ## `newHeads`
 
 The `newHeads` topic streams all new block headers participating in the consensus.
@@ -56,8 +52,6 @@ The `newHeads` topic streams all new block headers participating in the consensu
 { "jsonrpc": "2.0", "method": "cfx_subscription", "params": { "result": { "adaptive": false, "blame": 0, "deferredLogsBloomHash": "0xd397b3b043d87fcd6fad1291ff0bfd16401c274896d8c63a923727f077b8e0b5", "deferredReceiptsRoot": "0x959684cc863003d5ac5cb31bcf5baf7e1b4fc60963fcc36fbc1bf4394a0e2e3c", "deferredStateRoot": "0xd7bb2ad6406b7ec8c4ed3f424b5cb08f23483a6208f1c551e7f8a54e7c764462", "difficulty": "0x4", "epochNumber": "0x6b", "gasLimit": "0xb2d05e00", "hash": "0xd8f1eead32f32fdd909e3654357d90846114e26931448701af086a41fcf725ef", "height": "0x6b", "miner": "0xa8b427ecb70fdddbef0cda1a1dac0dfa8fb49943", "nonce": "0xf590aad206a65c1c", "parentHash": "0xcdd3831280b42552c4bdfe2893892d96008f1788f37122cbccf09b172f7035df", "refereeHashes": [], "stable": true, "timestamp": "0x5e478224", "transactionsRoot": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347" }, "subscription": "0x7b40ad26c24752d3" }}
 ...
 ```
-
----
 
 ## `epochs`
 
@@ -86,8 +80,6 @@ For each epoch, the **last** hash in `epochHashesOrdered` is the hash of the piv
 0xe322882ee1acb79e0b7eb394db9aeede67c6198641762da8a50b4bb6b48cc2a4 (epoch 0x6aa)
 ```
 
----
-
 ## `logs`
 
 The `logs` topic streams all logs matching a certain filter, in order.
@@ -108,11 +100,9 @@ In case of a pivot chain reorg (which might affect recent logs), a special `reve
 ...
 ```
 
-In the example above, the `revert` message **invalidates all logs with an epoch number greater than `0x40f`** (i.e. epochs `0x410`, `0x411`, etc). The log associated with transaction `0xf639c7b...` is executed and published again. This time, the transaction ends up in epoch `0x410` instead of `0x41a`. All logs in epochs up to (and including) **`0x40f`** remain valid.
+In the example above, the `revert` message **invalidates all logs with an epoch number greater than `0x40f`** (i.e. epochs `0x410`, `0x411`, etc). The log associated with transaction `0xf639c7b...` is executed and published again. This time, the transaction ends up in epoch `0x410` instead of `0x41a`. All logs in the epochs up to (and including) **`0x40f`** remain valid.
 
 *Note: The `logs` pub-sub topic is not supported on light nodes.*
-
----
 
 ## Node.js example
 
@@ -157,4 +147,4 @@ chain reorg of depth 1 (39562 --> 39561)
 ...
 ```
 
-(Note: shallow chain reorgs are quite common as the end of the pivot chain tends to oscillate before it stabilizes.)
+*Note: shallow chain reorgs are quite common as the end of the pivot chain tends to oscillate before it stabilizes.*
