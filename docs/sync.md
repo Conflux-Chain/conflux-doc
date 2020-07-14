@@ -1,6 +1,6 @@
-#Block Synchronization Process
+# Block Synchronization Process
 
-##Synchronization Graph
+## Synchronization Graph
 Synchronization graph is designed to organize newly arrived blocks (received from the peers, loaded from local storage, or self-mined) even when their past blocks haven’t been completely collected. Once all the past blocks of a block have been collected in synchronization graph, it will be dispatched to consensus graph for further processing.
 
 The block header and block body enter the synchronization graph in separate processes, because, typically, the block header and body are transferred separately in peer-to-peer layer. The graph structure in the synchronization graph is constructed by block header arrival. Each block is represented as a node in the graph structure, and the nodes are linked through the parent/child and referrer/referee relations between blocks. 
@@ -23,7 +23,7 @@ Synchronization graph checks the validity of arriving blocks. The blocks that do
 
 The validity checks 1~9 only use information in block header. The validity checks 10~13 use the information in block body. The checks 6~9 require graph structure information like parent information and are conducted on a block when the headers of all its past blocks have entered the synchronization graph. To speed up the block relay process, when both the header and body of a block have entered the synchronization graph and the headers of all its past blocks have also entered, the block can be relayed to the peers. It is not needed to wait for the bodies of all the past blocks of a block to be received in order to relay the block. This may lead to relaying invalid blocks, but since all the relayed blocks already have valid difficulty and POW settings, the attackers who make this case also pay the corresponding cost of computation power. 
 
-###Graph Structure Maintenance
+### Graph Structure Maintenance
 The node structure of synchronization graph is defined as follows:
 ```c
 pub struct SynchronizationGraphNode {
@@ -100,7 +100,7 @@ During this traversal process, for each node,
 It may make some of its descendants become `BLOCK_GRAPH_READY`. 
 If the block with the newly arrived body is at least `BLOCK_HEADER_GRAPH_READY`, it becomes ready to be relayed.
 
-###Garbage Collect Dangling Blocks
+### Garbage Collect Dangling Blocks
 Some (adversarial) nodes may send to a full node some blocks that cannot be in status of `BLOCK_GRAPH_READY` forever, e.g., to conduct DDOS attack or to be in the case of serious message delay so that the block does not belong to the current checkpoint era anymore. 
 These blocks will be held in synchronization graph but should be garbage-collected eventually to avoid wasting memory resources. 
 In order to do this, the synchronization graph maintains a set of blocks representing the frontier of these graph-unready blocks. 
