@@ -94,13 +94,13 @@ In case of a pivot chain reorg (which might affect recent logs), a special `reve
 
 { "jsonrpc": "2.0", "method": "cfx_subscription", "params": { "result": { "epochNumber": "0x3f3", "transactionHash": "0x89ee0aa76bc1a7c9340f3efcfc7c8263a212cadcb32f0231ef1395ef9c587899", "address": "0x67ca8b02599f2001cdf453722a01e243af936998", "blockHash": "0x929ad718797e03cce31f66f234e12893c8be5e959dba14b8328205c9c136ddbe", "data": "0x000000000000000000000000f8b133b3dad547cdf0be685399b39241f2e6e77d", "logIndex": "0x0", "topics": ["0xc822296d568499547c3a5b93a500428bab54ef8f6a481f352c7086f1daf4277f", "0x000000000000000000000000f8b133b3dad547cdf0be685399b39241f2e6e77d"], "transactionIndex": "0x0", "transactionLogIndex": "0x0" }, "subscription": "0x2dd59588c475a772" }}
 { "jsonrpc": "2.0", "method": "cfx_subscription", "params": { "result": { "epochNumber": "0x40f", "transactionHash": "0x5cf00bb4ee966c340f459c57a53e4be7357bdf23bb055a95066d4408d5ecf118", "address": "0x9c1b6fa76370402ae1543fb2a3ee4639b127924d", "blockHash": "0xede319ddfa7a9710aef627aa152052da190d3798d2ad7fd7da8d953b48a1785e", "data": "0x000000000000000000000000f8b133b3dad547cdf0be685399b39241f2e6e77d", "logIndex": "0x0", "topics": ["0xc822296d568499547c3a5b93a500428bab54ef8f6a481f352c7086f1daf4277f", "0x000000000000000000000000f8b133b3dad547cdf0be685399b39241f2e6e77d"], "transactionIndex": "0x0", "transactionLogIndex": "0x0" }, "subscription": "0x2dd59588c475a772" }}
-{ "jsonrpc": "2.0", "method": "cfx_subscription", "params": { "result": { "epochNumber": "0x41a", "transactionHash": "0xf639c7b26df0d60bc8306c7877d7ec3c361b2157d14b12b704ea5500d70d8798", "address": "0xdb65afacffa38d611f6f58d5bdb62e447074d247", "blockHash": "0x3742f695f9b2270b51b9a409ff499caf298dd46dc9d3bbe8360c4997ce9b00c7", "data": "0x000000000000000000000000f8b133b3dad547cdf0be685399b39241f2e6e77d", "logIndex": "0x0", "topics": ["0xc822296d568499547c3a5b93a500428bab54ef8f6a481f352c7086f1daf4277f", "0x000000000000000000000000f8b133b3dad547cdf0be685399b39241f2e6e77d"], "transactionIndex": "0x0", "transactionLogIndex": "0x0" }, "subscription": "0x2dd59588c475a772" }}
+{ "jsonrpc": "2.0", "method": "cfx_subscription", "params": { "result": { "epochNumber": "0x411", "transactionHash": "0xf639c7b26df0d60bc8306c7877d7ec3c361b2157d14b12b704ea5500d70d8798", "address": "0xdb65afacffa38d611f6f58d5bdb62e447074d247", "blockHash": "0x3742f695f9b2270b51b9a409ff499caf298dd46dc9d3bbe8360c4997ce9b00c7", "data": "0x000000000000000000000000f8b133b3dad547cdf0be685399b39241f2e6e77d", "logIndex": "0x0", "topics": ["0xc822296d568499547c3a5b93a500428bab54ef8f6a481f352c7086f1daf4277f", "0x000000000000000000000000f8b133b3dad547cdf0be685399b39241f2e6e77d"], "transactionIndex": "0x0", "transactionLogIndex": "0x0" }, "subscription": "0x2dd59588c475a772" }}
 { "jsonrpc": "2.0", "method": "cfx_subscription", "params": { "result": { "revertTo": "0x40f" }, "subscription": "0x2dd59588c475a772" }}
 { "jsonrpc": "2.0", "method": "cfx_subscription", "params": { "result": { "epochNumber": "0x410", "transactionHash": "0xf639c7b26df0d60bc8306c7877d7ec3c361b2157d14b12b704ea5500d70d8798", "address": "0x7877422249471ea4295a4b6c638888027147ad6e", "blockHash": "0x24faa39196ee34d1d04cd4c44012bd28a757b251e0551d9503bf6685b467e0d5", "data": "0x000000000000000000000000f8b133b3dad547cdf0be685399b39241f2e6e77d", "logIndex": "0x0", "topics": ["0xc822296d568499547c3a5b93a500428bab54ef8f6a481f352c7086f1daf4277f", "0x000000000000000000000000f8b133b3dad547cdf0be685399b39241f2e6e77d"], "transactionIndex": "0x0", "transactionLogIndex": "0x0" }, "subscription": "0x2dd59588c475a772" }}
 ...
 ```
 
-In the example above, the `revert` message **invalidates all logs with an epoch number greater than `0x40f`** (i.e. epochs `0x410`, `0x411`, etc). The log associated with transaction `0xf639c7b...` is executed and published again. This time, the transaction ends up in epoch `0x410` instead of `0x41a`. All logs in the epochs up to (and including) **`0x40f`** remain valid.
+In the example above, the `revert` message **invalidates all logs with an epoch number greater than `0x40f`** (i.e. epochs `0x410`, `0x411`, etc). Transaction `0xf639c7b...` is re-executed and the corresponding log is published again. This time, the transaction ends up in epoch `0x410` instead of `0x411`. All logs in the epochs up to (and including) **`0x40f`** remain valid.
 
 *Note: The `logs` pub-sub topic is not supported on light nodes.*
 
@@ -115,7 +115,7 @@ const jsonrpc = require('jsonrpc-lite');
 const ws = new WebSocket('ws://localhost:12535');
 
 ws.on('open', function open() {
-  const req = jsonrpc.request('1', 'cfx_subscribe', ["epochs"]);
+  const req = jsonrpc.request('1', 'cfx_subscribe', ['epochs']);
   ws.send(JSON.stringify(req));
 });
 
@@ -127,7 +127,7 @@ ws.on('message', function incoming(data) {
   if (item.type == 'notification') {
     let epoch = Number(item.payload.params.result.epochNumber);
 
-    if (epoch < latest_epoch) {
+    if (epoch <= latest_epoch) {
       console.log(`chain reorg of depth ${latest_epoch - epoch} (${latest_epoch} --> ${epoch})`);
     }
 
@@ -147,4 +147,4 @@ chain reorg of depth 1 (39562 --> 39561)
 ...
 ```
 
-*Note: shallow chain reorgs are quite common as the end of the pivot chain tends to oscillate before it stabilizes.*
+*Note: Shallow pivot chain reorgs are quite common as the end of the pivot chain tends to oscillate before it stabilizes.*
