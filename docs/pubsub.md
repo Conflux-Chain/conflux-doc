@@ -108,7 +108,7 @@ In the example above, the `revert` message **invalidates all logs with an epoch 
 
 Below is a simple example of using the pub-sub API through Node.js. In this example, we detect pivot chain reorgs using the `epochs` topic. We rely on 3rd-party libraries, as `js-conflux-sdk` does not support the pub-sub API yet. For simplicity, we omit error handling.
 
-```node
+```js
 const WebSocket = require('ws');
 const jsonrpc = require('jsonrpc-lite');
 
