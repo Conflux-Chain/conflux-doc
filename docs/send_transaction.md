@@ -67,7 +67,7 @@ const receiver = '0xa70ddf9b9750c575db453eea6a041f4c8536785a'
 	* **gas**: optional, the max gas you would like to use in the transaction. After the end of transaction processing, the unused gas will be refunded if used_gas >= gas * 0.75. If missing, the result of cfx_estimateGasAndCollateral will be automatically filled in and it works for general scenarios.
 	* **to**: the receiver of the transaction, could be a personal account(start with 1) or contract(start with 8). Leave a null here to deploy a contract.
 	* **value**: the value (in Drip) to be transferred.
-	* **storageLimit**: optional, he max storage (in Byte) you would like to collateralize in the transaction. If missing, the result of cfx_estimateGasAndCollateral will be automatically filled in and it works for general senarios.transactions.
+	* **storageLimit**: optional, the max storage (in Byte) you would like to collateralize in the transaction. If missing, the result of cfx_estimateGasAndCollateral will be automatically filled in and it works for general senarios.transactions.
 	* **epochHeight**: optional, a transaction is can be verified only in epochs in the range [epochHeight - 10000, epochHeight + 10000], so it's  a timeout mechanism. If missing, the result of cfx_epochNumber will be automatically filled in and it works for general scenarios.
 	* **data**: optional, it's either an attached message of a transaction or a function signature of a contract call. If missing, a null will be filled into it.
 	* **chainId**: optional, it used for dealing with a hard fork or preventing a transaction replay attack. If missing, 0 will be filled into it.
