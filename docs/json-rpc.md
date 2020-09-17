@@ -65,25 +65,30 @@ The following methods have an epoch number parameter:
 When requests are made that act on the state of conflux, the epoch number parameter determines the height of the epoch. The following options are possible for the epoch number parameter:
 
 * `HEX String` - an integer epoch number
-* `String "earliest"` for the earliest epoch where the genesis block in
-* `String "latest_mined"` - for the latest epoch where the latest mined block in
-* `String "latest_state"` - for the latest epoch where the latest block with an executed state in
+* `String "earliest"` for the epoch of the genesis block
+* `String "latest_checkpoint"` for the earliest epoch stored in memory
+* `String "latest_state"` - for the latest epoch that has been executed
+* `String "latest_mined"` - for the latest known epoch
 
-Noticed that for performance optimization concern, the lasted mined epochs are not executed, so there is no state available in these epochs. For most of RPCs related to state query, the `"latest_state"` is recommended.
+<!---
+TODO: Add links to deferred execution documentation.
+-->
+
+Please note that due to performance optimization, the latest mined epochs are not executed, so there is no state available for these epochs. For most RPCs related to state query, `"latest_state"` is recommended.
 
 ## Curl Examples Explained
 The curl options below might return a response where the node complains about the content type, this is because the --data option sets the content type to application/x-www-form-urlencoded . If your node does complain, manually set the header by placing -H "Content-Type: application/json" at the start of the call.
 
 The examples also include the URL/IP & port combination which must be the last argument given to curl e.x. ```http://localhost:12345```
 
-Example for [cfx_getbestblockhash](#cfx_getbestblockhash)
+Example for [cfx_getBestBlockHash](#cfx_getbestblockhash)
 
 ```
 curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBestBlockHash","params":[],"id":1}' -H "Content-Type: application/json" http://localhost:12345
 ```
 
 ## Migrating from Ethereum JSON-RPC
-There is a correspondence between some JSON-RPCs from Ethereum and Conflux. 
+There is a correspondence between some JSON-RPCs from Ethereum and Conflux.
 
 Even though the details of JSON-RPC may defer from each other, the following mapping table could be helpful on migrating from Ethereum to Conflux:
 
@@ -103,13 +108,14 @@ Even though the details of JSON-RPC may defer from each other, the following map
 * eth_getLogs => cfx_getLogs
 
 ## JSON-RPC methods
+
 #### cfx_getTransactionByHash 
 Returns the information about a transaction requested by transaction hash.
 ##### Parameters
  1. DATA, 32 Bytes - hash of a transaction
 ```
 params: [
-    '0x88df016429689c079f3b2f6ad39fa052532c56795b733da78a91ebe6a713944b',
+    "0x88df016429689c079f3b2f6ad39fa052532c56795b733da78a91ebe6a713944b"
 ]
 ```
 ##### Returns
@@ -168,7 +174,7 @@ Returns information about a block by hash.
   2. `Boolean` - If `true` it returns the full transaction objects, if `false` only the hashes of the transactions.
 ```
 params: [
-    '0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331',
+    "0xe670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
     true
 ]
 ```
@@ -177,12 +183,13 @@ params: [
 
 * `adaptive`: `Boolean` - If `true` the weight of the block is adaptive under GHAST rule, if `false` otherwise.
 * `blame`: `QUANTITY` - If 0, then no blocks are blamed on its parent path, If greater than 0, then the nearest blamed block on the parent path is `blame` steps away.
-* `deferredLogsBloomHash`: `DATA`, 32 Bytes - The bloom hash of deferred logs. 
+* `deferredLogsBloomHash`: `DATA`, 32 Bytes - The bloom hash of deferred logs.
 * `deferredReceiptsRoot`: `DATA`, 32 Bytes - the hash of the receipts of the block after deferred execution.
 * `deferredStateRoot`: `DATA`, 32 Bytes - the root of the final state trie of the block after deferred execution.
 * `difficulty`: `QUANTITY` - integer of the difficulty for this block.
 * `epochNumber`: `QUANTITY` - the current block epoch number in the client's view. `null` when it's not in best block's past set and the epoch number is not determined.
 * `gasLimit`: `QUANTITY` - the maximum gas allowed in this block.
+* `gasUsed`: `QUANTITY` - total used gas in this block. `null` when its pending block.
 * `hash`: `DATA`, 32 Bytes - hash of the block. `null` when its pending block.
 * `height`: `QUANTITY` - the block heights. `null` when its pending block.
 * `miner`: `DATA`, 20 Bytes - the address of the beneficiary to whom the mining rewards were given.
@@ -237,11 +244,11 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBlockByHash","params":["0
 #### cfx_getBlockByEpochNumber
 Returns information about a block by epoch number.
 ##### Parameters
-  1. `QUANTITY|TAG` - the epoch number, or the string "latest_mined",  "latest_state" or "earliest", see the [epoch number parameter](#the-epoch-number-parameter).
+  1. `QUANTITY|TAG` - the epoch number, or the string `"latest_mined"`, `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter).
   2. `Boolean` - If `true` it returns the full transaction objects, if `false` only the hashes of the transactions.
 ```
 params: [
-    'latest_mined',
+    "latest_mined",
     true
 ]
 ```
@@ -282,7 +289,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBestBlockHash","params":[
 #### cfx_epochNumber
 Returns the epoch number of given parameter.
 ##### Parameters
-`TAG` - (optional, default: "latest_mined") String "latest_mined",  "latest_state" or "earliest", see the [epoch number parameter](#the-epoch-number-parameter).
+`TAG` - (optional, default: `"latest_mined"`) String `"latest_mined"`, `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter).
 ##### Returns
 `QUANTITY` - integer of the current epoch number of given parameter.
 ##### Example
@@ -316,7 +323,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_gasPrice","params":[],"id":1
     "jsonrpc" : "2.0",
     "id" : 1,
     "result" : "0x09184e72a000"
-} 
+}
 ```
 
 ---
@@ -324,7 +331,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_gasPrice","params":[],"id":1
 #### cfx_getBlocksByEpoch
 Returns hashes of blocks located in some epoch.
 ##### Parameters
-`QUANTITY|TAG` - the epoch number, or the string "latest_mined",  "latest_state" or "earliest", see the [epoch number parameter](#the-epoch-number-parameter).
+`QUANTITY|TAG` - the epoch number, or the string `"latest_mined"`, `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter).
 ##### Returns
 `Array` - Array of block hashes, sorted by execution(topological) order.
 ##### Example
@@ -357,11 +364,11 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBlocksByEpoch","params":[
 Returns the balance of the account of given address.
 ##### Parameters
 1. `DATA`, 20 Bytes - address to check for balance.
-2. `QUANTITY|TAG` - integer epoch number, or the string "latest_mined",  "latest_state", "earliest", see the [epoch number parameter](#the-epoch-number-parameter)
+2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-   '0xc94770007dda54cF92009BFF0dE90c06F603a09f',
-   'latest_state'
+   "0xc94770007dda54cF92009BFF0dE90c06F603a09f",
+   "latest_state"
 ]
 ```
 ##### Returns
@@ -385,11 +392,11 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBalance","params":["0xc94
 Returns the balance of the staking account of given address.
 ##### Parameters
 1. `DATA`, 20 Bytes - address to check for staking balance.
-2. `QUANTITY|TAG` - integer epoch number, or the string "latest_mined",  "latest_state", "earliest", see the [epoch number parameter](#the-epoch-number-parameter)
+2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-   '0xc94770007dda54cF92009BFF0dE90c06F603a09f',
-   'latest_state'
+   "0xc94770007dda54cF92009BFF0dE90c06F603a09f",
+   "latest_state"
 ]
 ```
 ##### Returns
@@ -414,11 +421,11 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStakingBalance","params":
 Returns the size of the collateral storage of given address, in Byte.
 ##### Parameters
 1. `DATA`, 20 Bytes - address to check for collateral storage.
-2. `QUANTITY|TAG` - integer epoch number, or the string "latest_mined",  "latest_state", "earliest", see the [epoch number parameter](#the-epoch-number-parameter)
+2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-   '0xc94770007dda54cF92009BFF0dE90c06F603a09f',
-   'latest_state'
+   "0xc94770007dda54cF92009BFF0dE90c06F603a09f",
+   "latest_state"
 ]
 ```
 ##### Returns
@@ -442,11 +449,11 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getCollateralForStorage","pa
 Returns the admin of given contract.
 ##### Parameters
 1. `DATA`, 20 Bytes - address to contract.
-2. `QUANTITY|TAG` - integer epoch number, or the string "latest_mined",  "latest_state", "earliest", see the [epoch number parameter](#the-epoch-number-parameter)
+2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-    '0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f',
-    'latest_state'
+    "0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f",
+    "latest_state"
 ]
 ```
 ##### Returns
@@ -470,11 +477,11 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getAdmin","params":["0x8af71
 Returns the code of given contract.
 ##### Parameters
 1. `DATA`, 20 Bytes - address to contract.
-2. `QUANTITY|TAG` - integer epoch number, or the string "latest_mined",  "latest_state", "earliest", see the [epoch number parameter](#the-epoch-number-parameter)
+2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-    '0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f',
-    'latest_state'
+    "0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f",
+    "latest_state"
 ]
 ```
 ##### Returns
@@ -499,12 +506,12 @@ Returns storage entries from a given contract.
 ##### Parameters
 1. `DATA`, 20 Bytes - address to contract.
 2. `DATA`, 32 Bytes - the given position.
-3. `QUANTITY|TAG` - integer epoch number, or the string "latest_mined",  "latest_state", "earliest", see the [epoch number parameter](#the-epoch-number-parameter)
+3. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-    '0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f',
-    '0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9',
-    'latest_state'
+    "0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f",
+    "0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9",
+    "latest_state"
 ]
 ```
 ##### Returns
@@ -530,11 +537,11 @@ Returns the storage root of a given contract.
 
 ##### Parameters
 1. `DATA`, 20 Bytes - address to contract.
-2. `QUANTITY|TAG` - integer epoch number, or the string "latest_mined", "latest_state", "earliest", see the [epoch number parameter](#the-epoch-number-parameter)
+2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-    '0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f',
-    'latest_state'
+    "0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f",
+    "latest_state"
 ]
 ```
 
@@ -577,11 +584,11 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStorageRoot","params":["0
 Returns the sponsor info of given contract.
 ##### Parameters
 1. `DATA`, 20 Bytes - address to contract.
-2. `QUANTITY|TAG` - integer epoch number, or the string "latest_mined",  "latest_state", "earliest", see the [epoch number parameter](#the-epoch-number-parameter)
+2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-    '0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f',
-    'latest_state'
+    "0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f",
+    "latest_state"
 ]
 ```
 ##### Returns
@@ -618,11 +625,11 @@ Returns the next nonce should be used by given address.
 
 ##### Parameters
 1. `DATA`, 20 Bytes - address.
-2. `QUANTITY|TAG` - integer epoch number, or the string "latest_mined",  "latest_state", "earliest", see the [epoch number parameter](#the-epoch-number-parameter)
+2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-    '0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8',
-    'latest_state' // state at the latest executed epoch
+    "0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8",
+    "latest_state" // state at the latest executed epoch
 ]
 ```
 ##### Returns
@@ -631,7 +638,7 @@ params: [
 ##### Example
 ```
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getNextNonce","params":["0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8", 'latest_state'],"id":1}'
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getNextNonce","params":["0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8", "latest_state"],"id":1}'
 
 // Result
 {
@@ -648,7 +655,7 @@ Creates new message call transaction or a contract creation for signed transacti
 `DATA`, The signed transaction data.
 ```
 params: [
-    '0xf86eea8201a28207d0830f4240943838197c0c88d0d5b13b67e1bfdbdc132d4842e389056bc75e2d631000008080a017b8b26f473820475edc49bd153660e56b973b5985bbdb2828fceacb4c91f389a03452f9a69da34ef35acc9c554d7b1d63e9041141674b42c3abb1b57b9f83a2d3'
+    "0xf86eea8201a28207d0830f4240943838197c0c88d0d5b13b67e1bfdbdc132d4842e389056bc75e2d631000008080a017b8b26f473820475edc49bd153660e56b973b5985bbdb2828fceacb4c91f389a03452f9a69da34ef35acc9c554d7b1d63e9041141674b42c3abb1b57b9f83a2d3"
 ]
 ```
 ##### Returns
@@ -681,18 +688,18 @@ Virtually call a contract, return the output data.
   * `data`: `DATA` - (optional, default: `0x`) the data send along with the transaction.
   * `nonce`: `QUANTITY` - (optional, default: `0`) the number of transactions made by the sender prior to this one.
 
-2. `QUANTITY|TAG` - integer epoch number, or the string "latest_mined",  "latest_state", "earliest", see the [epoch number parameter](#the-epoch-number-parameter)
+2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 
 ```
 params: [
     {
-        "from":"0xf6B7219AF657e14B5103e915839dD12f51cDBA68",
-        "to":"0x63428378C5D7d168c9Ef2809a76812d40E018Ac9",
-        "data":"0x",
-        "gasPrice":"0x2540be400",
+        "from": "0xf6B7219AF657e14B5103e915839dD12f51cDBA68",
+        "to": "0x63428378C5D7d168c9Ef2809a76812d40E018Ac9",
+        "data": "0x",
+        "gasPrice": "0x2540be400",
         "nonce": "0x0"
     },
-    'latest_state' // state at the latest executed epoch
+    "latest_state" // state at the latest executed epoch
 ]
 ```
 ##### Returns
@@ -700,7 +707,7 @@ params: [
 ##### Example
 ```
 // Request
-curl -X POST --data '{"method":"cfx_call","id":1,"jsonrpc":"2.0","params":[{"from":"0xf6B7219AF657e14B5103e915839dD12f51cDBA68","to":"0x63428378C5D7d168c9Ef2809a76812d40E018Ac9","data":"0x","gasPrice":"0x2540be400", "nonce": "0x0"}]}'
+curl -X POST --data '{"method":"cfx_call","id":1,"jsonrpc":"2.0","params":[{"from":"0xf6B7219AF657e14B5103e915839dD12f51cDBA68","to":"0x63428378C5D7d168c9Ef2809a76812d40E018Ac9","data":"0x","gasPrice":"0x2540be400","nonce":"0x0"}]}'
 
 // Result
 {
@@ -721,13 +728,13 @@ See [cfx_call](#cfx_call).
 ```
 params: [
     {
-        "from":"0xf6B7219AF657e14B5103e915839dD12f51cDBA68",
-        "to":"0x63428378C5D7d168c9Ef2809a76812d40E018Ac9",
-        "data":"0x",
-        "gasPrice":"0x2540be400",
+        "from": "0xf6B7219AF657e14B5103e915839dD12f51cDBA68",
+        "to": "0x63428378C5D7d168c9Ef2809a76812d40E018Ac9",
+        "data": "0x",
+        "gasPrice": "0x2540be400",
         "nonce": "0x0"
     },
-    'latest_state' // state at the latest executed epoch
+    "latest_state" // state at the latest executed epoch
 ]
 ```
 ##### Returns
@@ -738,7 +745,7 @@ params: [
 ##### Example
 ```
 // Request
-curl -X POST --data '{"method":"cfx_estimateGasAndCollateral","id":1,"jsonrpc":"2.0","params":[{"from":"0xf6B7219AF657e14B5103e915839dD12f51cDBA68","to":"0x63428378C5D7d168c9Ef2809a76812d40E018Ac9","data":"0x","gasPrice":"0x2540be400", "nonce": "0x0"}]}'
+curl -X POST --data '{"method":"cfx_estimateGasAndCollateral","id":1,"jsonrpc":"2.0","params":[{"from":"0xf6B7219AF657e14B5103e915839dD12f51cDBA68","to":"0x63428378C5D7d168c9Ef2809a76812d40E018Ac9","data":"0x","gasPrice":"0x2540be400","nonce":"0x0"}]}'
 
 // Result
 {
@@ -758,12 +765,12 @@ Returns logs matching the filter provided.
 ##### Parameters
 `Object` - A log filter object:
 
-   * `fromEpoch`: `QUANTITY` - (optional, default: `"earliest"`) search will be applied from this epoch number.
-   * `toEpoch`: `QUANTITY` - (optional, default: `"latest_mined"`) till this epoch number.
-   * `blockHashes`: `Array` of `DATA` - (optional, default: `null`) Array of block hashes that the search will be applied. This will override from/to epoch fields if it's not `null`.
-   * `address`: `Array` of `DATA` - (optional, default: `null`) Search addresses, If `null`, match all. If specified, log must be produced by one of these addresses.
+   * `fromEpoch`: `QUANTITY|TAG` - (optional, default: `"latest_checkpoint"`) the epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter). Search will be applied from this epoch number.
+   * `toEpoch`: `QUANTITY|TAG` - (optional, default: `"latest_state"`) the epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter). Search will be applied up until (and including) this epoch number.
+   * `blockHashes`: `Array` of `DATA` - (optional, default: `null`) Array of up to 128 block hashes that the search will be applied to. This will override from/to epoch fields if it's not `null`.
+   * `address`: `Array` of `DATA` - (optional, default: `null`) Search contract addresses. If `null`, match all. If specified, log must be produced by one of these addresses.
    * `topics`: `Array` - (optional, default: `null`) Search topics. Logs can have `4` topics: the function signature and up to `3` indexed event arguments. The elements of `topics` match the corresponding log topics. Example: `["0xA", null, ["0xB", "0xC"], null]` matches logs with `"0xA"` as the 1st topic AND (`"0xB"` OR `"0xC"`) as the 3rd topic. If `null`, match all.
-   * `limit`: `QUANTITY` - (optional, default: `null`) If `null` return all logs, otherwise should only return **last** `limit` logs.
+   * `limit`: `QUANTITY` - (optional, default: `null`) If `null` return all logs, otherwise should only return the **last** `limit` logs. Note: if the node has `get_logs_filter_max_limit` set, it will override `limit` if it is `null` or greater than the preset value.
 ```
 params: [
     {}
@@ -833,7 +840,7 @@ Returns the information about a transaction receipt requested by transaction has
  1. DATA, 32 Bytes - hash of a transaction
 ```
 params: [
-    '0x53fe995edeec7d241791ff32635244e94ecfd722c9fe90f34ddf59082d814514',
+    "0x53fe995edeec7d241791ff32635244e94ecfd722c9fe90f34ddf59082d814514",
 ]
 ```
 ##### Returns
@@ -855,7 +862,7 @@ params: [
 ##### Example
 ```
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getTransactionReceipt","params":["0x53fe995edeec7d241791ff32635244e94ecfd722c9fe90f34ddf59082d814514"],"id":1}'
+curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"cfx_getTransactionReceipt","params":["0x53fe995edeec7d241791ff32635244e94ecfd722c9fe90f34ddf59082d814514"],"id":1}'
 
 // Result
 {
@@ -883,11 +890,11 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getTransactionReceipt","para
 Return account related states of the given account
 ##### Parameters
 1. `DATA`, 20 Bytes - address to get account.
-2. `QUANTITY|TAG` - integer epoch number, or the string "latest_mined",  "latest_state", "earliest", see the [epoch number parameter](#the-epoch-number-parameter)
+2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-   '0xc94770007dda54cF92009BFF0dE90c06F603a09f',
-   'latest_state'
+   "0xc94770007dda54cF92009BFF0dE90c06F603a09f",
+   "latest_state"
 ]
 ```
 ##### Returns
@@ -904,7 +911,7 @@ params: [
 ##### Example
 ```
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getAccount","params":["0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f", "latest_state"],"id":1}'
+curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"cfx_getAccount","params":["0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f", "latest_state"],"id":1}'
 
 // Result
 {
@@ -928,10 +935,10 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getAccount","params":["0x8af
 #### cfx_getInterestRate
 Returns the interest rate of given parameter.
 ##### Parameters
-`TAG` - (optional, default: "latest_mined") String "latest_mined",  "latest_state" or "earliest", see the [epoch number parameter](#the-epoch-number-parameter).
+`QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-   'latest_state'
+   "latest_state"
 ]
 ```
 ##### Returns
@@ -939,7 +946,7 @@ params: [
 ##### Example
 ```
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getInterestRate","params":["latest_state"],"id":1}'
+curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"cfx_getInterestRate","params":["latest_state"],"id":1}'
 
 // Result
 {
@@ -954,10 +961,10 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getInterestRate","params":["
 #### cfx_getAccumulateInterestRate
 Returns the accumulate interest rate of given parameter.
 ##### Parameters
-`TAG` - (optional, default: "latest_mined") String "latest_mined",  "latest_state" or "earliest", see the [epoch number parameter](#the-epoch-number-parameter).
+`QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 ```
 params: [
-   'latest_state'
+   "latest_state"
 ]
 ```
 ##### Returns
@@ -965,7 +972,7 @@ params: [
 ##### Example
 ```
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getAccumulateInterestRate","params":["latest_state"],"id":1}'
+curl --data '{"jsonrpc":"2.0","method":"cfx_getAccumulateInterestRate","params":["latest_state"],"id":1}' -X POST -H "Content-Type: application/json"
 
 // Result
 {
@@ -976,3 +983,221 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getAccumulateInterestRate","
 ```
 ---
 
+#### cfx_checkBalanceAgainstTransaction
+Check if user balance is enough for the transaction.
+
+##### Parameters
+* `DATA`, account address
+* `DATA`, contract address
+* `QUANTITY`, gas limit
+* `QUANTITY`, gas price
+* `QUANTITY`, storage limit
+* `QUANTITY|TAG`, epoch number
+
+```
+params: [
+  "0x1386b4185a223ef49592233b69291bbe5a80c527", 
+  "0x1dc4f61a57a9b13a2f75f3717566bc8ea9869fa6", 
+  "0x5208", 
+  "0x2540be400", 
+  "0x0", 
+  "0xbf63"
+]
+```
+
+##### Returns
+* `isBalanceEnough`: `BOOL` - indicate balance is enough
+* `willPayCollateral`: `BOOL` - indicate balance is enough for collateral
+* `willPayTxFee`: `BOOL` - indicate balance is enough for tx fee
+
+##### Example
+```
+// Request
+curl --data '{"jsonrpc":"2.0","method":"cfx_checkBalanceAgainstTransaction","params":["0x1386b4185a223ef49592233b69291bbe5a80c527", "0x1dc4f61a57a9b13a2f75f3717566bc8ea9869fa6", "0x5208", "0x2540be400", "0x0", "0xbf63"],"id":1}' -X POST -H "Content-Type: application/json"
+// Result
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "isBalanceEnough": true,
+    "willPayCollateral": true,
+    "willPayTxFee": true
+  },
+  "id": 1
+}
+```
+---
+
+#### cfx_getSkippedBlocksByEpoch
+Return skipped block hashs 
+##### Parameters
+* `QUANTITY|TAG` - integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
+
+```
+params: [
+  "0xba28"
+]
+```
+
+##### Returns
+* `Array` of block hashs
+
+##### Example
+```
+// Request
+curl --data '{"jsonrpc":"2.0","method":"cfx_getSkippedBlocksByEpoch","params":["0xba28"],"id":1}' -X POST -H "Content-Type: application/json"
+// Result
+{
+  "jsonrpc": "2.0",
+  "result": [],
+  "id": 1
+}
+```
+---
+
+#### cfx_getConfirmationRiskByHash
+Return one block's confirmation risk
+
+##### Parameters
+* `DATA`, The block hash.
+
+```
+params: [
+  "0x3912275cf09f8982a69735a876c14584dae95078762090c5d32fdf0dbec0647c"
+]
+```
+
+##### Returns
+* `QUANTITY`, The confirmation risk number
+
+##### Example
+```
+// Request
+curl --data '{"jsonrpc":"2.0","method":"cfx_getConfirmationRiskByHash","params":["0x3912275cf09f8982a69735a876c14584dae95078762090c5d32fdf0dbec0647c"],"id":1}' -X POST -H "Content-Type: application/json"
+// Result
+{
+  "jsonrpc": "2.0",
+  "result": "0x2af31dc4611873bf3f70834acdae9f0f4f534f5d60585a5f1c1a3ced1b",
+  "id": 1
+}
+```
+---
+#### cfx_getStatus
+Return network status
+
+##### Parameters
+`none`
+##### Returns
+
+* `bestHash`: `DATA` - hash of the latest epoch's pivot block
+* `blockNumber`: `QUANTITY` - total block number
+* `chainId`: `QUANTITY` - chainId
+* `epochNumber`: `QUANTITY` - latest epoch number
+* `pendingTxNumber`: `QUANTITY` - current pending transaction count
+
+##### Example
+
+```
+// Request
+curl --data '{"jsonrpc":"2.0","method":"cfx_getStatus","params":[],"id":1}' -X POST -H "Content-Type: application/json"
+// Result
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "bestHash": "0xe4bf02ad95ad5452c7676d3dfc2e57fde2a70806c2e68231c58c77cdda5b7c6c",
+    "blockNumber": "0xa9b7",
+    "chainId": "0x0",
+    "epochNumber": "0xa9b6",
+    "pendingTxNumber": "0x0"
+  },
+  "id": 1
+}
+```
+---
+
+#### cfx_clientVersion
+Return conflux-rust version
+
+##### Parameters
+`none`
+##### Returns
+* `DATA` - the client version
+
+##### Example
+```
+//Request
+curl --data '{"jsonrpc":"2.0","method":"cfx_clientVersion","params":[],"id":1}' -X POST -H "Content-Type: application/json"
+//Result
+{
+  "jsonrpc": "2.0",
+  "result": "conflux-rust-1.0.0",
+  "id": 1
+}
+```
+---
+
+#### cfx_getBlockRewardInfo
+Return reward info of an epoch's blocks
+
+##### Parameters
+`QUANTITY|TAG` - integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
+```
+params: [
+  "0x5ee248"
+]
+```
+##### Returns
+`Array` - Array of reward info objects
+
+* `blockHash`: `DATA` - the block hash
+* `author`: `DATA` - the address of block miner
+* `totalReward`: `QUANTITY` - total reward of the block include base reward, tx fee, staking reward
+* `baseReward`: `QUANTITY` - base reward
+* `txFee`: `QUANTITY` - tx fee
+
+##### Example
+```
+// Request
+curl --data '{"jsonrpc":"2.0","method":"cfx_getBlockRewardInfo","params":["0x5ee248"],"id":1}' -X POST -H "Content-Type: application/json"
+
+// Result
+{
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "author": "0x137565786f869b93c55dbf48db6609a78eec88ec",
+      "baseReward": "0x9ccda666a9516000",
+      "blockHash": "0xa4a409ea5f1d31e787cd5e20a3eec1fd43851d29608d2de98fb127f518e1a211",
+      "totalReward": "0x9ccdca639a29ece1",
+      "txFee": "0x0"
+    }
+  ],
+  "id": 1
+}
+```
+---
+
+#### cfx_getBlockByHashWithPivotAssumption
+Returns block with given hash and pivot chain assumption.
+##### Parameters
+* `DATA`, block hash
+* `DATA`, pivot hash
+* `QUANTITY`, epoch number
+```
+params: [
+   "0x3912275cf09f8982a69735a876c14584dae95078762090c5d32fdf0dbec0647c",
+   "0x3912275cf09f8982a69735a876c14584dae95078762090c5d32fdf0dbec0647c", 
+   "0xba28"
+]
+```
+
+##### Returns
+See [cfx_getBlockByHash](#cfx_getblockbyhash).
+
+##### Example
+```
+// Request
+curl --data '{"jsonrpc":"2.0","method":"cfx_getBlockByHashWithPivotAssumption","params":["0x3912275cf09f8982a69735a876c14584dae95078762090c5d32fdf0dbec0647c", "0x3912275cf09f8982a69735a876c14584dae95078762090c5d32fdf0dbec0647c", "0xba28"],"id":1}' -X POST -H "Content-Type: application/json"
+```
+Result see [cfx_getBlockByHash](#cfx_getblockbyhash).
+
+---

@@ -137,7 +137,7 @@ SUBCOMMANDS:
 ### Get block(s)
 - Get Best block hash: `./conflux.exe rpc best-block-hash`
 - Get block by epoch: `./conflux.exe rpc block-by-epoch --epoch latest_state`
-- Get block by hash: `./conflux.exe rpc block-by-epoch --hash 0xf756b4...c0a6d1`
+- Get block by height: `./conflux.exe rpc block-by-epoch --epoch 0x10`
 - Get blocks in epoch: `./conflux.exe rpc blocks --epoch latest_state`
 
 ### Get transaction
@@ -218,7 +218,7 @@ conflux.exe-rpc-local-send
 Send a transaction and return its hash
 
 USAGE:
-    conflux.exe rpc local send [OPTIONS] --from <ADDRESS> --password <STRING> --value <HEX>
+    conflux.exe rpc local send [OPTIONS] --from <ADDRESS> --value <HEX>
 
 FLAGS:
     -h, --help       Prints help information
@@ -230,7 +230,6 @@ OPTIONS:
         --gas <HEX>            Gas provided for transaction execution [default: 0x5208]
         --gas-price <HEX>      Transaction gas price [default: 0x2540BE400]
         --nonce <HEX>          Transaction nonce
-        --password <STRING>    Used to decrypt private key of sender to sign transaction
         --to <ADDRESS>         Transaction to address (empty to create contract)
         --url <url>            URL of RPC server [default: http://localhost:12537]
         --value <HEX>          value sent with this transaction
