@@ -984,7 +984,7 @@ curl --data '{"jsonrpc":"2.0","method":"cfx_getAccumulateInterestRate","params":
 ---
 
 #### cfx_checkBalanceAgainstTransaction
-Check if user balance is enough for the transaction.
+Check if a user's balance is enough to send a transaction with the specified gas and storage limits to the specified contract. The balance is enough if the user can cover the up-front payment of both execution and storage, or if these costs are sponsored by the contract.
 
 ##### Parameters
 * `DATA`, account address
@@ -992,7 +992,7 @@ Check if user balance is enough for the transaction.
 * `QUANTITY`, gas limit
 * `QUANTITY`, gas price
 * `QUANTITY`, storage limit
-* `QUANTITY|TAG`, epoch number
+* `QUANTITY|TAG`, (optional, default: "latest_state") integer epoch number, or the string "latest_state", "latest_checkpoint" or "earliest", see the [epoch number parameter](#the-epoch-number-parameter).
 
 ```
 params: [
@@ -1006,9 +1006,9 @@ params: [
 ```
 
 ##### Returns
-* `isBalanceEnough`: `BOOL` - indicate balance is enough
-* `willPayCollateral`: `BOOL` - indicate balance is enough for collateral
-* `willPayTxFee`: `BOOL` - indicate balance is enough for tx fee
+* `isBalanceEnough`: `Boolean` - indicate balance is enough
+* `willPayCollateral`: `Boolean` - false if the transaction is eligible for storage collateral sponsorship, true otherwise.
+* `willPayTxFee`: `Boolean` - false if the transaction is eligible for gas sponsorship, true otherwise.
 
 ##### Example
 ```
@@ -1028,7 +1028,8 @@ curl --data '{"jsonrpc":"2.0","method":"cfx_checkBalanceAgainstTransaction","par
 ---
 
 #### cfx_getSkippedBlocksByEpoch
-Return skipped block hashs 
+Return the list of non-executed blocks in an epoch. By default, Conflux only executes the last 200 blocks in each epoch (note that under normal circumstances, epochs should be much smaller).
+
 ##### Parameters
 * `QUANTITY|TAG` - integer epoch number, or the string `"latest_state"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 
@@ -1039,7 +1040,7 @@ params: [
 ```
 
 ##### Returns
-* `Array` of block hashs
+* `Array` of block hashes
 
 ##### Example
 ```
@@ -1058,7 +1059,7 @@ curl --data '{"jsonrpc":"2.0","method":"cfx_getSkippedBlocksByEpoch","params":["
 Return one block's confirmation risk
 
 ##### Parameters
-* `DATA`, The block hash.
+* `DATA`, 32 Bytes - The block hash.
 
 ```
 params: [
@@ -1067,7 +1068,7 @@ params: [
 ```
 
 ##### Returns
-* `QUANTITY`, The confirmation risk number
+* `QUANTITY`, The confirmation risk number or null
 
 ##### Example
 ```
@@ -1082,7 +1083,7 @@ curl --data '{"jsonrpc":"2.0","method":"cfx_getConfirmationRiskByHash","params":
 ```
 ---
 #### cfx_getStatus
-Return network status
+Return node status
 
 ##### Parameters
 `none`
@@ -1129,7 +1130,7 @@ curl --data '{"jsonrpc":"2.0","method":"cfx_clientVersion","params":[],"id":1}' 
 //Result
 {
   "jsonrpc": "2.0",
-  "result": "conflux-rust-1.0.0",
+  "result": "conflux-rust-0.6.3",
   "id": 1
 }
 ```
@@ -1150,7 +1151,7 @@ params: [
 
 * `blockHash`: `DATA` - the block hash
 * `author`: `DATA` - the address of block miner
-* `totalReward`: `QUANTITY` - total reward of the block include base reward, tx fee, staking reward
+* `totalReward`: `QUANTITY` - total reward of the block including base reward, tx fee, staking reward
 * `baseReward`: `QUANTITY` - base reward
 * `txFee`: `QUANTITY` - tx fee
 
@@ -1177,11 +1178,12 @@ curl --data '{"jsonrpc":"2.0","method":"cfx_getBlockRewardInfo","params":["0x5ee
 ---
 
 #### cfx_getBlockByHashWithPivotAssumption
-Returns block with given hash and pivot chain assumption.
+Returns the requested block if the provided pivot hash is correct, returns an error otherwise.
+
 ##### Parameters
 * `DATA`, block hash
 * `DATA`, pivot hash
-* `QUANTITY`, epoch number
+* `QUANTITY`, integer epoch number, or the string "latest_state", "latest_checkpoint" or "earliest", see the [epoch number parameter](#the-epoch-number-parameter).
 ```
 params: [
    "0x3912275cf09f8982a69735a876c14584dae95078762090c5d32fdf0dbec0647c",
