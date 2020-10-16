@@ -1,4 +1,6 @@
 # conflux-doc
+
+### How to start
 This is the documentation of Conflux, it is build with [mkdocs](https://www.mkdocs.org/).
 
 ### How to run 
