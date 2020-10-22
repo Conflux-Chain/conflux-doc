@@ -71,6 +71,7 @@ The epoch number specifies a point in time and the corresponding state of the sy
 * `String "latest_checkpoint"` for the earliest epoch stored in memory.
 * `String "latest_state"` - for the latest epoch that has been executed.
 * `String "latest_mined"` - for the latest known epoch.
+* `String "latest_confirmed"` - for the latest confirmed (with the estimation of the confirmation meter)
 
 <!---
 TODO: Add links to deferred execution documentation.
