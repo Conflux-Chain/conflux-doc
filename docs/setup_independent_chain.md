@@ -1,6 +1,6 @@
 ---
-id: independent_chain 
-title: Run An Independent Chain
+id: independent_chain
+title: Run an Independent Chain
 custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/setup_independent_chain.md
 keywords:
   - conflux

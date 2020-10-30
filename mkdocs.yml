@@ -11,6 +11,7 @@ nav:
     - CLI Sub-commands: cli.md
     - Design & Implementation: design.md
     - My First Transaction: send_transaction.md
+    - Run a Light Node: light-nodes.md
 theme: readthedocs
 markdown_extensions:
     - toc:
