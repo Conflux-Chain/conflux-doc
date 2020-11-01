@@ -11,7 +11,7 @@ keywords:
 
 Light nodes are special nodes in the Conflux network that store block headers only, and retrieve everything else from their peers on-demand. This means that by default, light nodes do not store transactions, nor do they store the state trees. This can drastically reduce the disk and bandwidth use of light nodes compared to full and archive nodes, especially under high TPS. As a trade-off, RPC queries have a higher latency on light nodes.
 
-Light nodes execute GHAST consensus on their local header graph, and they also verify each item retrieved on-demand through Merkle proofs and other similar mechanisms. Items retrieved on-demand include accounts, bloom filters, transactions, and transaction receipts. This means that, while light nodes need to rely on their peers to fulfill RPC queries, they do this in a trustless manner.
+Light nodes execute GHAST consensus on their local header graph, and they also verify each item retrieved on-demand using Merkle proofs and other similar mechanisms. Items retrieved on-demand include accounts, bloom filters, transactions, and transaction receipts. This means that, while light nodes need to rely on their peers to fulfill RPC queries, they do this in a trustless manner.
 
 **The current light node implementation is still considered experimental, bugs are expected to exist. If you encounter any issues, please let us know by opening an issue on the [conflux-rust](https://github.com/Conflux-Chain/conflux-rust/issues) repository.**
 
@@ -24,10 +24,10 @@ Please start by downloading the latest release from the [conflux-rust](https://g
 
 ```
 > cd run
-> ./conflux --config default.toml --light 2> stderr.txt
+> ./conflux --config tethys.toml --light 2> stderr.txt
 ```
 
-Similarly to full nodes, you will know when your node is fully synced with the network once it prints:
+Alternatively, if you want your node to connect to the testnet, you will need to pass `testnet.toml` instead. Similarly to full nodes, you will know when your node is fully synced with the network once it prints:
 
 ```
 Catch-up mode: false
