@@ -44,9 +44,7 @@ The following document will use [js-conflux-sdk](https://github.com/Conflux-Chai
 const { Conflux, util } = require('js-conflux-sdk');
 
 const cfx = new Conflux({
-  url: 'http://testnet-jsonrpc.conflux-chain.org:12537',
-  defaultGasPrice: 100, // The default gas price of your following transactions
-  defaultGas: 1000000, // The default gas of your following transactions
+  url: 'http://test.confluxrpc.org',
   logger: console,
 });
 ```
@@ -55,8 +53,8 @@ const cfx = new Conflux({
 
 ```javascript
 const PRIVATE_KEY = 'Your Private Key';
-// const PRIVATE_KEY = '0x5f15f9e52fc5ec6f77115a9f306c120a7e80d83115212d33a843bb6b7989c261';
-const account = cfx.Account(PRIVATE_KEY); // create account instance
+// const PRIVATE_KEY = '0xE8B3FE5E46845416D397F1E3D355EA1FD07A2FA9637256A1295641302A62C0A2';
+const account = cfx.wallet.addPrivateKey(PRIVATE_KEY)
 const receiver = '0xa70ddf9b9750c575db453eea6a041f4c8536785a'
 ```
 
@@ -75,7 +73,7 @@ const receiver = '0xa70ddf9b9750c575db453eea6a041f4c8536785a'
 
 ```javascript
 let txParams = {
-  from: account, // from account instance and will by sign by account.privateKey
+  from: account, // from is address of PRIVATE_KEY and will sign this transaction
   // nonce 
   // gasPrice
   // gas
@@ -108,7 +106,7 @@ After the provider got the cfx_sendRawTransaction RPC call, it will try to do th
 
 ### 2. got stucked in the transaction pool
 
-However, the transaction hash you got doesn't mean it's successfully executed. Conflux transaction will store as much verified transactions in the pool as possible, even the transactions whose nonce doesn' match expected one or the balance is not enough to pay the ```gas * gasPrice + value```. 
+However, the transaction hash you got doesn't mean it's successfully executed. Conflux transaction will store as much verified transactions in the pool as possible, even the transactions whose nonce doesn't match expected one or the balance is not enough to pay the ```gas * gasPrice + value```. 
 
 So if you wait for 1 minute and still cannot find the transaction in ConfluxScan after sending it, it very likely got stuck in the transaction pool. 
 
