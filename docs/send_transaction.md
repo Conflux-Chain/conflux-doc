@@ -56,7 +56,7 @@ const cfx = new Conflux({
 ```javascript
 const PRIVATE_KEY = 'Your Private Key';
 // const PRIVATE_KEY = '0x5f15f9e52fc5ec6f77115a9f306c120a7e80d83115212d33a843bb6b7989c261';
-const account = cfx.Account(PRIVATE_KEY); // create account instance
+const account = cfx.wallet.addPrivateKey(PRIVATE_KEY); // create account instance
 const receiver = '0xa70ddf9b9750c575db453eea6a041f4c8536785a'
 ```
 
@@ -70,7 +70,7 @@ const receiver = '0xa70ddf9b9750c575db453eea6a041f4c8536785a'
 	* **storageLimit**: optional, the max storage (in Byte) you would like to collateralize in the transaction. If missing, the result of cfx_estimateGasAndCollateral will be automatically filled in and it works for general senarios.transactions.
 	* **epochHeight**: optional, a transaction is can be verified only in epochs in the range [epochHeight - 10000, epochHeight + 10000], so it's  a timeout mechanism. If missing, the result of cfx_epochNumber will be automatically filled in and it works for general scenarios.
 	* **data**: optional, it's either an attached message of a transaction or a function signature of a contract call. If missing, a null will be filled into it.
-	* **chainId**: optional, it used for dealing with a hard fork or preventing a transaction replay attack. If missing, 0 will be filled into it.
+	* **chainId**: optional, it used for dealing with a hard fork or preventing a transaction replay attack. If missing, the SDK will get it from RPC. Currently mainnet chainId is 1029, testnet is 1.
 	* **from**: The sender account(with private key) to sign the transaction.
 
 ```javascript
