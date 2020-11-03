@@ -106,44 +106,38 @@ In the example above, the `revert` message **invalidates all logs with an epoch 
 
 ## Node.js example
 
-Below is a simple example of using the pub-sub API through Node.js. In this example, we detect pivot chain reorgs using the `epochs` topic. We rely on 3rd-party libraries, as `js-conflux-sdk` does not support the pub-sub API yet. For simplicity, we omit error handling.
+Below is a simple example of using the pub-sub API through Node.js. In this example, we detect pivot chain reorgs using the `epochs` topic. We rely on `js-conflux-sdk`. For simplicity, we omit error handling.
 
 ```js
-const WebSocket = require('ws');
-const jsonrpc = require('jsonrpc-lite');
+const sdk = require("js-conflux-sdk")
+const cfx = new sdk.Conflux({ url: "ws://127.0.0.1:12535" });
 
-const ws = new WebSocket('ws://localhost:12535');
+(async function () {
+    subscription = await cfx.subscribeEpochs()
+    let latest_epoch = 0;
+    subscription.on('data', data => {
+        let epoch = data.epochNumber
+        console.log(`epoch ${epoch} produced`)
+        if (epoch <= latest_epoch) {
+            console.log(`chain reorg of depth ${latest_epoch - epoch} (${latest_epoch} --> ${epoch})`);
+        }
+        latest_epoch = epoch;
+    })
+})()
 
-ws.on('open', function open() {
-  const req = jsonrpc.request('1', 'cfx_subscribe', ['epochs']);
-  ws.send(JSON.stringify(req));
-});
-
-let latest_epoch = 0;
-
-ws.on('message', function incoming(data) {
-  item = jsonrpc.parse(data);
-
-  if (item.type == 'notification') {
-    let epoch = Number(item.payload.params.result.epochNumber);
-
-    if (epoch <= latest_epoch) {
-      console.log(`chain reorg of depth ${latest_epoch - epoch} (${latest_epoch} --> ${epoch})`);
-    }
-
-    latest_epoch = epoch;
-  }
-});
 ```
 
 Example output:
 
 ```
-chain reorg of depth 1 (39379 --> 39378)
-chain reorg of depth 1 (39425 --> 39424)
-chain reorg of depth 2 (39430 --> 39428)
-chain reorg of depth 1 (39520 --> 39519)
-chain reorg of depth 1 (39562 --> 39561)
+epoch 3136 produced
+epoch 3137 produced
+epoch 3138 produced
+epoch 3139 produced
+epoch 3140 produced
+epoch 3141 produced
+chain reorg of depth 1 (3142 --> 3141)
+chain reorg of depth 1 (3143 --> 3142)
 ...
 ```
 
