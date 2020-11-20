@@ -15,7 +15,7 @@ Here we walk through how to quickly setup conflux full node to join the testnet 
 
 First, please build the binary as instructed in [Installation](install.md#Install).
 
-To start Conflux manually, you need to edit the default configuration file `run/default.toml`:
+To start Conflux manually, you need to edit the default configuration file `run/tethys.toml`:
 
 * Set `public_address` according to your public IP. The port should be 32323 by default.
 * Set `mining_author` to the account address to receive mining reward.
@@ -25,7 +25,7 @@ Then you can run the following commands:
 
 ```bash
 $ cd run
-$ ../target/release/conflux --config default.toml
+$ ../target/release/conflux --config tethys.toml
 ```
 
 It will start a full node and begin syncing the Conflux testnet blockchain. 
@@ -38,7 +38,7 @@ To restart a node, just run the same command line in the same directory.
 
 Conflux can be configured using either the CLI options or a config file. Should the CLI flags and the config file disagree about a setting, the CLI takes precedence.  
 
-The config file follows the format of [TOML](https://github.com/toml-lang/toml). The path of the configuration file can be set with the CLI option `--config path/to/conflux.toml`. A default configuration file `default.toml` with every configuration explained has been provided in the directory `run`, and you can start customizing your configuration from there.
+The config file follows the format of [TOML](https://github.com/toml-lang/toml). The path of the configuration file can be set with the CLI option `--config path/to/conflux.toml`. A default configuration file `tethys.toml` with every configuration explained has been provided in the directory `run`, and you can start customizing your configuration from there.
 
 You can list all CLI options by running  `$ ./conflux --help`. The vast majority of CLI options map to a setting in the TOML file, for example `--public-address 127.0.0.1:32323` can be set by creating a config file:
 
@@ -76,18 +76,16 @@ Then you can run the tests as follows
 
     
 
-## Using Conflux Web Wallet
+## Creating a wallet
 
-You can access [Conflux web wallet](https://wallet.confluxscan.io) and 
-create a new wallet by clicking "New Wallet" button that provides you a seed phrase 
+You can use [Conflux Portal](https://portal.conflux-chain.org) to create a wallet.
+It will provide you a seed phrase
 (used to restore your wallet if you close it) and a password (used to unlock your wallet if you lock it 
 when you leave your computer). Once a wallet is created, you can then manage your account addresses,
 send transactions, and deploy smart contract.
 
 In order to issue on-chain operations, you will need Conflux tokens. 
-You can periodically (1 Conflux token per hour) get Conflux tokens from a faucet account.
-A pop-up box will appear to inform you to get the tokens.  
+On the testnet, you can periodically (100 CFX token per hour) get CFX tokens from a faucet account.
+You can use the faucet through Conflux Portal by clicking on "Deposit".
 
-For developers to build smart contract, you can use [remix](https://remix.ethereum.org) to write and compile your
-contract to generate bytecode which you can then copy-paste to "Contract" page of the wallet
-that is triggered by action "Contract".
+For developing smart contracts, you can use [Conflux Studio](https://github.com/ObsidianLabs/ConfluxStudio) to write, compile, and deploy your contract.

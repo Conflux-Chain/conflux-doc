@@ -11,59 +11,73 @@ Here is a step by step guide on how to build Conflux from the source code and ge
 
 ## Install Build Dependencies
 
-Conflux requires **Rust 1.45.0** to build,  `clang`, and `sqlite` to build.
+Conflux requires **Rust 1.47.0**, `clang`, and `sqlite` to build.
 
 We recommend installing Rust through [rustup](https://www.rustup.rs/). If you don't already have `rustup` or `clang`, you can install them like this:
 
-* Linux:
+### Linux
 
-        $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-        $ rustup install 1.45.0
-    
-    Other dependencies including `clang`, `cmake (version >= 3.1)` and `sqlite (version >= 3.8.3)` can be installed with:
+```
+$ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+$ rustup install 1.47.0
+```
 
-    - Ubuntu 18.04:
+Other dependencies including `clang`, `cmake (version >= 3.1)` and `sqlite (version >= 3.8.3)` can be installed with:
 
-            $ sudo apt-get install clang libsqlite3-dev pkg-config libssl-dev cmake
-        
-    - CentOS 7 / RHEL: 
-    
-            $ sudo yum install epel-release
-            $ sudo yum install clang gcc gcc-c++ openssl-devel cmake3 wget
+* Ubuntu 18.04:
 
-            # This may fail if you have installed cmake with version 2.8. 
-            # You can choose to uninstall cmake first.
-            $ sudo ln -s /usr/bin/cmake3 /usr/bin/cmake
+```
+$ sudo apt-get install clang libsqlite3-dev pkg-config libssl-dev cmake
+```
 
-            # The official sqlite version on CentOS 7 is 3.7.17, so we need to install the latest version from the source code.
-            # The source code have be downloaded from https://www.sqlite.org/download.html
-            $ wget https://www.sqlite.org/2020/sqlite-autoconf-3320100.tar.gz
-            $ tar xfvz sqlite-autoconf-3320100.tar.gz
-            $ cd sqlite-autoconf-3320100
-            $ ./configure
-            $ make
-            $ sudo make install
-    
-* OSX:
+* CentOS 7 / RHEL:
 
-        $ curl https://sh.rustup.rs -sSf | sh
-        $ rustup install 1.45.0
+```
+$ sudo yum install epel-release
+$ sudo yum install clang gcc gcc-c++ openssl-devel cmake3 wget
 
-    You might need to install `brew` if you need to use it to install `clang`:
+# This may fail if you have installed cmake with version 2.8.
+# You can choose to uninstall cmake first.
+$ sudo ln -s /usr/bin/cmake3 /usr/bin/cmake
 
-        $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    
-    `clang` comes with Xcode command line tools, and can also be installed with homebrew:
-    
-        $ brew install llvm    
+# The official sqlite version on CentOS 7 is 3.7.17, so we need to install the latest version from the source code.
+# The source code have be downloaded from https://www.sqlite.org/download.html
+$ wget https://www.sqlite.org/2020/sqlite-autoconf-3320100.tar.gz
+$ tar xfvz sqlite-autoconf-3320100.tar.gz
+$ cd sqlite-autoconf-3320100
+$ ./configure
+$ make
+$ sudo make install
+```
 
-* Windows:
+### OSX
 
-    Make sure you have Visual Studio 2015 with C++ support installed. Next, download and run the `rustup` installer from https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe, start "VS2015 x64 Native Tools Command Prompt", and use the following command to install and set up the `msvc` toolchain:
+```
+$ curl https://sh.rustup.rs -sSf | sh
+$ rustup install 1.47.0
+```
 
-        $ rustup default stable-x86_64-pc-windows-msvc
+You might need to install `brew` if you need to use it to install `clang`:
 
-    `clang` can be installed with LLVM. Pre-built binaries can be downloaded from [Download LLVM](https://releases.llvm.org/download.html#8.0.0). Make sure to add LLVM to the system PATH as instructed.
+```
+$ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+`clang` comes with Xcode command line tools, and can also be installed with homebrew:
+
+```
+$ brew install llvm
+```
+
+### Windows
+
+Make sure you have Visual Studio 2015 with C++ support installed. Next, download and run the `rustup` installer from [this link](https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe), start `VS2015 x64 Native Tools Command Prompt`, and use the following command to install and set up the `msvc` toolchain:
+
+```
+$ rustup default stable-x86_64-pc-windows-msvc
+```
+
+`clang` can be installed with LLVM. Pre-built binaries can be downloaded from [Download LLVM](https://releases.llvm.org/download.html#8.0.0). Make sure to add LLVM to the system PATH as instructed.
 
 Make sure that these binaries are in your `PATH` (the instruction will be shown after installing `rustup`). After that, you should be able to build Conflux from source.
 
@@ -74,7 +88,7 @@ After installing the dependencies mentioned above, now you can clone our reposit
 # download Conflux code
 $ git clone https://github.com/Conflux-Chain/conflux-rust
 $ cd conflux-rust
-$ git checkout v1.0.0
+$ git checkout v1.0.3
 
 
 # build in release mode
@@ -105,22 +119,26 @@ Solidity compiler `solc` is also required, and be installed as follows:
 
 * Ubuntu
 
-        sudo add-apt-repository ppa:ethereum/ethereum
-        sudo apt-get update
-        sudo apt-get install solc
+```
+$ sudo add-apt-repository ppa:ethereum/ethereum
+$ sudo apt-get update
+$ sudo apt-get install solc
+```
 
 * OSX
 
-        brew update
-        brew upgrade
-        brew tap ethereum/ethereum
-        brew install solidity
+```
+$ brew update
+$ brew upgrade
+$ brew tap ethereum/ethereum
+$ brew install solidity
+```
 
 * Others
 
-    You can follow the detailed instructions at [Installing the Solidity Compiler](https://solidity.readthedocs.io/en/v0.5.7/installing-solidity.html#binary-packages).
+You can follow the detailed instructions at [Installing the Solidity Compiler](https://solidity.readthedocs.io/en/v0.5.7/installing-solidity.html#binary-packages).
 
-    Note that latest solidity compiler may be incompatible with Conflux and may cause the integration test to fail. If you encounter such problem, please install solidity compiler version 0.5.2.
+Note that latest solidity compiler may be incompatible with Conflux and may cause the integration test to fail. If you encounter such problem, please install solidity compiler version 0.5.2.
 
 To run tests, you can build the source code first and follow the instructions at [Running Test](get_started.md#running-test).
 
