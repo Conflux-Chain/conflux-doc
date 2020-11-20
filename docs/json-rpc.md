@@ -106,6 +106,7 @@ Below is a list of the Conflux RPC APIs and their availability on archive and fu
 | [`cfx_getCode`](#cfx_getcode)                                                     |    recent    |   recent  |
 | [`cfx_getCollateralForStorage`](#cfx_getcollateralforstorage)                     |    recent    |   recent  |
 | [`cfx_getConfirmationRiskByHash`](#cfx_getconfirmationriskbyhash)                 |      OK      |   recent  |
+| [`cfx_getDepositList`](#cfx_getdepositlist)                                       |    recent    |   recent  |
 | [`cfx_getInterestRate`](#cfx_getinterestrate)                                     |    recent    |   recent  |
 | [`cfx_getLogs`](#cfx_getlogs)                                                     |      OK      |   recent  |
 | [`cfx_getNextNonce`](#cfx_getnextnonce)                                           |    recent    |   recent  |
@@ -117,9 +118,10 @@ Below is a list of the Conflux RPC APIs and their availability on archive and fu
 | [`cfx_getStorageRoot`](#cfx_getstorageroot)                                       |    recent    |   recent  |
 | [`cfx_getTransactionByHash`](#cfx_gettransactionbyhash)                           |      OK      |   recent  |
 | [`cfx_getTransactionReceipt`](#cfx_gettransactionreceipt)                         |      OK      |   recent  |
+| [`cfx_getVoteList`](#cfx_getvotelist)                                             |    recent    |   recent  |
 | [`cfx_sendRawTransaction`](#cfx_sendrawtransaction)                               |      OK      |     OK    |
 
-If you query an item that is unavailable on the node, you will get an error response:
+If you query a state entry that is unavailable on the node, you will get an error response:
 
 ```json
 // Request
@@ -1065,9 +1067,13 @@ params: [
 * `to`: `DATA`, 20 Bytes - address of the receiver. `null` when it is a contract deployment transaction.
 * `gasUsed`: `QUANTITY` - gas used for executing the transaction.
 * `gasFee`: `QUANTITY` - gas charged to the sender's account. If the provided gas (gas limit) is larger than the gas used, at most 1/4 of it is refunded.
+* `gasCoveredBySponsor`: `Boolean`, true if this transaction's gas fee was covered by the sponsor.
+* `storageCollateralized`: `QUANTITY`, the amount of storage collateral this transaction required.
+* `storageCoveredBySponsor`: `Boolean`, true if this transaction's storage collateral was covered by the sponsor.
+* `storageReleased`: `Array`, array of storage change objects, each specifying an address and the corresponding amount of storage collateral released, e.g., `[{ 'address': '0x0000000000000000000000000000000000000001', 'collaterals': '0x280' }]`
 * `contractCreated`: `DATA`, 20 Bytes - address of the contract created. `null` when it is not a contract deployment transaction.
 * `stateRoot`: `DATA`, 32 Bytes - hash of the state root after the execution of the corresponding block. `0` if the state root is not available.
-* `outcomeStatus`: `QUANTITY` - the outcome status code.
+* `outcomeStatus`: `QUANTITY` - the outcome status code. `0x0` means success.
 * `logsBloom`: `DATA`, 256 Bytes - bloom filter for light clients to quickly retrieve related logs.
 * `logs`: `Array` - array of log objects that this transaction generated, see [cfx_getLogs](#cfx_getlogs).
 
@@ -1085,6 +1091,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getTransactionReceipt","para
     "contractCreated": null,
     "epochNumber": "0x87431b",
     "from": "0x19a3224214fe29107d84af9baa02118b614e46d5",
+    "gasCoveredBySponsor": true,
     "gasFee": "0x108ca",
     "gasUsed": "0x8465",
     "index": "0x0",
@@ -1096,12 +1103,19 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getTransactionReceipt","para
     "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000080000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000",
     "outcomeStatus": "0x0",
     "stateRoot": "0x1bc37c63c03d7e7066f9427f69e515988d19ebb26998087d75b50d2235e55ee7",
+    "storageCollateralized": "0x40",
+    "storageCoveredBySponsor": true,
+    "storageReleased": [{
+      "address": "0x1c1e72f0c37968557b3d85a3f32747792798bbde",
+      "collaterals": "0x40"
+    }],
     "to": "0x8b017126d2fede908a86b36b43969f17d25f3770",
     "transactionHash": "0x53fe995edeec7d241791ff32635244e94ecfd722c9fe90f34ddf59082d814514"
   },
   "id": 1
 }
 ```
+
 ---
 
 ### cfx_getAccount
@@ -1115,7 +1129,7 @@ Returns an account, identified by its address.
 
 ```json
 params: [
-   "0xc94770007dda54cF92009BFF0dE90c06F603a09f",
+   "0x8af71f222b6e05b47d8385fe437fe2f2a9ec1f1f",
    "latest_state"
 ]
 ```
@@ -1487,3 +1501,93 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBlockByHashWithPivotAssum
 Result see [cfx_getBlockByHash](#cfx_getblockbyhash).
 
 ---
+
+### cfx_getDepositList
+
+Returns the deposit list of the given account, identified by its address.
+
+#### Parameters
+
+1. `DATA`, 20 Bytes - address of the account.
+2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_confirmed"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
+
+```json
+params: [
+   "0x176c45928d7c26b0175dec8bf6051108563c62c5",
+   "latest_state"
+]
+```
+
+#### Returns
+
+`Array` - array of deposit info objects:
+
+* `accumulatedInterestRate`: `QUANTITY` - the accumulated interest rate at the time of the deposit.
+* `amount`: `QUANTITY` - the number of tokens deposited.
+* `depositTime`: `QUANTITY` - the time of the deposit.
+
+##### Example
+
+```json
+// Request
+curl --data '{"jsonrpc":"2.0","method":"cfx_getDepositList","params":["0x176c45928d7c26b0175dec8bf6051108563c62c5", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+
+// Result
+{
+  "jsonrpc": "2.0",
+  "result": [{
+    "accumulatedInterestRate": "0x3c4517ac75006c913c52c2402e8",
+    "amount": "0x8ac7230489e80000",
+    "depositTime": 3135949
+  }, {
+    "accumulatedInterestRate": "0x3c451870afdac66f40804d95742",
+    "amount": "0x8ac7230489e80000",
+    "depositTime": 3136255
+  }],
+  "id": 1
+}
+```
+
+---
+
+### cfx_getVoteList
+
+Returns the vote list of the given account, identified by its address.
+
+#### Parameters
+
+1. `DATA`, 20 Bytes - address of the account.
+2. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_confirmed"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
+
+```json
+params: [
+   "0x176c45928d7c26b0175dec8bf6051108563c62c5",
+   "latest_state"
+]
+```
+
+#### Returns
+
+`Array` - array of vote info objects:
+
+* `amount`: `QUANTITY` - the number of tokens locked.
+* `unlockBlockNumber`: `QUANTITY` - the block number at which the locked tokens are released.
+
+For getting the current block number, please refer to [conflux-rust#1973](https://github.com/Conflux-Chain/conflux-rust/issues/1973).
+
+##### Example
+
+```json
+// Request
+curl --data '{"jsonrpc":"2.0","method":"cfx_getVoteList","params":["0x176c45928d7c26b0175dec8bf6051108563c62c5", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+
+// Result
+{
+  "jsonrpc": "2.0",
+  "result": [{
+    "amount": "0x8ac7230489e80000",
+    "unlockBlockNumber": 1000000000000
+  }],
+  "id": 1
+}
+```

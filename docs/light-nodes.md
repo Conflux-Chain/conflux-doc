@@ -9,6 +9,8 @@ keywords:
 
 ## Overview
 
+**Node version: `conflux-rust v1.0.3`.**
+
 Light nodes are special nodes in the Conflux network that store block headers only, and retrieve everything else from their peers on-demand. This means that by default, light nodes do not store transactions, nor do they store the state trees. This can drastically reduce the disk and bandwidth use of light nodes compared to full and archive nodes, especially under high TPS. As a trade-off, RPC queries have a higher latency on light nodes.
 
 Light nodes execute GHAST consensus on their local header graph, and they also verify each item retrieved on-demand using Merkle proofs and other similar mechanisms. Items retrieved on-demand include accounts, bloom filters, transactions, and transaction receipts. This means that, while light nodes need to rely on their peers to fulfill RPC queries, they do this in a trustless manner.
@@ -151,7 +153,7 @@ conflux.InternalContract('AdminControl').setAdmin('0x8e2f2e68eb75bb8b18caafe9607
 }).executed();
 ```
 
-You will get a similar error. This is because for contract transactions, `js-conflux-sdk` will automatically attempt to estimate the gas limit and storage limit using the `cfx_estimateGasAndCollateral` RPC, and it will also set the current gas price using the `cfx_gasPrice` RPC, both of which are not yet supported on light nodes. You can address this by manually setting these parameters:
+You will get a similar error. This is because for contract transactions, `js-conflux-sdk` will automatically attempt to estimate the gas limit and storage limit using the `cfx_estimateGasAndCollateral` RPC which is not yet supported on light nodes. You can address this by manually setting these parameters:
 
 ```js
 conflux.InternalContract('AdminControl').setAdmin('0x8e2f2e68eb75bb8b18caafe9607242d4748f8d98', '0x189121b8f0cdfef0b56eb22d9cb76c97b9c7cfbc').sendTransaction({
@@ -217,13 +219,13 @@ for (ii = 0; ii < 10; ++ii) {
 | RPC                                                                                       |                               supported                              |
 |-------------------------------------------------------------------------------------------|:--------------------------------------------------------------------:|
 | [`cfx_call`](json_rpc#cfx_call)                                                           | [not yet](https://github.com/Conflux-Chain/conflux-rust/issues/1461) |
-| [`cfx_checkBalanceAgainstTransaction`](json_rpc#cfx_checkbalanceagainsttransaction)       | [not yet](https://github.com/Conflux-Chain/conflux-rust/issues/1461) |
+| [`cfx_checkBalanceAgainstTransaction`](json_rpc#cfx_checkbalanceagainsttransaction)       |                                  OK                                  |
 | [`cfx_clientVersion`](json_rpc#cfx_clientversion)                                         |                                  OK                                  |
 | [`cfx_epochNumber`](json_rpc#cfx_epochnumber)                                             |                                  OK                                  |
 | [`cfx_estimateGasAndCollateral`](json_rpc#cfx_estimategasandcollateral)                   | [not yet](https://github.com/Conflux-Chain/conflux-rust/issues/1461) |
-| [`cfx_gasPrice`](json_rpc#cfx_gasprice)                                                   | [not yet](https://github.com/Conflux-Chain/conflux-rust/issues/1461) |
+| [`cfx_gasPrice`](json_rpc#cfx_gasprice)                                                   |                                  OK                                  |
 | [`cfx_getAccount`](json_rpc#cfx_getaccount)                                               |                                  OK                                  |
-| [`cfx_getAccumulateInterestRate`](json_rpc#cfx_getaccumulateinterestrate)                 | [not yet](https://github.com/Conflux-Chain/conflux-rust/issues/1461) |
+| [`cfx_getAccumulateInterestRate`](json_rpc#cfx_getaccumulateinterestrate)                 |                                  OK                                  |
 | [`cfx_getAdmin`](json_rpc#cfx_getadmin)                                                   |                                  OK                                  |
 | [`cfx_getBalance`](json_rpc#cfx_getbalance)                                               |                                  OK                                  |
 | [`cfx_getBestBlockHash`](json_rpc#cfx_getbestblockhash)                                   |                                  OK                                  |
@@ -235,7 +237,7 @@ for (ii = 0; ii < 10; ++ii) {
 | [`cfx_getCode`](json_rpc#cfx_getcode)                                                     |                                  OK                                  |
 | [`cfx_getCollateralForStorage`](json_rpc#cfx_getcollateralforstorage)                     |                                  OK                                  |
 | [`cfx_getConfirmationRiskByHash`](json_rpc#cfx_getconfirmationriskbyhash)                 |                                  OK                                  |
-| [`cfx_getInterestRate`](json_rpc#cfx_getinterestrate)                                     | [not yet](https://github.com/Conflux-Chain/conflux-rust/issues/1461) |
+| [`cfx_getInterestRate`](json_rpc#cfx_getinterestrate)                                     |                                  OK                                  |
 | [`cfx_getLogs`](json_rpc#cfx_getlogs)                                                     |                                  OK                                  |
 | [`cfx_getNextNonce`](json_rpc#cfx_getnextnonce)                                           |                                  OK                                  |
 | [`cfx_getSkippedBlocksByEpoch`](json_rpc#cfx_getskippedblocksbyepoch)                     |                                  OK                                  |
