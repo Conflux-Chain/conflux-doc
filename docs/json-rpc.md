@@ -1591,3 +1591,47 @@ curl --data '{"jsonrpc":"2.0","method":"cfx_getVoteList","params":["0x176c45928d
   "id": 1
 }
 ```
+
+---
+
+### cfx_getSupplyInfo
+
+Returns the information about the total supply of the CFX token.
+
+#### Parameters
+
+1. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_confirmed"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
+
+```json
+params: [
+   "latest_state"
+]
+```
+
+#### Returns
+
+
+`Object` - the information about the token supply.:
+
+* `totalIssued`: `QUANTITY` - the number of total issued tokens in Drip, a.k.a. total supply. It does not include the staking interest not withdrawn.
+* `totalStaking`: `QUANTITY` - the number of total staked tokens in Drip. It does not include the staking interest.
+* `totalCollateral`: `QUANTITY` - the number of total collateralized tokens for storage in Drip. 
+
+##### Example
+
+```json
+// Request
+curl --data '{"jsonrpc":"2.0","method":"cfx_getSupplyInfo","params":["latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+
+// Result
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "totalCollateral": "0x11240988bb027a24000",
+    "totalIssued": "0x10311e5ebd6b8d9530404f76",
+    "totalStaking": "0x0"
+  },
+  "id": 1
+}
+```
+
