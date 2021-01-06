@@ -11,14 +11,14 @@ keywords:
 
 Here we walk through how to quickly setup conflux full node to join the testnet and how to use Conflux wallet to manage your account, transfer Conflux token, and deploy smart contract.
 
-## Running Conflux Node
+## Running a Conflux Node
 
 First, please build the binary as instructed in [Installation](install.md#Install).
 
 To start Conflux manually, you need to edit the default configuration file `run/tethys.toml`:
 
 * Set `public_address` according to your public IP. The port should be 32323 by default.
-* Set `mining_author` to the account address （without `0x` prefix） to receive mining reward.
+* Set `mining_author` to the account address to receive mining reward.
 * Conflux team has maintained some full nodes for the test net, and they have been provided as `bootnodes`. If you want to use other nodes to bootstrap your new node, you should edit this entry.
 
 Then you can run the following commands:
@@ -28,7 +28,7 @@ $ cd run
 $ ../target/release/conflux --config tethys.toml
 ```
 
-It will start a archive node and begin syncing the Conflux mainnet blockchain. 
+It will start an archive node and begin syncing the Conflux mainnet blockchain. 
 
 Note that two new directories (`blockchain_db` and `net_config`) will be created in the current working directory ( `run` ) to keep the persistent data. Please do not remove them unless data are corrupt or you want to start a fresh new node.
 
@@ -50,7 +50,8 @@ If you are going to set up a node and let it join the Conflux mainnet(testnet), 
 
 If you want to let your node participate the mining process, you need to enable it by setting `start_mining` as "true" and `mining_author` as the account address that receives the mining reward. 
 
-If you want to open the http or websocket RPC, you need to enable it by setting `jsonrpc_http_port` or `jsonrpc_ws_port`, and if you want reliably answer transaction-related RPCs you need set `persist_tx_index` to true before sync started (`very important`) and run a archive node.
+If you want to open the http or websocket RPC, you need to enable it by setting `jsonrpc_http_port` or `jsonrpc_ws_port`. 
+**Note that to serve transaction-related RPCs, `persist_tx_index` should also be set to `true` or the node will only be able to handle very recent transactions.**
 
 ## Running Test
 
