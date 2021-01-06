@@ -144,8 +144,8 @@ To run tests, you can build the source code first and follow the instructions at
 
 ## Download compiled node binary
 
-If you don't want build the node from source code, you can directly download it from [github release page](https://github.com/Conflux-Chain/conflux-rust/releases), we have provide pre-compiled node program for Windows, Linux, OSX. There are two release line: mainnet and testnet (release name include `testnet` suffix). If you want to run a mainnet node you should choose `Conflux vx.x.x`, and if you want run a testnet node choose `Conflux vx.x.x-testnet`. The main difference is the config file, mainnet's config file is `tethys.toml`, testnet's config file is `testnet.toml`, the two config file's `bootnodes` and `chain_id` are different.
-After download and unzip the release file, you can run the node with `start.sh` or `start.bat`(Windows)
+If you don't want to build the node from the source code, you can directly download the pre-compiled binary from [github release page](https://github.com/Conflux-Chain/conflux-rust/releases). We provide the binaries for Windows, Linux, and OSX. There are two release lines: mainnet and testnet (with suffix `testnet`). If you want to run a mainnet node, you should choose `Conflux vx.x.x`, and if you want to run a testnet node, please choose `Conflux vx.x.x-testnet`. mainnet release uses config file `tethys.toml`, while testnet release uses config file `testnet.toml`, and the values of the keys `bootnodes` and `chain_id` of the two config files are different.
+After downloading and unzipping the release file, you can run the node with `start.sh` or `start.bat`(Windows)
 
 ```sh
 $ ./start.sh
