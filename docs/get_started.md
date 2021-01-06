@@ -28,7 +28,7 @@ $ cd run
 $ ../target/release/conflux --config tethys.toml
 ```
 
-It will start a full node and begin syncing the Conflux testnet blockchain. 
+It will start a full node and begin syncing the Conflux mainnet blockchain. 
 
 Note that two new directories (`blockchain_db` and `net_config`) will be created in the current working directory ( `run` ) to keep the persistent data. Please do not remove them unless data are corrupt or you want to start a fresh new node.
 
