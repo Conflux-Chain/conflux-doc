@@ -11,7 +11,7 @@ keywords:
 
 Here we walk through how to quickly setup conflux full node to join the testnet and how to use Conflux wallet to manage your account, transfer Conflux token, and deploy smart contract.
 
-## Running Conflux Full Node
+## Running a Conflux Node
 
 First, please build the binary as instructed in [Installation](install.md#Install).
 
@@ -28,7 +28,7 @@ $ cd run
 $ ../target/release/conflux --config tethys.toml
 ```
 
-It will start a full node and begin syncing the Conflux mainnet blockchain. 
+It will start an archive node and begin syncing the Conflux mainnet blockchain. 
 
 Note that two new directories (`blockchain_db` and `net_config`) will be created in the current working directory ( `run` ) to keep the persistent data. Please do not remove them unless data are corrupt or you want to start a fresh new node.
 
@@ -49,6 +49,9 @@ public_address="127.0.0.1:32323"
 If you are going to set up a node and let it join the Conflux mainnet(testnet), you need to set the `public_address` appropriately. It should be set as the IP address of your node which can be accessed publicly from Internet. If your node is covered under a public gateway, you can get its public address by searching "ip" in [Baidu](https://www.baidu.com).
 
 If you want to let your node participate the mining process, you need to enable it by setting `start_mining` as "true" and `mining_author` as the account address that receives the mining reward. 
+
+If you want to open the http or websocket RPC, you need to enable it by setting `jsonrpc_http_port` or `jsonrpc_ws_port`. 
+**Note that to serve transaction-related RPCs, `persist_tx_index` should also be set to `true` or the node will only be able to handle very recent transactions.**
 
 ## Running Test
 
