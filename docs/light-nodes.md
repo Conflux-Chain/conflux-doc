@@ -49,11 +49,11 @@ Light nodes support most Conflux RPC APIs, and support for the rest is also [on 
 > curl -X POST --data '{ "jsonrpc": "2.0", "method": "cfx_clientVersion", "id": 1 }' -H "Content-Type: application/json" localhost:12539
 { "jsonrpc": "2.0", "result": "conflux-rust-1.0.0", "id": 1 }
 
-> curl -X POST --data '{ "jsonrpc":"2.0", "method":"cfx_getBalance", "params": ["cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6"], "id": 2 }' -H "Content-Type: application/json" localhost:12539
+> curl -X POST --data '{ "jsonrpc":"2.0", "method":"cfx_getBalance", "params": ["cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg"], "id": 2 }' -H "Content-Type: application/json" localhost:12539
 { "jsonrpc": "2.0", "result": "0x5fc346d4363f84249d4a", "id": 2 }
 
-> curl -X POST --data '{ "jsonrpc": "2.0", "method": "cfx_getLogs", "params": [{ "address": "cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c", "fromEpoch": "0x1c8b8", "toEpoch": "0x1c8d6" }], "id": 3}' -H "Content-Type: application/json" localhost:12539
-{ "jsonrpc": "2.0", "result": [{ "address": "CFX:TYPE.CONTRACT:022XG0J5VG1FBA4NH7GZ372WE6740PUPTMS36CM58C", "blockHash": "0x694898c77602511b6c411860ec230ac7ca58c08a4cbe3cad904e724b2eb97fee", "data": "0x0000000000000000000000000000000000000000000000049b9ca9a694340000000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000141da5f533abef1b82a4a6d698415b8a56894b7b410000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "epochNumber": "0x1c8bf", "logIndex": "0x0", "topics": ["0x06b541ddaa720db2b10a4d0cdac39b8d360425fc073085fac19bc82614677987","0x0000000000000000000000001da5f533abef1b82a4a6d698415b8a56894b7b41","0x0000000000000000000000001da5f533abef1b82a4a6d698415b8a56894b7b41","0x00000000000000000000000080bb30efc5683758128b404fe5da03432eb16634"], "transactionHash": "0x7dcfeb245369e509f2d154f2d5523e3ebe0b54f1d420e02edf56c70cdcae278d", "transactionIndex": "0x0", "transactionLogIndex": "0x0" },{ "address": "CFX:TYPE.CONTRACT:022XG0J5VG1FBA4NH7GZ372WE6740PUPTMS36CM58C", "blockHash": "0x694898c77602511b6c411860ec230ac7ca58c08a4cbe3cad904e724b2eb97fee", "data": "0x0000000000000000000000000000000000000000000000049b9ca9a694340000", "epochNumber": "0x1c8bf", "logIndex": "0x1", "topics": ["0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef","0x0000000000000000000000001da5f533abef1b82a4a6d698415b8a56894b7b41","0x00000000000000000000000080bb30efc5683758128b404fe5da03432eb16634"], "transactionHash": "0x7dcfeb245369e509f2d154f2d5523e3ebe0b54f1d420e02edf56c70cdcae278d", "transactionIndex": "0x0", "transactionLogIndex": "0x1" }], "id": 3 } -H "Content-Type: application/json" localhost:12539
+> curl -X POST --data '{ "jsonrpc": "2.0", "method": "cfx_getLogs", "params": [{ "address": "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp", "fromEpoch": "0x1c8b8", "toEpoch": "0x1c8d6" }], "id": 3}' -H "Content-Type: application/json" localhost:12539
+{ "jsonrpc": "2.0", "result": [{ "address": "CFX:TYPE.CONTRACT:ACC7UAWF5UBTNMEZVHU9DHC6SGHEA0403Y2DGPYFJP", "blockHash": "0x694898c77602511b6c411860ec230ac7ca58c08a4cbe3cad904e724b2eb97fee", "data": "0x0000000000000000000000000000000000000000000000049b9ca9a694340000000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000141da5f533abef1b82a4a6d698415b8a56894b7b410000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "epochNumber": "0x1c8bf", "logIndex": "0x0", "topics": ["0x06b541ddaa720db2b10a4d0cdac39b8d360425fc073085fac19bc82614677987","0x0000000000000000000000001da5f533abef1b82a4a6d698415b8a56894b7b41","0x0000000000000000000000001da5f533abef1b82a4a6d698415b8a56894b7b41","0x00000000000000000000000080bb30efc5683758128b404fe5da03432eb16634"], "transactionHash": "0x7dcfeb245369e509f2d154f2d5523e3ebe0b54f1d420e02edf56c70cdcae278d", "transactionIndex": "0x0", "transactionLogIndex": "0x0" },{ "address": "CFX:TYPE.CONTRACT:ACC7UAWF5UBTNMEZVHU9DHC6SGHEA0403Y2DGPYFJP", "blockHash": "0x694898c77602511b6c411860ec230ac7ca58c08a4cbe3cad904e724b2eb97fee", "data": "0x0000000000000000000000000000000000000000000000049b9ca9a694340000", "epochNumber": "0x1c8bf", "logIndex": "0x1", "topics": ["0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef","0x0000000000000000000000001da5f533abef1b82a4a6d698415b8a56894b7b41","0x00000000000000000000000080bb30efc5683758128b404fe5da03432eb16634"], "transactionHash": "0x7dcfeb245369e509f2d154f2d5523e3ebe0b54f1d420e02edf56c70cdcae278d", "transactionIndex": "0x0", "transactionLogIndex": "0x1" }], "id": 3 } -H "Content-Type: application/json" localhost:12539
 ```
 
 ### JavaScript
@@ -70,7 +70,7 @@ Then, you can query the blockchain and send transactions:
 const { Conflux, Drip } = require('js-conflux-sdk');
 
 const PRIVATE_KEY = '0x...';
-const RECEIVER = 'cfx:type.user:00cwegpesgntwkrz7e2cvvedwbusmdrm9wdsdks47x';
+const RECEIVER = 'cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg';
 
 async function main() {
   const conflux = new Conflux({ url: 'http://localhost:12539' });
@@ -80,12 +80,12 @@ async function main() {
   console.log('client_version:', client_version);
 
   // query account balance
-  const balance = await conflux.getBalance('cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6');
+  const balance = await conflux.getBalance('cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg');
   console.log('balance:', balance.toString(10));
 
   // query smart contract logs
   const logs = await conflux.getLogs({
-    address: 'cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c',
+    address: 'cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp',
     fromEpoch: 116920,
     toEpoch: 116950,
   });
@@ -125,7 +125,7 @@ While it has not been tested, light nodes are expected to work with the Java and
 If you run the following code:
 
 ```js
-const admin = await cfx.InternalContract('AdminControl').getAdmin('cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c');
+const admin = await cfx.InternalContract('AdminControl').getAdmin('cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp');
 console.log('admin:', admin);
 ```
 
@@ -148,7 +148,7 @@ This is because contract calls use the `cfx_call` RPC API which is not yet suppo
 Suppose you would like to send a transaction to a smart contract:
 
 ```js
-conflux.InternalContract('AdminControl').setAdmin('cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c', 'cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6').sendTransaction({
+conflux.InternalContract('AdminControl').setAdmin('cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp', 'cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg').sendTransaction({
   from: account,
 }).executed();
 ```
@@ -156,7 +156,7 @@ conflux.InternalContract('AdminControl').setAdmin('cfx:type.contract:022xg0j5vg1
 You will get a similar error. This is because for contract transactions, `js-conflux-sdk` will automatically attempt to estimate the gas limit and storage limit using the `cfx_estimateGasAndCollateral` RPC which is not yet supported on light nodes. You can address this by manually setting these parameters:
 
 ```js
-conflux.InternalContract('AdminControl').setAdmin('cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c', 'cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6').sendTransaction({
+conflux.InternalContract('AdminControl').setAdmin('cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp', 'cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg').sendTransaction({
   from: account,
   gas: '0x1111',
   storageLimit: '0x0',
@@ -198,7 +198,7 @@ const fromEpoch = 110000;
 const toEpoch = 119999;
 
 // NOT RECOMMENDED
-const logs = await cfx.getLogs({ fromEpoch, toEpoch, address: 'cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c' });
+const logs = await cfx.getLogs({ fromEpoch, toEpoch, address: 'cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp' });
 console.log('logs:', logs);
 ```
 
@@ -208,7 +208,7 @@ console.log('logs:', logs);
 for (ii = 0; ii < 10; ++ii) {
   const fromEpoch = 110000 + ii * 1000;
   const toEpoch = 110000 + (ii + 1) * 1000 - 1;
-  const logs = await cfx.getLogs({ fromEpoch, toEpoch, address: 'cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c' });
+  const logs = await cfx.getLogs({ fromEpoch, toEpoch, address: 'cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp' });
   console.log('logs:', logs);
 }
 ```

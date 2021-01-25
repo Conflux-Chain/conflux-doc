@@ -64,9 +64,9 @@ Note that block and transaction hashes are represented using 32 bytes.
 
 `BASE32`: Base32 **addresses** should be encoded as an ASCII string of 42-characters plus network prefix, separators, and optional fields. Please note the following constraints for base32 addresses as RPC parameters:
 
-* The network-prefix should match the node's network, i.e. `cfx:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c` can be sent to mainnet nodes and `cfxtest:022xg0j5vg1fba4nh7gz372we6740puptmj8nwjfc6` can be sent to testnet nodes. Note that these two example addresses correspond to the same account on different networks.
-* Including and omitting the address-type are both accepted, i.e. `cfx:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6` and `cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6` are equivalent. However, addresses with an incorrect type, e.g. `cfx:type.contract:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6`, are rejected.
-* Both lowercase (`cfx:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6`) and uppercase (`CFX:00D2Z01M2G4P77N6MDDVTAW2K43622DAAMM1867UK6`) addresses are accepted. Mixed-case addresses are rejected.
+* The network-prefix should match the node's network, i.e. `cfx:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp` can be sent to mainnet nodes and `cfxtest:acc7uawf5ubtnmezvhu9dhc6sghea0403ywjz6wtpg` can be sent to testnet nodes. Note that these two example addresses correspond to the same account on different networks.
+* Including and omitting the address-type are both accepted, i.e. `cfx:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg` and `cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg` are equivalent. However, addresses with an incorrect type, e.g. `cfx:type.contract:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg`, are rejected.
+* Both lowercase (`cfx:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg`) and uppercase (`CFX:AARC9ABYCUE0HHZGYRR53M6CXEDGCCRMMYYBJGH4XG`) addresses are accepted. Mixed-case addresses are rejected.
 
 ### The epoch number parameter
 
@@ -133,7 +133,7 @@ If you query a state entry that is unavailable on the node, you will get an erro
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBalance","params":["cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6", "earliest"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBalance","params":["cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg", "earliest"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -225,7 +225,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getTransactionByHash","param
     "contractCreated": null,
     "data": "0x0",
     "epochHeight": "0x909c9f",
-    "from": "CFX:TYPE.USER:00D2Z01M2G4P77N6MDDVTAW2K43622DAAMM1867UK6",
+    "from": "CFX:TYPE.USER:AARC9ABYCUE0HHZGYRR53M6CXEDGCCRMMYYBJGH4XG",
     "gas": "0xf4240",
     "gasPrice": "0x174876e800",
     "hash": "0x497755f45baef13a35347933c48c0b8940f2cc3347477b5ed9f165581b082699",
@@ -234,7 +234,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getTransactionByHash","param
     "s": "0x304070abe6488c3532ecb66f4be32b88ee35ce48a4607b8d0c86461987a79fc7",
     "status": "0x0",
     "storageLimit": "0x100",
-    "to": "CFX:TYPE.CONTRACT:022XG0J5VG1FBA4NH7GZ372WE6740PUPTMS36CM58C",
+    "to": "CFX:TYPE.CONTRACT:ACC7UAWF5UBTNMEZVHU9DHC6SGHEA0403Y2DGPYFJP",
     "transactionIndex": "0x0",
     "v": "0x1",
     "value": "0x3635c9adc5dea00000"
@@ -308,7 +308,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBlockByHash","params":["0
     "gasUsed": "0xad5ae8",
     "hash": "0x692373025c7315fa18b2d02139d08e987cd7016025920f59ada4969c24e44e06",
     "height": "0x1394c9",
-    "miner": "CFX:TYPE.USER:00D2Z01M2G4P77N6MDDVTAW2K43622DAAMM1867UK6",
+    "miner": "CFX:TYPE.USER:AARC9ABYCUE0HHZGYRR53M6CXEDGCCRMMYYBJGH4XG",
     "nonce": "0x329243b1063c6773",
     "parentHash": "0xd1c2ff79834f86eb4bc98e0e526de475144a13719afba6385cf62a4023c02ae3",
     "powQuality": "0x2ab0c3513",
@@ -495,7 +495,7 @@ Returns the balance of the given account, identified by its address.
 
 ```json
 params: [
-   "cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6",
+   "cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg",
    "latest_state"
 ]
 ```
@@ -508,7 +508,7 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBalance","params":["cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBalance","params":["cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -531,7 +531,7 @@ Returns the stacking balance of the given account, identified by its address.
 
 ```json
 params: [
-   "cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6",
+   "cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg",
    "latest_state"
 ]
 ```
@@ -544,7 +544,7 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStakingBalance","params":["cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStakingBalance","params":["cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -568,7 +568,7 @@ Returns the size of the collateral storage of a given address, in bytes.
 
 ```json
 params: [
-   "cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6",
+   "cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg",
    "latest_state"
 ]
 ```
@@ -581,7 +581,7 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getCollateralForStorage","params":["cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getCollateralForStorage","params":["cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -604,7 +604,7 @@ Returns the admin of the specified contract.
 
 ```json
 params: [
-    "cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c",
+    "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp",
     "latest_state"
 ]
 ```
@@ -617,12 +617,12 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getAdmin","params":["cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getAdmin","params":["cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
   "jsonrpc": "2.0",
-  "result": "CFX:TYPE.USER:00D2Z01M2G4P77N6MDDVTAW2K43622DAAMM1867UK6",
+  "result": "CFX:TYPE.USER:AARC9ABYCUE0HHZGYRR53M6CXEDGCCRMMYYBJGH4XG",
   "id": 1
 }
 ```
@@ -640,7 +640,7 @@ Returns the code of the specified contract.
 
 ```json
 params: [
-    "cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c",
+    "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp",
     "latest_state"
 ]
 ```
@@ -653,7 +653,7 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getCode","params":["cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c","latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getCode","params":["cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp","latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -677,7 +677,7 @@ Returns storage entries from a given contract.
 
 ```json
 params: [
-    "cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c",
+    "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp",
     "0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9",
     "latest_state"
 ]
@@ -691,7 +691,7 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStorageAt","params":["cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c","0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9","latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStorageAt","params":["cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp","0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9","latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -714,7 +714,7 @@ Returns the storage root of a given contract.
 
 ```json
 params: [
-    "cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c",
+    "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp",
     "latest_state"
 ]
 ```
@@ -738,7 +738,7 @@ TODO: Add links to snapshot/checkpoint documentation.
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStorageRoot","params":["cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c","latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStorageRoot","params":["cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp","latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -765,7 +765,7 @@ Returns the sponsor info of a given contract.
 
 ```json
 params: [
-    "cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c",
+    "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp",
     "latest_state"
 ]
 ```
@@ -784,7 +784,7 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getSponsorInfo","params":["cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getSponsorInfo","params":["cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -812,7 +812,7 @@ Returns the next nonce that should be used by the given account when sending a t
 
 ```json
 params: [
-    "cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6",
+    "cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg",
     "latest_state"
 ]
 ```
@@ -825,7 +825,7 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getNextNonce","params":["cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getNextNonce","params":["cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -890,8 +890,8 @@ Virtually calls a contract, returns the output data. The transaction will not be
 ```json
 params: [
     {
-        "from": "cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6",
-        "to": "cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c",
+        "from": "cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg",
+        "to": "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp",
         "data": "0xa6f2ae3a",
         "gasPrice": "0x2540be400",
         "nonce": "0x0"
@@ -908,7 +908,7 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"method":"cfx_call","id":1,"jsonrpc":"2.0","params":[{"from":"cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6","to":"cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c","data":"0xa6f2ae3a","gasPrice":"0x2540be400","nonce":"0x0"}]}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"method":"cfx_call","id":1,"jsonrpc":"2.0","params":[{"from":"cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg","to":"cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp","data":"0xa6f2ae3a","gasPrice":"0x2540be400","nonce":"0x0"}]}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -931,8 +931,8 @@ See [cfx_call](#cfx_call).
 ```json
 params: [
     {
-        "from": "cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6",
-        "to": "cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c",
+        "from": "cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg",
+        "to": "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp",
         "data": "0x",
         "gasPrice": "0x2540be400",
         "nonce": "0x0"
@@ -951,7 +951,7 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"method":"cfx_estimateGasAndCollateral","id":1,"jsonrpc":"2.0","params":[{"from":"cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6","to":"cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c","data":"0x","gasPrice":"0x2540be400","nonce":"0x0"}]}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"method":"cfx_estimateGasAndCollateral","id":1,"jsonrpc":"2.0","params":[{"from":"cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg","to":"cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp","data":"0x","gasPrice":"0x2540be400","nonce":"0x0"}]}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -985,7 +985,7 @@ params: [
     {
         "fromEpoch": "0x873e12",
         "toEpoch": "0x87431b",
-        "address": "cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c",
+        "address": "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp",
         "topics": [["0x233e08777131763a85257b15eafc9f96ef08f259653d9944301ff924b3917cf5", "0xd7fb65c06987247ab480a21659e16bdf0b5862a19869ec264075d50ab3525435"], null, "0x0000000000000000000000001d618f9b63eca8faf90faa9cb799bf4bfe616c26"],
         "limit": "0x2"
     }
@@ -1010,13 +1010,13 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getLogs","params":[{ "fromEpoch": "0x873e12", "toEpoch": "0x87431b", "address": "cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c", "topics": [["0x233e08777131763a85257b15eafc9f96ef08f259653d9944301ff924b3917cf5", "0xd7fb65c06987247ab480a21659e16bdf0b5862a19869ec264075d50ab3525435"], null, "0x0000000000000000000000001d618f9b63eca8faf90faa9cb799bf4bfe616c26"], "limit": "0x2" }],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getLogs","params":[{ "fromEpoch": "0x873e12", "toEpoch": "0x87431b", "address": "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp", "topics": [["0x233e08777131763a85257b15eafc9f96ef08f259653d9944301ff924b3917cf5", "0xd7fb65c06987247ab480a21659e16bdf0b5862a19869ec264075d50ab3525435"], null, "0x0000000000000000000000001d618f9b63eca8faf90faa9cb799bf4bfe616c26"], "limit": "0x2" }],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
   "jsonrpc": "2.0",
   "result": [{
-    "address": "CFX:TYPE.CONTRACT:022XG0J5VG1FBA4NH7GZ372WE6740PUPTMS36CM58C",
+    "address": "CFX:TYPE.CONTRACT:ACC7UAWF5UBTNMEZVHU9DHC6SGHEA0403Y2DGPYFJP",
     "blockHash": "0x44531df7bad30d39dfaf844e7c7eb44628467e9bd8474d313397c664a1b9fd14",
     "data": "0x0000000000000000000000001d618f9b63eca8faf90faa9cb799bf4bfe616c26",
     "epochNumber": "0x873e12",
@@ -1030,7 +1030,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getLogs","params":[{ "fromEp
     "transactionIndex": "0x0",
     "transactionLogIndex": "0x0"
   }, {
-    "address": "CFX:TYPE.CONTRACT:022XG0J5VG1FBA4NH7GZ372WE6740PUPTMS36CM58C",
+    "address": "CFX:TYPE.CONTRACT:ACC7UAWF5UBTNMEZVHU9DHC6SGHEA0403Y2DGPYFJP",
     "blockHash": "0x82da9c6ef8a93036ac75b176230dd88c8fe1727104ab01878b54180f0fa25638",
     "data": "0x00000000000000000000000019a3224214fe29107d84af9baa02118b614e46d5",
     "epochNumber": "0x87431b",
@@ -1078,7 +1078,7 @@ params: [
 * `gasCoveredBySponsor`: `Boolean`, true if this transaction's gas fee was covered by the sponsor.
 * `storageCollateralized`: `QUANTITY`, the amount of storage collateral this transaction required.
 * `storageCoveredBySponsor`: `Boolean`, true if this transaction's storage collateral was covered by the sponsor.
-* `storageReleased`: `Array`, array of storage change objects, each specifying an address and the corresponding amount of storage collateral released, e.g., `[{ 'address': 'CFX:TYPE.USER:00D2Z01M2G4P77N6MDDVTAW2K43622DAAMM1867UK6', 'collaterals': '0x280' }]`
+* `storageReleased`: `Array`, array of storage change objects, each specifying an address and the corresponding amount of storage collateral released, e.g., `[{ 'address': 'CFX:TYPE.USER:AARC9ABYCUE0HHZGYRR53M6CXEDGCCRMMYYBJGH4XG', 'collaterals': '0x280' }]`
 * `contractCreated`: `BASE32` - address of the contract created. `null` when it is not a contract deployment transaction.
 * `stateRoot`: `DATA`, 32 Bytes - hash of the state root after the execution of the corresponding block. `0` if the state root is not available.
 * `outcomeStatus`: `QUANTITY` - the outcome status code. `0x0` means success.
@@ -1098,13 +1098,13 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getTransactionReceipt","para
     "blockHash": "0xbb1eea3c8a574dc19f7d8311a2096e23a39f12e649a20766544f2df67aac0bed",
     "contractCreated": null,
     "epochNumber": "0x87431b",
-    "from": "CFX:TYPE.USER:00D2Z01M2G4P77N6MDDVTAW2K43622DAAMM1867UK6",
+    "from": "CFX:TYPE.USER:AARC9ABYCUE0HHZGYRR53M6CXEDGCCRMMYYBJGH4XG",
     "gasCoveredBySponsor": true,
     "gasFee": "0x108ca",
     "gasUsed": "0x8465",
     "index": "0x0",
     "logs": [{
-      "address": "CFX:TYPE.CONTRACT:022XG0J5VG1FBA4NH7GZ372WE6740PUPTMS36CM58C",
+      "address": "CFX:TYPE.CONTRACT:ACC7UAWF5UBTNMEZVHU9DHC6SGHEA0403Y2DGPYFJP",
       "data": "0x00000000000000000000000019a3224214fe29107d84af9baa02118b614e46d5",
       "topics": ["0x233e08777131763a85257b15eafc9f96ef08f259653d9944301ff924b3917cf5"]
     }],
@@ -1114,10 +1114,10 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getTransactionReceipt","para
     "storageCollateralized": "0x40",
     "storageCoveredBySponsor": true,
     "storageReleased": [{
-      "address": "CFX:TYPE.USER:00D2Z01M2G4P77N6MDDVTAW2K43622DAAMM1867UK6",
+      "address": "CFX:TYPE.USER:AARC9ABYCUE0HHZGYRR53M6CXEDGCCRMMYYBJGH4XG",
       "collaterals": "0x40"
     }],
-    "to": "CFX:TYPE.CONTRACT:022XG0J5VG1FBA4NH7GZ372WE6740PUPTMS36CM58C",
+    "to": "CFX:TYPE.CONTRACT:ACC7UAWF5UBTNMEZVHU9DHC6SGHEA0403Y2DGPYFJP",
     "transactionHash": "0x53fe995edeec7d241791ff32635244e94ecfd722c9fe90f34ddf59082d814514"
   },
   "id": 1
@@ -1137,7 +1137,7 @@ Returns an account, identified by its address.
 
 ```json
 params: [
-   "cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c",
+   "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp",
    "latest_state"
 ]
 ```
@@ -1158,14 +1158,14 @@ params: [
 
 ```json
 // Request
-curl --data '{"jsonrpc":"2.0","method":"cfx_getAccount","params":["cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl --data '{"jsonrpc":"2.0","method":"cfx_getAccount","params":["cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
   "jsonrpc": "2.0",
   "result": {
     "accumulatedInterestReturn": "0x0",
-    "admin": "CFX:TYPE.USER:00D2Z01M2G4P77N6MDDVTAW2K43622DAAMM1867UK6",
+    "admin": "CFX:TYPE.USER:AARC9ABYCUE0HHZGYRR53M6CXEDGCCRMMYYBJGH4XG",
     "balance": "0x0",
     "codeHash": "0x45fed62dd2b7c5ed76a63628ddc811e69bb5770cf31dd55647ca219aaee5434f",
     "collateralForStorage": "0x0",
@@ -1261,8 +1261,8 @@ Check if a user's balance is enough to send a transaction with the specified gas
 
 ```json
 params: [
-  "cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6",
-  "cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c",
+  "cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg",
+  "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp",
   "0x5208",
   "0x2540be400",
   "0x0",
@@ -1280,7 +1280,7 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_checkBalanceAgainstTransaction","params":["cfx:type.user:00d2z01m2g4p77n6mddvtaw2k43622daamm1867uk6", "cfx:type.contract:022xg0j5vg1fba4nh7gz372we6740puptms36cm58c", "0x5208", "0x2540be400", "0x0", "0xbf63"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_checkBalanceAgainstTransaction","params":["cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg", "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp", "0x5208", "0x2540be400", "0x0", "0xbf63"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -1465,7 +1465,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBlockRewardInfo","params"
   "jsonrpc": "2.0",
   "result": [
     {
-      "author": "CFX:TYPE.USER:00D2Z01M2G4P77N6MDDVTAW2K43622DAAMM1867UK6",
+      "author": "CFX:TYPE.USER:AARC9ABYCUE0HHZGYRR53M6CXEDGCCRMMYYBJGH4XG",
       "baseReward": "0x9ccda666a9516000",
       "blockHash": "0xa4a409ea5f1d31e787cd5e20a3eec1fd43851d29608d2de98fb127f518e1a211",
       "totalReward": "0x9ccdca639a29ece1",
