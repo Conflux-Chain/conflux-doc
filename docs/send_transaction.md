@@ -68,7 +68,7 @@ const receiver = '0x176c45928d7c26b0175dec8bf6051108563c62c5'
 	* **to**: the receiver of the transaction, could be a personal account (start with `0x1`) or contract (start with `0x8`). Leave a null here to deploy a contract.
 	* **value**: the value (in Drip) to be transferred.
 	* **storageLimit**: optional, the max storage (in Byte) you would like to collateralize in the transaction. If missing, the result of `cfx_estimateGasAndCollateral` will be automatically filled in and it works for general senarios.transactions.
-	* **epochHeight**: optional, a transaction is can be verified only in epochs in the range `[epochHeight - 10000, epochHeight + 10000]`, so it's  a timeout mechanism. If missing, the result of `cfx_epochNumber` will be automatically filled in and it works for general scenarios.
+	* **epochHeight**: optional, a transaction is can be verified only in epochs in the range `[epochHeight - 100000, epochHeight + 100000]`, so it's  a timeout mechanism. If missing, the result of `cfx_epochNumber` will be automatically filled in and it works for general scenarios.
 	* **data**: optional, it's either an attached message of a transaction or a function signature of a contract call. If missing, a null will be filled into it.
 	* **chainId**: optional, it used for dealing with a hard fork or preventing a transaction replay attack. If missing, the SDK will get it from RPC. Currently mainnet chainId is 1029, testnet is 1.
 	* **from**: The sender account(with private key) to sign the transaction.
