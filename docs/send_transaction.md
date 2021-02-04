@@ -57,7 +57,7 @@ const cfx = new Conflux({
 const PRIVATE_KEY = 'Your Private Key';
 // const PRIVATE_KEY = '0x5f15f9e52fc5ec6f77115a9f306c120a7e80d83115212d33a843bb6b7989c261';
 const account = cfx.wallet.addPrivateKey(PRIVATE_KEY); // create account instance
-const receiver = '0x176c45928d7c26b0175dec8bf6051108563c62c5'
+const receiver = 'cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg'
 ```
 
 * Compose your transaction, here are the fields could be filled with:
@@ -65,7 +65,7 @@ const receiver = '0x176c45928d7c26b0175dec8bf6051108563c62c5'
 	* **nonce**: optional, the nonce of a transaction to keep the order of your sending transactions, starting with some random large number and increase one by one. If missing, the result of `cfx_getNextNonce` will be automatically filled in and it works for general scenarios. Some cases, like sending a lot of transactions in a short period. It's recommended to maintain the nonce on your own.
 	* **gasPrice**: optional, the price in Drip that you would like to pay for each gas consumed. If missing, the result of `cfx_gasPrice` will be automatically filled in, which is the median of recent transactions.
 	* **gas**: optional, the max gas you would like to use in the transaction. After the end of transaction processing, the unused gas will be refunded if `used_gas >= gas * 0.75`. If missing, the result of `cfx_estimateGasAndCollateral` will be automatically filled in and it works for general scenarios.
-	* **to**: the receiver of the transaction, could be a personal account (start with `0x1`) or contract (start with `0x8`). Leave a null here to deploy a contract.
+	* **to**: the [base32 address](https://github.com/Conflux-Chain/CIPs/blob/master/CIPs/cip-37.md) of the receiver of the transaction, could be a personal account (e.g. `cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg`) or a contract (e.g. `cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp`). Leave a null here to deploy a contract.
 	* **value**: the value (in Drip) to be transferred.
 	* **storageLimit**: optional, the max storage (in Byte) you would like to collateralize in the transaction. If missing, the result of `cfx_estimateGasAndCollateral` will be automatically filled in and it works for general senarios.transactions.
 	* **epochHeight**: optional, a transaction is can be verified only in epochs in the range `[epochHeight - 100000, epochHeight + 100000]`, so it's  a timeout mechanism. If missing, the result of `cfx_epochNumber` will be automatically filled in and it works for general scenarios.
@@ -115,13 +115,13 @@ So if you wait for 1 minute and still cannot find the transaction in ConfluxScan
 Use `cfx_getTransactionByHash`, `cfx_getBalance` and `cfx_getNextNonce` to check if your transaction is ready to be packed and mined, for example:
 
 ```
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBalance","params":["0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8"],"id":1}' -H "Content-Type: application/json" https://test.confluxrpc.org
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBalance","params":["cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg"],"id":1}' -H "Content-Type: application/json" https://test.confluxrpc.org
 ```
 
 And compare the result with `value + gas * gasPrice + storage_limit * (10^18/1024)`.
 
 ```
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getNextNonce","params":["0xfbe45681ac6c53d5a40475f7526bac1fe7590fb8"],"id":1}' -H "Content-Type: application/json" https://test.confluxrpc.org
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getNextNonce","params":["cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg"],"id":1}' -H "Content-Type: application/json" https://test.confluxrpc.org
 ```
 
 And compare the result with the nonce you filled in.

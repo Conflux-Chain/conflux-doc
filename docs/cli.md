@@ -126,10 +126,10 @@ SUBCOMMANDS:
 ```
 
 ### Get balance
-`./conflux.exe rpc balance --address 0xa70ddf9b9750c575db453eea6a041f4c8536785a`
+`./conflux.exe rpc balance --address cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg`
 
 ### Get nonce
-`./conflux.exe rpc nonce --address 0xa70ddf9b9750c575db453eea6a041f4c8536785a`
+`./conflux.exe rpc nonce --address cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg`
 
 ### Get current epoch number
 `./conflux.exe rpc epoch`
@@ -152,7 +152,7 @@ Send a signed transaction which encoded in HEX format. Generally, this API is us
 `./conflux.exe rpc send --raw-bytes 0x...`
 
 ### Misc
-- Get contract code: `./conflux.exe rpc code --address 0xa70ddf9b9750c575db453eea6a041f4c8536785a`
+- Get contract code: `./conflux.exe rpc code --address cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp`
 - Get recent mean gas price: `./conflux.exe rpc price`
 
 ## Private APIs
