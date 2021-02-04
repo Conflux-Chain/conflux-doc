@@ -8,7 +8,7 @@ keywords:
   - sdk
 ---
 
-**IMPORTANT NOTICE (January 2021): Starting from `conflux-rust v1.1.1`, all hex addresses used in the RPCs below have been updated to base32 addresses, as defined in [CIP-37](https://github.com/Conflux-Chain/CIPs/blob/master/CIPs/cip-37.md). For converting legacy hex addresses into base32 addresses, please refer to [conflux-address-js](https://www.npmjs.com/package/conflux-address-js).**
+**IMPORTANT NOTICE (February 2021): Starting from `conflux-rust v1.1.1`, all hex addresses used in the RPCs below have been updated to base32 addresses, as defined in [CIP-37](https://github.com/Conflux-Chain/CIPs/blob/master/CIPs/cip-37.md). For converting legacy hex addresses into base32 addresses, please refer to [conflux-address-js](https://www.npmjs.com/package/conflux-address-js) or use the [conversion tool](https://confluxscan.io/address-converter) on Conflux Scan.**
 
 The Conflux JSON-RPC API is a collection of interfaces that allow you to interact with a local or remote Conflux node. You can use this API through an HTTP, TCP, or WebSocket connection.
 
