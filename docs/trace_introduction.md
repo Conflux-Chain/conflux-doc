@@ -1,12 +1,12 @@
 # Introduction to Transaction Traces
 
-Traces are used to record the transaction execution details. It can be used to debug or retrieving more information (like getting contract addresses created within transaction execution).
+Traces are used to record the transaction execution details. It can be used to debug or retrieve more information (like getting contract addresses created within transaction execution).
 
 ## Trace Types
 
 ### Call
 
-The trace is recorded for all `Call` operations, including balance transferring or contract calling.
+The trace is recorded for all `Call` operations, including balance transferring or contract calling, executed either by the transaction itself or inside a contract.
 
 ```rust
 pub struct Call {
@@ -38,9 +38,11 @@ pub enum CallType {
 }
 ```
 
+If a transaction itself is calling a contract (`to` is a contract address), this trace will always be the first one in the trace list of this transaction.
+
 `call_type` can never be `None` for `Call` traces.
 
-Note that `gas` is the "provided" gas for this `Call` operation, so the gas overhead has been deducted. For example, it is `0` for a simple balance transferring transaction of `21000` gas, because the base gas cost (`21000`) has been deducted in advance. The gas cost for call-related opcodes (`CALL`, `DELEGATECALL`, e.t.c.) or the 1/64 gas reserve for calling are also deducted in advance during contract execution.
+Note that `gas` is the "provided" gas for the execution of the callee, so the gas overhead has been deducted. For example, it is `0` for a simple balance transferring transaction of `21000` gas, because the base gas cost (`21000`) has been deducted in advance. The gas cost for call-related opcodes (`CALL`, `DELEGATECALL`, e.t.c.) or the 1/64 gas reserve for calling are also deducted in advance during contract execution.
 
 ### CallResult
 
@@ -108,7 +110,7 @@ Similar to `CallResult`, no `CreateResult` trace is recorded for the one trigger
 
 ### InternalTransferAction
 
-The trace is recorded for the balance transfer triggered by internal contracts. It includes contract suicide, sponsor replacement (including storage collatoral sponsor and gas sponsor) , and staking.
+The trace is recorded for the balance transfer triggered by internal contracts. It includes contract suicide, sponsor replacement (including storage collateral sponsor and gas sponsor) , and staking.
 
 ```rust
 pub struct InternalTransferAction {
