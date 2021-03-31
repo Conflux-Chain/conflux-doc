@@ -88,7 +88,7 @@ node id of this bootnode. Remove the 0x prefix and you'll get the node id
 with:
 
     ```bash
-    grep "Self node id" log/conflux.log|awk '{print $9}'|tr -d '0x'
+    grep "Self node id" log/conflux.log|awk '{print $9}'|sed -e "s/^0x//"
     ```
 
 4. Now we have the `$IP`, `$PORT$`, and `$NODEID` of the boot node, we can get
