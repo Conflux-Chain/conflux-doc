@@ -1376,7 +1376,11 @@ None.
 * `bestHash`: `DATA` - hash of the latest epoch's pivot block
 * `blockNumber`: `QUANTITY` - total block number
 * `chainId`: `QUANTITY` - chainId
+* `networkId`: `QUANTITY` - networkId
 * `epochNumber`: `QUANTITY` - latest epoch number
+* `latestCheckpoint`: `QUANTITY` - latest checkpoint epoch number
+* `latestConfirmed`: `QUANTITY` - latest confirmed epoch number
+* `latestState`: `QUANTITY` - latest state epoch number
 * `pendingTxNumber`: `QUANTITY` - current pending transaction count
 
 ##### Example
@@ -1390,9 +1394,13 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStatus","id":1}' -H "Cont
   "jsonrpc": "2.0",
   "result": {
     "bestHash": "0xe4bf02ad95ad5452c7676d3dfc2e57fde2a70806c2e68231c58c77cdda5b7c6c",
-    "blockNumber": "0xa9b7",
-    "chainId": "0x0",
-    "epochNumber": "0xa9b6",
+    "chainId": "0x1",
+    "networkId": "0x1",
+    "blockNumber": "0x1a80325",
+    "epochNumber": "0xaf28ab",
+    "latestCheckpoint": "0xada520",
+    "latestConfirmed": "0xaf2885",
+    "latestState": "0xaf28a7",
     "pendingTxNumber": "0x0"
   },
   "id": 1
