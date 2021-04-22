@@ -1,6 +1,6 @@
 ---
 id: installation
-title: Installation
+title: Compile from source code
 custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/install.md
 keywords:
   - conflux
@@ -141,14 +141,4 @@ You can follow the detailed instructions at [Installing the Solidity Compiler](h
 Note that latest solidity compiler may be incompatible with Conflux and may cause the integration test to fail. If you encounter such problem, please install solidity compiler version 0.5.2.
 
 To run tests, you can build the source code first and follow the instructions at [Running Test](get_started.md#running-test).
-
-## Download compiled node binary
-
-If you don't want to build the node from the source code, you can directly download the pre-compiled binary from [github release page](https://github.com/Conflux-Chain/conflux-rust/releases). We provide the binaries for Windows, Linux, and OSX. There are two release lines: mainnet and testnet (with suffix `testnet`). If you want to run a mainnet node, you should choose `Conflux vx.x.x`, and if you want to run a testnet node, please choose `Conflux vx.x.x-testnet`. mainnet release uses config file `tethys.toml`, while testnet release uses config file `testnet.toml`, and the values of the keys `bootnodes` and `chain_id` of the two config files are different.
-After downloading and unzipping the release file, you can run the node with `start.sh` or `start.bat`(Windows)
-
-```sh
-$ ./start.sh
-```
-
 
