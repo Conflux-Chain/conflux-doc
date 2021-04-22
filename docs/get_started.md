@@ -1,6 +1,6 @@
 ---
 id: get_started
-title: Getting Started
+title: Running an mainnet node
 custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/get_started.md
 keywords:
   - conflux
