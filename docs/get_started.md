@@ -1,6 +1,6 @@
 ---
 id: get_started
-title: Running an mainnet node
+title: Run a Node
 custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/get_started.md
 keywords:
   - conflux
@@ -9,7 +9,7 @@ keywords:
   - full node
 ---
 
-Here we walk through how to quickly setup conflux full node to join the testnet and how to use Conflux wallet to manage your account, transfer Conflux token, and deploy smart contract.
+Here we walk through how to quickly setup conflux full node to join the conflux network and how to use Conflux wallet to manage your account, transfer Conflux token, and deploy smart contract.
 
 ## Running a Conflux Node
 
