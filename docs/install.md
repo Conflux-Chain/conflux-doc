@@ -1,6 +1,6 @@
 ---
 id: installation
-title: Compile from source code
+title: Compile from Source
 custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/install.md
 keywords:
   - conflux
