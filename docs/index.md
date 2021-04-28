@@ -2,7 +2,7 @@
 
 ![Screenshot](img/testnet.jpg)
 
-<span style="font-size:1.8em;">**The Conflux Testnet is Live!**</span>
+**The Conflux Testnet is Live!**
 
 We are excited to annouce the Conflux testnet release to provide developers and users the early access to our technology.
 
