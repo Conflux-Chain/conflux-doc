@@ -3,7 +3,7 @@ to create and manage your key-pair, create and sign your transaction, and submit
 transaction to Conflux. 
 
 ## Get Key Management Toolkit
-You can download the key management toolkit of Conflux (**keymgr**) from [here]().
+You can download the key management toolkit of Conflux (**keymgr**) from here.
 Or you can directly build **keymgr** from Conflux source code with the following steps.
 ```markdown
 $ git clone ssh://git@base.conflux-chain.org:2222/source/conflux-rust.git
