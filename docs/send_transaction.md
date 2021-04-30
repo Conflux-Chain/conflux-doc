@@ -109,7 +109,7 @@ After the provider got the `cfx_sendRawTransaction` RPC call, it will try to do 
 
 ### 2. Stuck in the transaction pool
 
-However, the transaction hash you got does not mean it was successfully executed. Conflux will store as many verified transactions in the pool as possible, even transactions whose nonce does not match the expected one or the balance is not enough to pay the ```value + gas * gasPrice + storage_limit * (10^18/1024)```.
+However, the transaction hash you got does not mean it was successfully executed. Conflux will store as many verified transactions in the pool as possible, even transactions whose nonce does not match the expected one or the balance is not enough to pay the ```value + gas * gasPrice + storageLimit * (10^18/1024)```.
 
 So if you wait for 1 minute and still cannot find the transaction in ConfluxScan after sending it, it very likely got stuck in the transaction pool.
 
