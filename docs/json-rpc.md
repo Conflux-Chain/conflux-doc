@@ -20,10 +20,6 @@ JSON is a lightweight data-interchange format. It can represent numbers, strings
 
 JSON-RPC is a stateless, light-weight remote procedure call (RPC) protocol. Primarily this specification defines several data structures and the rules around their processing. It is transport-agnostic in that the concepts can be used within the same process, over sockets, over HTTP, or in many various message passing environments. It uses JSON (RFC 4627) as its data format.
 
-### JavaScript API
-
-We also provide a JavaScript library [js-conflux-sdk](https://github.com/Conflux-Chain/js-conflux-sdk) for you to interact with a Conflux node from a JavaScript application. This  SDK offers a convenient interface on top of the RPC methods.
-
 ### JSON-RPC endpoints
 
 Currently, Conflux has a [Rust implementation](https://github.com/Conflux-Chain/conflux-rust) that supports JSON-RPC 2.0 over an HTTP, TPC, or WebSocket connection.
@@ -1529,7 +1525,7 @@ Returns the deposit list of the given account, identified by its address.
 
 ```json
 params: [
-   "0x176c45928d7c26b0175dec8bf6051108563c62c5",
+   "cfx:aan02vpwvz8crpa1n10j17ufceefptdc2yzkagxk5u",
    "latest_state"
 ]
 ```
@@ -1546,7 +1542,7 @@ params: [
 
 ```json
 // Request
-curl --data '{"jsonrpc":"2.0","method":"cfx_getDepositList","params":["0x176c45928d7c26b0175dec8bf6051108563c62c5", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl --data '{"jsonrpc":"2.0","method":"cfx_getDepositList","params":["cfx:aan02vpwvz8crpa1n10j17ufceefptdc2yzkagxk5u", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -1577,7 +1573,7 @@ Returns the vote list of the given account, identified by its address.
 
 ```json
 params: [
-   "0x176c45928d7c26b0175dec8bf6051108563c62c5",
+   "cfx:aan02vpwvz8crpa1n10j17ufceefptdc2yzkagxk5u",
    "latest_state"
 ]
 ```
@@ -1595,7 +1591,7 @@ For getting the current block number, please refer to [conflux-rust#1973](https:
 
 ```json
 // Request
-curl --data '{"jsonrpc":"2.0","method":"cfx_getVoteList","params":["0x176c45928d7c26b0175dec8bf6051108563c62c5", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl --data '{"jsonrpc":"2.0","method":"cfx_getVoteList","params":["cfx:aan02vpwvz8crpa1n10j17ufceefptdc2yzkagxk5u", "latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
