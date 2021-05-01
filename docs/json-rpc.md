@@ -1327,7 +1327,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getSkippedBlocksByEpoch","pa
 
 ### cfx_getConfirmationRiskByHash
 
-Returns the confirmation block of a given block, identified by its hash.
+Returns the confirmation risk of a given block, identified by its hash.
 
 #### Parameters
 
