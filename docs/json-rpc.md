@@ -941,6 +941,7 @@ params: [
 #### Returns
 
 `Object` - an estimate result object:
+   * `gasLimit`: `QUANTITY` - the recommended gas_limit.
    * `gasUsed`: `QUANTITY` - gas used during execution.
    * `storageCollateralized`: `QUANTITY` - size of storage collateralized, in bytes.
 
