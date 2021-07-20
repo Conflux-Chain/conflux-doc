@@ -280,6 +280,7 @@ params: [
 * `timestamp`: `QUANTITY` - the unix timestamp for when the block was created.
 * `transactions`: `Array` - array of transaction objects, or 32-byte transaction hashes, depending on the second parameter.
 * `transactionsRoot`: `DATA`, 32 Bytes - the Merkle root of the transactions in this block.
+* `custom`: `Array`- customized informtion.
 
 Note that the fields `epochNumber` and `gasUsed` are provided by the node as they depend on the ledger. The rest of the fields are included in or derived from the block header directly.
 
@@ -940,6 +941,7 @@ params: [
 #### Returns
 
 `Object` - an estimate result object:
+   * `gasLimit`: `QUANTITY` - the recommended gas_limit.
    * `gasUsed`: `QUANTITY` - gas used during execution.
    * `storageCollateralized`: `QUANTITY` - size of storage collateralized, in bytes.
 
@@ -953,6 +955,7 @@ curl -X POST --data '{"method":"cfx_estimateGasAndCollateral","id":1,"jsonrpc":"
 {
   "jsonrpc": "2.0",
   "result": {
+    "gasLimit": "0x6d60",
     "gasUsed": "0x5208",
     "storageCollateralized": "0x80"
   },
@@ -1415,7 +1418,7 @@ None.
 
 #### Returns
 
-* `DATA` - the client version
+* `STRING` - the client version
 
 ##### Example
 
