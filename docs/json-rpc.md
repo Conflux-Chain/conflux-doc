@@ -281,6 +281,7 @@ params: [
 * `transactions`: `Array` - array of transaction objects, or 32-byte transaction hashes, depending on the second parameter.
 * `transactionsRoot`: `DATA`, 32 Bytes - the Merkle root of the transactions in this block.
 * `custom`: `Array`- customized informtion.
+* `blockNumber`: `QUANTITY` - the number of this block's total order in the tree-graph. `null` when the order is not determined. Added from `Conflux-rust v1.1.5`
 
 Note that the fields `epochNumber` and `gasUsed` are provided by the node as they depend on the ledger. The rest of the fields are included in or derived from the block header directly.
 
@@ -628,7 +629,7 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getAdmin","params":["cfx:typ
 
 ### cfx_getCode
 
-Returns the code of the specified contract.
+Returns the code of the specified contract. If contract not exist will return `0x0`
 
 #### Parameters
 
@@ -978,6 +979,7 @@ Returns logs matching the filter provided.
     * `address`: `Array` of `BASE32` - (optional, default: `null`) Search contract addresses. If `null`, match all. If specified, the log must be produced by one of these contracts.
     * `topics`: `Array` - (optional, default: `null`) 32-byte earch topics. Logs can have `4` topics: the event signature and up to `3` indexed event arguments. The elements of `topics` match the corresponding log topics. Example: `["0xA", null, ["0xB", "0xC"], null]` matches logs with `"0xA"` as the 1st topic AND (`"0xB"` OR `"0xC"`) as the 3rd topic. If `null`, match all.
     * `limit`: `QUANTITY` - (optional, default: `null`) If `null` return all logs, otherwise should only return the **last** `limit` logs. Note: if the node has `get_logs_filter_max_limit` set, it will override `limit` if it is `null` or greater than the preset value.
+    * `offset`: `QUANTITY` - If specified, the response will skip the `last` offset logs. For instance, with 10 matching logs (0..9) and offset=0x1, limit=0x5, the response will contain logs 4..8. Note: Even if you specify offset, the corresponding logs still need to be processed by the node, so a filter with offset=10000, limit=10 has about the same performance as a filter with offset=0, limit=100010
 
 ```json
 params: [
@@ -986,7 +988,8 @@ params: [
         "toEpoch": "0x87431b",
         "address": "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp",
         "topics": [["0x233e08777131763a85257b15eafc9f96ef08f259653d9944301ff924b3917cf5", "0xd7fb65c06987247ab480a21659e16bdf0b5862a19869ec264075d50ab3525435"], null, "0x0000000000000000000000001d618f9b63eca8faf90faa9cb799bf4bfe616c26"],
-        "limit": "0x2"
+        "limit": "0x2",
+        "offset": "0x1"
     }
 ]
 ```
@@ -1145,6 +1148,7 @@ params: [
 
 `Object` - the state of the given account:
 
+* `address`: `BASE32` - address of the account.
 * `balance`: `QUANTITY` - the balance of the account.
 * `nonce`: `QUANTITY` - the nonce of the account's next transaction.
 * `codeHash`: `QUANTITY` - the code hash of the account.
@@ -1606,3 +1610,160 @@ curl --data '{"jsonrpc":"2.0","method":"cfx_getVoteList","params":["cfx:aan02vpw
   "id": 1
 }
 ```
+
+### cfx_getSupplyInfo
+
+Returns summary supply info of the entire chain.
+
+#### Parameters
+
+None.
+
+#### Returns
+
+`Object` - Object include the supply summary info.
+
+* `totalIssued`: `QUANTITY` - Amount of total issued CFX in Drip
+* `totalCollateral`: `QUANTITY` - Amount of total storage collateraled CFX in Drip
+* `totalStaking`: `QUANTITY` - Amount of total staking CFX in Drip
+* `totalCirculating`: `QUANTITY` - Amount: `TotalIssued` - `FourYearUnlock` - `TwoYearUnlock`
+
+#### Example
+
+```json
+// Request
+curl --data '{"jsonrpc":"2.0","method":"cfx_getSupplyInfo","params":[],"id":1}' -H "Content-Type: application/json" localhost:12539
+
+// Result
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "totalCirculating": "0x1ed09beade67915041ca95cb0ea3b",
+    "totalCollateral": "0x2b95bdcc39b610000",
+    "totalIssued": "0x1ed09ced5cda57e32eec33328ea3b",
+    "totalStaking": "0x56bc75e2d63100000"
+  },
+  "id": "15922956697249514502"
+}
+```
+
+### cfx_getAccountPendingInfo
+
+Returns transaction pool pending info of one account
+
+#### Parameters
+
+1. `BASE32` - address of the account.
+
+```json
+params: [
+    "cfx:aan02vpwvz8crpa1n10j17ufceefptdc2yzkagxk5u"
+]
+```
+
+#### Returns
+
+`Object` - Object include account's pending info.
+
+* `localNonce`: `QUANTITY` - User's transaction pool nonce that can be used for next transaction.
+* `pendingNonce`: `QUANTITY` - User's current pending nonce
+* `pendingCount`: `QUANTITY` - Count of pending transaction
+* `nextPendingTx`: `DATA` - Hash of next pending transaction
+
+```json
+// Request
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getAccountPendingInfo","params":["cfx:aan02vpwvz8crpa1n10j17ufceefptdc2yzkagxk5u"],"id":1}' -H "Content-Type: application/json" localhost:12539
+
+// Response
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "localNonce": "0x1ed",
+        "nextPendingTx": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "pendingCount": "0x0",
+        "pendingNonce": "0x0"
+    },
+    "id": "15922956697249514502"
+}
+```
+
+### cfx_getAccountPendingTransactions
+
+Returns pending transactions in pool of one account
+
+#### Parameters
+
+1. `BASE32` - address of the account.
+
+```json
+params: [
+    "cfx:aan02vpwvz8crpa1n10j17ufceefptdc2yzkagxk5u"
+]
+```
+
+#### Returns
+
+`Object` - Object include account's pending transaction info.
+
+* `firstTxStatus`: `OBJECT` - An object with only one field `pending`, it's value is the first pending transaction's status. Only have two case `futureNonce`, `notEnoughCash`
+* `pendingCount`: `QUANTITY` - Count of pending transactions
+* `pendingTransactions`: `ARRAY` - Array of pending [transaction](#cfx_gettransactionbyhash)
+
+```json
+// Request
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getAccountPendingTransactions","params":["cfx:aan02vpwvz8crpa1n10j17ufceefptdc2yzkagxk5u"],"id":1}' -H "Content-Type: application/json" localhost:12539
+
+// Response
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "firstTxStatus": {
+            "pending": "futureNonce"
+        },
+        "pendingCount": "0x1",
+        // Reference transaction example
+        "pendingTransactions": [
+            {
+                "...": "..."
+            }
+        ]
+    },
+    "id": "15922956697249514502"
+}
+```
+
+
+### cfx_getBlockByBlockNumber
+
+Returns information about a block, identified by its block number (block's tree-graph order number).
+
+#### Added at
+
+`Conflux-rust v1.1.5`
+
+#### Parameters
+
+1. `QUANTITY|TAG` - the block number, or the string.
+2. `Boolean` - if `true`, it returns the full transaction objects. If `false`, only the hashes of the transactions are returned
+
+```json
+params: [
+    "0x1000",
+    true
+]
+```
+
+#### Returns
+
+See [cfx_getBlockByHash](#cfx_getblockbyhash).
+
+##### Example
+
+```json
+// Request
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBlockByBlockNumber","params":["0x1000", false],"id":1}' -H "Content-Type: application/json" localhost:12539
+```
+
+Result see [cfx_getBlockByHash](#cfx_getblockbyhash).
+
+---

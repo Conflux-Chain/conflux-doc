@@ -59,6 +59,8 @@ The `epochs` topic streams consensus results: the total order of blocks, as expr
 
 The returned series of epoch numbers is monotonically increasing with an increment of one. If you see the same epoch twice, this suggests a pivot chain reorg has happened (this might happen for recent epochs).
 
+An optional parameter can be passed to control the subscribed epoch. available value is `latest_state` and `latest_mined` (default).
+
 ```json
 { "jsonrpc": "2.0", "method": "cfx_subscribe", "params": ["epochs"], "id": 1 }
 { "jsonrpc": "2.0", "result": "0xde5801fda9520049", "id": 1 }
