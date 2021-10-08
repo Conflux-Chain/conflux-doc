@@ -73,6 +73,7 @@ The epoch number specifies a point in time and the corresponding state of the sy
 * `HEX String` - an integer epoch number. For example, `0x3e8` is epoch 1000.
 * `String "earliest"` for the epoch of the genesis block.
 * `String "latest_checkpoint"` for the earliest epoch stored in memory.
+* `String "latest_finalized"` - for the latest finalized (by PoS) epoch. (Added from conflux-rust `v1.2.0`)
 * `String "latest_confirmed"` - for the latest confirmed epoch (using the confirmation meter's estimate).
 * `String "latest_state"` - for the latest epoch that has been executed.
 * `String "latest_mined"` - for the latest known epoch.
@@ -282,6 +283,7 @@ params: [
 * `transactionsRoot`: `DATA`, 32 Bytes - the Merkle root of the transactions in this block.
 * `custom`: `Array`- customized informtion.
 * `blockNumber`: `QUANTITY` - the number of this block's total order in the tree-graph. `null` when the order is not determined. Added from `Conflux-rust v1.1.5`
+* `posReference`: `DATA`, 32 Bytes - the hash of the PoS newest committed block. Added from `Conflux-rust v1.2.0`
 
 Note that the fields `epochNumber` and `gasUsed` are provided by the node as they depend on the ledger. The rest of the fields are included in or derived from the block header directly.
 
@@ -1670,6 +1672,8 @@ params: [
 * `pendingCount`: `QUANTITY` - Count of pending transaction
 * `nextPendingTx`: `DATA` - Hash of next pending transaction
 
+#### Example
+
 ```json
 // Request
 curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getAccountPendingInfo","params":["cfx:aan02vpwvz8crpa1n10j17ufceefptdc2yzkagxk5u"],"id":1}' -H "Content-Type: application/json" localhost:12539
@@ -1709,6 +1713,8 @@ params: [
 * `pendingCount`: `QUANTITY` - Count of pending transactions
 * `pendingTransactions`: `ARRAY` - Array of pending [transaction](#cfx_gettransactionbyhash)
 
+#### Example
+
 ```json
 // Request
 curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getAccountPendingTransactions","params":["cfx:aan02vpwvz8crpa1n10j17ufceefptdc2yzkagxk5u"],"id":1}' -H "Content-Type: application/json" localhost:12539
@@ -1731,7 +1737,6 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getAccountPendingTransaction
     "id": "15922956697249514502"
 }
 ```
-
 
 ### cfx_getBlockByBlockNumber
 
@@ -1757,7 +1762,7 @@ params: [
 
 See [cfx_getBlockByHash](#cfx_getblockbyhash).
 
-##### Example
+#### Example
 
 ```json
 // Request
@@ -1767,3 +1772,46 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBlockByBlockNumber","para
 Result see [cfx_getBlockByHash](#cfx_getblockbyhash).
 
 ---
+
+### cfx_getPoSEconomics
+
+Returns PoS economics summary info.
+
+#### Added at
+
+`Conflux-rust v1.2.0`
+
+#### Parameters
+
+1. [`QUANTITY`] - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_confirmed"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
+
+#### Returns
+
+* `distributablePosInterest`: `QUANTITY` Total distributable PoS interest (Unit is Drip)
+* `lastDistributeBlock`: `QUANTITY` Last block that distributable PoS interest
+* `totalPosStakingTokens`: `QUANTITY` Total tokens staked in PoS (Unit is Drip)
+
+#### Example
+
+```json
+// Request
+curl --location --request POST 'http://localhost:12537' \
+--header 'Content-Type: application/json' \
+--data-raw ' {
+    "jsonrpc": "2.0",
+    "id": "15922956697249514502",
+    "method": "cfx_getPoSEconomics",
+    "params": []
+  }'
+
+// Response
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "distributablePosInterest": "0x6fd7fd91140603a45caff2",
+        "lastDistributeBlock": 0,
+        "totalPosStakingTokens": "0x29cbb85e5a6e849c00000"
+    },
+    "id": "15922956697249514502"
+}
+```

@@ -90,7 +90,7 @@ PoS 账户地址跟 PoW 地址格式不同是一个 256 位 hash 值，例如：
 
 * `epoch`: `QUANTITY` - PoS 链当前的纪元号
 * `latestCommitted`: `QUANTITY` - 最新被 commit 的区块号，commit 的区块不会再发生 revert
-* `latestVoted`: `QUANTITY` - 最近被成功投票的区块号。如果当前没有完成投票的区块为 null
+* `latestVoted`: [`QUANTITY`] - 最近被成功投票的区块号。如果当前没有完成投票的区块为 null
 * `pivotDecision`: `QUANTITY` - 当前 PoS 链所 finalize 的最新 PoW 链的主轴区块号
 
 #### Example
@@ -215,7 +215,7 @@ curl --location --request POST 'http://localhost:12537' \
 
 ```json
 // Request
-curl --location --request POST 'http://101.132.158.162:12537' \
+curl --location --request POST 'http://localhost:12537' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "id": 1,
