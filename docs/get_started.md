@@ -13,7 +13,7 @@ Here we walk through how to quickly setup conflux full node to join the conflux 
 
 ## Running a Conflux Node
 
-First, please build the binary as instructed in [Installation](install.md#Install).
+First, please [Get a Conflux Client](../../run-a-node/en/how-to-get.md) or [Compile from Source](install.md).
 
 To start Conflux manually, you need to edit the default configuration file `run/tethys.toml`:
 
