@@ -60,8 +60,8 @@ PoS 账户地址跟 PoW 地址格式不同是一个 256 位 hash 值，例如：
 当用户发起解锁操作之后，待解锁的票券会先进入 `outQueue` 状态，同样需要经过`七天`时间变为 `unlocked` 状态。
 
 * `availableVotes`: `QUANTITY` - 账户当前可用的票数, 等于 `sum inQueue` + `locked`
-* `exemptFromForfeit`: [`QUANTITY`] - 账户被检测到作恶时，staked 票数会被罚没，可以免除罚没的质押金额（已经成功解锁部分）
-* `forceRetired`: `BOOLEAN` - 账户是否被强制退休
+* `forfeited`: `QUANTITY` - 账户被检测到作恶时，staked 票数会被锁死，无法提取的数量
+* `forceRetired`: [`QUANTITY`] - 账户被强制退休的票数
 * `inQueue`: `Array` of [VotesInQueue](#VotesInQueue) - 当前正在等待锁定的队列
 * `locked`: `QUANTITY` - 账户当前被锁定的票数
 * `outQueue`: `Array` of [VotesInQueue](#VotesInQueue) - 当前正在等待解锁的队列
@@ -164,8 +164,8 @@ curl --location --request POST 'http://localhost:12537' \
         "blockNumber": "0x14a7",
         "status": {
             "availableVotes": "0x513",
-            "exemptFromForfeit": null,
-            "forceRetired": false,
+            "forfeited": "0x0",
+            "forceRetired": null,
             "inQueue": [],
             "locked": "0x513",
             "outQueue": [],
@@ -453,7 +453,7 @@ params: [
 * `payload`: [`OBJECT`] - 交易主要数据，payload 内容根据交易类型不同而不同
 * `status`: [`ENUM`] - 交易的状态，可能值：`Executed`, `Failed`, `Discard`
 * `timestamp`: [`QUANTITY`] - 交易时间戳
-* `type`: `ENUM` 交易的类型，可能值：`BlockMetadata`, `Electtion`, `Retire`, `Register`, `UpdateVotingPower`, `PivoteDecision`, `Dispute`, `Other`
+* `type`: `ENUM` 交易的类型，可能值：`BlockMetadata`, `Election`, `Retire`, `Register`, `UpdateVotingPower`, `PivoteDecision`, `Dispute`, `Other`
 
 
 ##### Example
@@ -489,3 +489,8 @@ curl --location --request POST 'http://localhost:12537' \
     "id": 1
 }
 ```
+
+## More Info
+
+1. Common Errors
+2. Harfork height
