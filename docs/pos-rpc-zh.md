@@ -95,8 +95,9 @@ PoS 账户地址跟 PoW 地址格式不同是一个 256 位 hash 值，例如：
 
 #### Example
 
-```json
-// Request
+Request
+
+```sh
 curl --location --request POST 'http://localhost:12537' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -105,8 +106,11 @@ curl --location --request POST 'http://localhost:12537' \
     "method": "pos_getStatus",
     "params": []
 }'
+```
 
-// Result
+Result
+
+```json
 {
     "jsonrpc": "2.0",
     "result": {
@@ -145,8 +149,9 @@ params: [
 
 #### Example
 
-```json
-// Request
+Request
+
+```sh
 curl --location --request POST 'http://localhost:12537' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -155,8 +160,11 @@ curl --location --request POST 'http://localhost:12537' \
     "method": "pos_getAccount",
     "params": ["0x046ca462890f25ed9394ca9f92c979ff48e1738a81822ecab96d83813c1a433c"]
 }'
+```
 
-// Response
+Response
+
+```json
 {
     "jsonrpc": "2.0",
     "result": {
@@ -213,8 +221,9 @@ curl --location --request POST 'http://localhost:12537' \
 
 #### Example
 
-```json
-// Request
+Request
+
+```sh
 curl --location --request POST 'http://localhost:12537' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -223,7 +232,11 @@ curl --location --request POST 'http://localhost:12537' \
     "method": "pos_getCommittee",
     "params": []
 }'
-// Response
+```
+
+Response
+
+```json
 {
     "jsonrpc": "2.0",
     "result": {
@@ -304,8 +317,9 @@ params: [
 
 #### Example
 
-```json
-// Request
+Request
+
+```sh
 curl --location --request POST 'http://localhost:12537' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -314,7 +328,11 @@ curl --location --request POST 'http://localhost:12537' \
     "method": "pos_getBlockByHash",
     "params": ["0x2b8b9d33e79e1735817a1278a9c8c5be828101b281bd4190531686153bee317b"]
 }'
-// Response
+```
+
+Response
+
+```json
 {
     "jsonrpc": "2.0",
     "result": {
@@ -356,8 +374,9 @@ curl --location --request POST 'http://localhost:12537' \
 
 #### Example
 
-```json
-// Request
+Request
+
+```sh
 curl --location --request POST 'http://localhost:12537' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -395,8 +414,9 @@ params: [
 
 ##### Example
 
-```json
-// Request
+Request
+
+```sh
 curl --location --request POST 'http://localhost:12537' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -405,7 +425,11 @@ curl --location --request POST 'http://localhost:12537' \
     "method": "pos_getRewardsByEpoch",
     "params": ["0x4a"]
 }'
-// Response
+```
+
+Response
+
+```json
 {
     "jsonrpc": "2.0",
     "result": {
