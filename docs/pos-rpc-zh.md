@@ -455,10 +455,89 @@ params: [
 * `timestamp`: [`QUANTITY`] - 交易时间戳
 * `type`: `ENUM` 交易的类型，可能值：`BlockMetadata`, `Election`, `Retire`, `Register`, `UpdateVotingPower`, `PivoteDecision`, `Dispute`, `Other`
 
+payload 一共有六种 （BlockMetadata类型的交易 payload 为 null）:
+
+Register: 注册
+
+* vrfPublicKey: `STRING` - VRF 公钥
+* publicKey: `STRING` - 公钥
+
+```json
+{
+  "publicKey": "0x90901cc921cd86c6a67bdb7652a3dc4e03e069c6ef6d8294eb4e856e396bb10e2191996a914eaaa9dfdaa75f2a3d70a3",
+  "vrfPublicKey": "0x02a0c4e36a2e9a3a2804486b7c849d0eb6f30094e3fe91a9015e9c16f9279fbff8"
+}
+```
+
+Election: 选举
+
+* publicKey: `STRING` - 公钥
+* targetTerm: `QUANTITY` - 计划参选的委员会编号（epoch）
+* vrfProof: `STRING` - VRF 证明
+* vrfPublicKey: `STRING` - VRF 公钥
+
+```json
+{
+  "publicKey": "0x8abc04b696da9699601c595cf3a9539e657262d42eef6b63fb324bb5b987418bf5491b04ed21edce4296174cb6d95fcc",
+  "targetTerm": "0x7",
+  "vrfProof": "0x03c09bec671c32ca143f67f3f965cf913993a53cc268f12954649d54548afe70e75c87fda23fbd01cd9e4af184aa06af01adfa0fce92697e811635190935cecf48aca9804a12e604df6f19455d1ca59f4f",
+  "vrfPublicKey": "0x03862bbe4b6591457ebf5d410ab12fe8e9bebe80171a8d2f73db45c5933a8173a4"
+}
+```
+
+UpdateVotingPower: 增加投票交易
+
+* address: `HASH` - PoS 账号地址
+* votingPower: `QUANTITY` - 增加的票数
+
+```json
+{
+  "address": "0x52893f0ecd91f68b7db8a6eb04eb888b5ca1b208009eb9dfb434ad5da372f6f2",
+  "votingPower": "0xb"
+}
+```
+
+Retire: 退休投票
+
+* address: `HASH` - PoS 账号地址
+* votingPower: `QUANTITY` - 退休的票数
+
+```json
+{
+  "address": "c70a93136ddff3023c4c5244c2be9141d242cdcb11d7ed15c053728c959b87bc",
+  "votingPower": "0xa"
+}
+```
+
+PivotDecision: 主轴区块决定
+
+* height: `QUANTITY` - PoS 对 PoW 主轴决定的高度
+* blockHash: `HASH` - PoS 对 PoW 主轴决定的哈希
+
+```json
+{
+  "blockHash": "0x0abf7b384d8bb02a98f21d1582e6d465b1e2382978d5473cbceb473039b0eef3",
+  "height": "0x2900"
+}
+```
+
+Dispute: 争议
+
+* address: `HASH` - 账户地址
+* blsPublicKey: `STRING` - BLS 公钥
+* vrfPublicKey: `STRING` - VRF 公钥
+* conflictingVotes: `ConflictingVotes` - 有争议的投票信息
+
+其中 ConflictingVotes 结构如下:
+
+* conflictVoteType: `STRING` - 争议类型可能值为 `proposal`, `vote`
+* first: `STRING` - 第一个投票
+* second: `STRING` - 第二个投票
+
 
 ##### Example
 
-```json
+```sh
 // Request
 curl --location --request POST 'http://localhost:12537' \
 --header 'Content-Type: application/json' \
@@ -468,7 +547,9 @@ curl --location --request POST 'http://localhost:12537' \
     "method": "pos_getTransactionByNumber",
     "params": ["0x71"]
 }'
+```
 
+```json
 // Response
 {
     "jsonrpc": "2.0",
@@ -480,7 +561,7 @@ curl --location --request POST 'http://localhost:12537' \
         "number": "0x71",
         "payload": {
             "blockHash": "0xd66e1d6050d7070cab189a524782381e211508fa204a0674ea35fa1523cfba90",
-            "height": 12780
+            "height": "0x129"
         },
         "status": "Executed",
         "timestamp": "0x5cd05bea6a9b0",

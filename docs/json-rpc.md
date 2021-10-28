@@ -1153,7 +1153,7 @@ params: [
 * `address`: `BASE32` - address of the account.
 * `balance`: `QUANTITY` - the balance of the account.
 * `nonce`: `QUANTITY` - the nonce of the account's next transaction.
-* `codeHash`: `QUANTITY` - the code hash of the account.
+* `codeHash`: `DATA` - the code hash of the account.
 * `stakingBalance`: `QUANTITY` - the staking balance of the account.
 * `collateralForStorage`: `QUANTITY` - the collateral storage of the account.
 * `accumulatedInterestReturn`: `QUANTITY` - accumulated interest return of the account.
