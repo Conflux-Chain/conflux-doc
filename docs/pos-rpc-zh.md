@@ -537,8 +537,9 @@ Dispute: 争议
 
 ##### Example
 
+Request
+
 ```sh
-// Request
 curl --location --request POST 'http://localhost:12537' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -549,8 +550,9 @@ curl --location --request POST 'http://localhost:12537' \
 }'
 ```
 
+Response
+
 ```json
-// Response
 {
     "jsonrpc": "2.0",
     "result": {
