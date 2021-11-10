@@ -54,7 +54,7 @@ PoS 账户地址跟 PoW 地址格式不同是一个 256 位 hash 值，例如：
 
 ## PoS Model
 
-#### AccountStatus
+### AccountStatus
 
 一个账户注册参与 PoS 共识，或者增加质押的投票之后，票数首先会进入 `inQueue` 状态，经过`七天`时间变为 `locked` 状态。
 当用户发起解锁操作之后，待解锁的票券会先进入 `outQueue` 状态，同样需要经过`七天`时间变为 `unlocked` 状态。
@@ -66,6 +66,13 @@ PoS 账户地址跟 PoW 地址格式不同是一个 256 位 hash 值，例如：
 * `locked`: `QUANTITY` - 账户当前被锁定的票数
 * `outQueue`: `Array` of [VotesInQueue](#VotesInQueue) - 当前正在等待解锁的队列
 * `unlocked`: `QUANTITY` - 账户当前已解锁的票数
+
+### Decision
+
+PoS 链对 PoW 主轴链的高度的决定, 被决定的 PoW 的区块，即为 Finialized 的区块
+
+* `height`: `QUANTITY` - 主轴区块高度
+* `blockHash`: `HASH` - 主轴区块哈希
 
 #### VotesInQueue
 
@@ -91,7 +98,7 @@ PoS 账户地址跟 PoW 地址格式不同是一个 256 位 hash 值，例如：
 * `epoch`: `QUANTITY` - PoS 链当前的纪元号
 * `latestCommitted`: `QUANTITY` - 最新被 commit 的区块号，commit 的区块不会再发生 revert
 * `latestVoted`: [`QUANTITY`] - 最近被成功投票的区块号。如果当前没有完成投票的区块为 null
-* `pivotDecision`: `QUANTITY` - 当前 PoS 链所 finalize 的最新 PoW 链的主轴区块号
+* `pivotDecision`: [`Decision`](#Decision) - 当前 PoS 链所 finalize 的最新 PoW 链的`决定`
 
 #### Example
 
@@ -117,7 +124,10 @@ Result
         "epoch": "0x56",
         "latestCommitted": "0x140c",
         "latestVoted": "0x140e",
-        "pivotDecision": "0x113af0"
+        "pivotDecision": {
+          "height": "0x113af0",
+          "blockHash": "0x88df016429689c079f3b2f6ad39fa052532c56795b733da78a91ebe6a713944b"
+        }
     },
     "id": 1
 }
@@ -298,12 +308,12 @@ params: [
 #### Returns
 
 * `epoch`: `QUANTITY` - 区块所在的纪元
-* `hash`: `QUANTITY` - 区块 hash
+* `hash`: `HASH` - 区块 hash
 * `height`: `QUANTITY` - 区块高度
 * `miner`: [`ADDRESS`] - 区块的创建者，可能为 `null`
 * `nextTxNumber`: `QUANTITY` - 下一区块交易的其实编号
 * `parentHash`: `HASH` - 父区块 hash
-* `pivotDecision`: [`QUANTITY`] - 对 PoW 主轴链的确认
+* `pivotDecision`: [`Decision`](#Decision) - 对 PoW 主轴链的决定
 * `round`: `QUANTITY` - 当前的轮次
 * `signatures`: `Array` of [Signature](#Signature) - 区块的签名信息
 * `timestamp`: `QUANTITY` - 时间戳
@@ -342,7 +352,10 @@ Response
         "miner": "0x046ca462890f25ed9394ca9f92c979ff48e1738a81822ecab96d83813c1a433c",
         "nextTxNumber": "0x1da7",
         "parentHash": "0x89cf3089296679dfef822d3dca037decab2a301de6f047e56c69cb34ae0b79e2",
-        "pivotDecision": "0x117ee8",
+        "pivotDecision": {
+          "height": "0x113af0",
+          "blockHash": "0x88df016429689c079f3b2f6ad39fa052532c56795b733da78a91ebe6a713944b"
+        },
         "round": "0x13",
         "signatures": [
             {
