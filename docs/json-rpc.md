@@ -1795,8 +1795,7 @@ Returns PoS economics summary info.
 
 #### Example
 
-```json
-// Request
+```shell
 curl --location --request POST 'http://localhost:12537' \
 --header 'Content-Type: application/json' \
 --data-raw ' {
@@ -1805,8 +1804,9 @@ curl --location --request POST 'http://localhost:12537' \
     "method": "cfx_getPoSEconomics",
     "params": []
   }'
+```
 
-// Response
+```json
 {
     "jsonrpc": "2.0",
     "result": {
@@ -1814,6 +1814,43 @@ curl --location --request POST 'http://localhost:12537' \
         "lastDistributeBlock": 0,
         "totalPosStakingTokens": "0x29cbb85e5a6e849c00000"
     },
+    "id": "15922956697249514502"
+}
+```
+
+### cfx_openedMethodGroups
+
+Return fullnode's opened RPC method groups
+
+#### Added at
+
+`v1.2.0`
+
+#### Parameters
+
+None
+
+#### Returns
+
+Method prefix array
+
+#### Example
+
+```shell
+curl --location --request POST 'http://localhost:12537' \
+--header 'Content-Type: application/json' \
+--data-raw ' {
+    "jsonrpc": "2.0",
+    "id": "15922956697249514502",
+    "method": "cfx_openedMethodGroups",
+    "params": []
+  }'
+```
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": ["cfx", "txpool", "pos", "trace", "pubsub"],
     "id": "15922956697249514502"
 }
 ```
