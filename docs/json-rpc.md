@@ -1698,6 +1698,8 @@ Returns pending transactions in pool of one account
 #### Parameters
 
 1. `BASE32` - address of the account.
+2. [`QUANTITY`] - Optional start nonce to return
+3. [`QUANTITY`] - Optional `limit` of pending transactions to return
 
 ```json
 params: [
