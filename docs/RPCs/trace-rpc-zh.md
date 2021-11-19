@@ -1,4 +1,10 @@
-# Trace RPC
+---
+id: trace_rpc_zh
+title: trace Namespace
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/RPCs/trace-rpc-zh.md
+keywords:
+  - trace-rpc
+---
 
 通过 Trace RPC 可以追踪合约内部执行的细节，Conflux 的 Archive node 需要开启如下配置才能访问 trace 相关的 RPC.
 

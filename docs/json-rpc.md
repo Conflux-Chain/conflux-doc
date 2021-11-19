@@ -1,6 +1,6 @@
 ---
 id: json_rpc
-title: JSON RPC
+title: cfx Namespace
 custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/json-rpc.md
 keywords:
   - conflux
@@ -672,13 +672,13 @@ Returns storage entries from a given contract.
 #### Parameters
 
 1. `BASE32` - address of the contract.
-2. `DATA`, 32 Bytes - a storage position (see [here](https://solidity.readthedocs.io/en/v0.7.1/internals/layout_in_storage.html) for more info).
+2. `QUANTITY` - a storage position (see [here](https://solidity.readthedocs.io/en/v0.7.1/internals/layout_in_storage.html) for more info).
 3. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_confirmed"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 
 ```json
 params: [
     "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp",
-    "0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9",
+    "0x100",
     "latest_state"
 ]
 ```
@@ -691,7 +691,7 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStorageAt","params":["cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp","0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9","latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStorageAt","params":["cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp","0x100","latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {

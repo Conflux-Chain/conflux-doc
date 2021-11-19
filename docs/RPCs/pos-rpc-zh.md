@@ -1,11 +1,9 @@
 ---
-id: pos_rpc
-title: PoS JSON RPC
-custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/pos-rpc.md
+id: pos_rpc_zh
+title: pos Namespace
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/RPCs/pos-rpc-zh.md
 keywords:
-  - conflux
   - pos-rpc
-  - sdk
 ---
 
 `conflux-rust` 从 v1.2.0 开始引入 PoS finality 机制，用于加快区块的最终性，从而防止 51% 攻击。PoS finality 机制会引入一条独立的 PoS 链，用于实现 PoS 共识，并对 PoW 区块进行 finalize。相对应的 PoS 也有自己专门的 RPC 方法，用于获取 PoS 链的数据。

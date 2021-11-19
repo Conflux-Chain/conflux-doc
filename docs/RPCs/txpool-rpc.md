@@ -1,7 +1,7 @@
 ---
 id: txpool_rpc
-title: txpool RPC
-custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/txpool-rpc.md
+title: txpool Namespace
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/RPCs/txpool-rpc.md
 keywords:
   - conflux
   - txpool-rpc
