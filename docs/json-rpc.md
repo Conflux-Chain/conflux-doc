@@ -1750,7 +1750,7 @@ Returns information about a block, identified by its block number (block's tree-
 
 #### Parameters
 
-1. `QUANTITY|TAG` - the block number, or the string.
+1. `QUANTITY` - the block number.
 2. `Boolean` - if `true`, it returns the full transaction objects. If `false`, only the hashes of the transactions are returned
 
 ```json
