@@ -67,8 +67,6 @@ pub enum Outcome {
 }
 ```
 
-Note that there is no `CallResult` for simple transfer transactions, and the information is accesible in the transaction receipts in this case.
-
 ### Create
 
 The trace is recorded for all operations that create contracts, including executing contract creation transactions or successfully executing the `CREATE`/`CREATE2` opcode.
@@ -103,8 +101,6 @@ pub struct CreateResult {
     /// Output data
     pub return_data: Bytes,
 ```
-
-Similar to `CallResult`, no `CreateResult` trace is recorded for the one triggered by the original contract creation transactions. Note that other contracts created during the creation of the original contract still have traces.  
 
 `addr` can only be used if `outcome` is `Success`.
 
