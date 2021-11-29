@@ -1711,7 +1711,7 @@ params: [
 
 `Object` - Object include account's pending transaction info.
 
-* `firstTxStatus`: `OBJECT` - An object with only one field `pending`, it's value is the first pending transaction's status. Only have two case `futureNonce`, `notEnoughCash`
+* `firstTxStatus`: `OBJECT` - An object with only one field `pending`, it's value is the first pending transaction's status. Only have three case `futureNonce`, `notEnoughCash`. Or just a string `ready`
 * `pendingCount`: `QUANTITY` - Count of pending transactions
 * `pendingTransactions`: `ARRAY` - Array of pending [transaction](#cfx_gettransactionbyhash)
 

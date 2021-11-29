@@ -1,7 +1,7 @@
 ---
-id: pos_rpc_zh
+id: pos_rpc
 title: pos Namespace
-custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/RPCs/pos-rpc-zh.md
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/RPCs/pos-rpc.md
 keywords:
   - pos-rpc
 ---
@@ -59,11 +59,11 @@ PoS 账户地址跟 PoW 地址格式不同是一个 256 位 hash 值，例如：
 
 * `availableVotes`: `QUANTITY` - 账户当前可用的票数, 等于 `sum inQueue` + `locked`
 * `forfeited`: `QUANTITY` - 账户被检测到作恶时，staked 票数会被锁死，无法提取的数量
-* `forceRetired`: [`QUANTITY`] - 账户被强制退休时的 blockNumber
+* `forceRetired`: [`QUANTITY`] - 账户被强制退休的票数
 * `inQueue`: `Array` of [VotesInQueue](#VotesInQueue) - 当前正在等待锁定的队列
 * `locked`: `QUANTITY` - 账户当前被锁定的票数
 * `outQueue`: `Array` of [VotesInQueue](#VotesInQueue) - 当前正在等待解锁的队列
-* `unlocked`: `QUANTITY` - 账户历史累计解锁的总票数
+* `unlocked`: `QUANTITY` - 账户当前已解锁的票数
 
 ### Decision
 
@@ -607,8 +607,3 @@ Response
     "id": 1
 }
 ```
-
-## More Info
-
-1. Common Errors
-2. Harfork height

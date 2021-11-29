@@ -1,23 +1,23 @@
 ---
-id: trace_rpc_zh
+id: trace_rpc
 title: trace Namespace
-custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/RPCs/trace-rpc-zh.md
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/RPCs/trace-rpc.md
 keywords:
   - trace-rpc
 ---
 
-通过 Trace RPC 可以追踪合约内部执行的细节，Conflux 的 Archive node 需要开启如下配置才能访问 trace 相关的 RPC.
+Through `trace` RPCs we can know the transaction executive details. To use these RPC Conflux archive node need set two additional config:
 
 ```toml
 executive_trace = true
 public_rpc_apis = "safe,trace"  // or public_rpc_apis = "all"
 ```
 
-Note: 一个现有 Archive 节点开启 `executive_trace` 需要重新同步数据，才能提供 trace 数据
+Note: An existing archive node need clear all blockchain data to open `executive_trace` config.
 
-## Trace 的详细介绍
+## Trace object
 
-一个 `Trace` 包含 信息如下:
+A `Trace` trace object contain below field:
 
 * `type`: `STRING` - Type of trace. Avaliable value is `call`, `create`, `call_result`, `create_result`, `internal_transfer_action`
 * `action`: `OBJECT` - Trace's action info，different type trace's action have different fields.
@@ -38,13 +38,13 @@ Example:
 }
 ```
 
-关于 Trace 的信息和介绍可以参看[这篇文档](https://github.com/Conflux-Chain/conflux-doc/blob/master/docs/trace_introduction.md)
+Check this [document](https://github.com/Conflux-Chain/conflux-doc/blob/master/docs/trace_introduction.md) to get detail explanation of Conflux trace
 
 ## RPCs
 
 ### trace_block
 
-获取一个 Block 的所有 trace
+Get block traces by block hash
 
 #### Parameters
 
@@ -193,7 +193,7 @@ curl --location --request POST 'http://testnet-rpc:12537' \
 
 ### trace_transaction
 
-获取一个 Transaction 的所有 trace
+Get transaction's trace by it's hash
 
 #### Parameters
 
@@ -374,8 +374,8 @@ curl --location --request POST 'http://testnet-rpc:12537' \
 }
 ```
 
-## 注意
+## Note
 
-1. 一个 `call` 类型的 trace，会有一个对应的 `call_result` trace. `create` 同样有 `create_result` 对应
-2. `call` trace 的 `result` 有 `success`, `fail`, `revert` 三种可能
-3. 判断合约方法调用是否发生 CFX 转移，只需要判断 `callType` 为 call 一种类型, 且 `value` 有值，状态为成功
+1. One `call` trace, will have one corresponding `call_result` trace. A `create` trace will also have one corresponding `create_result` trace
+2. `call` trace's `result` field have three possible value: `success`, `fail`, `revert`
+3. Only traces which's `callType` value is `call` and have `success` result status, that can indicate CFX transfer
