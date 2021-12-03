@@ -64,7 +64,7 @@ When the user makes an unlock command, the votes to be unlocked will first go in
 * `inQueue`: `Array` of [VotesInQueue](#VotesInQueue) - the number of votes that are currently waiting to be locked
 * `locked`: `QUANTITY` - the number of votes that are currently locked
 * `outQueue`: `Array` of [VotesInQueue](#VotesInQueue) - the number of votes that are currently waiting to be unlocked
-* `unlocked`: `QUANTITY` - the number of votes that are currently unlocked
+* `unlocked`: `QUANTITY` - the number of users total unlocked votes in history
 
 ### Decision
 
