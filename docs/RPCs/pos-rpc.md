@@ -6,47 +6,47 @@ keywords:
   - pos-rpc
 ---
 
-`conflux-rust` 从 v1.2.0 开始引入 PoS finality 机制，用于加快区块的最终性，从而防止 51% 攻击。PoS finality 机制会引入一条独立的 PoS 链，用于实现 PoS 共识，并对 PoW 区块进行 finalize。相对应的 PoS 也有自己专门的 RPC 方法，用于获取 PoS 链的数据。
+`conflux-rust` introduces the PoS finality starting from v2.0.0 to speed up the finality of blocks and prevent 51% attacks. PoS finality will introduce an independent PoS chain for PoS consensus and finalizing PoW blocks. Correspondingly, PoS also has its own RPC methods for obtaining data from the PoS chain.
 
-目前只有 conflux-rust 的 archive node 可以对外提供 PoS RPC 服务，RPC 需要配置 `public_rpc_apis` 选项才能打开。
+Currently, only the archive nodes of conflux-rust can provide PoS RPC service to the public. `public_rpc_apis` needs to be configured to open RPC.
 
-可以在当前打开的 RPC 方法组中，增加 `pos` 组。
+You can add the `pos` group to the current RPC method group.
 
 ```js
 public_rpc_apis = "safe,pos"
 ```
 
-或者直接将 `public_rpc_apis` 设置为 `all`，打开所有 RPC 方法。
+Or just set `public_rpc_apis` to `all` to open all RPC methods.
 
 ```js
 public_rpc_apis = "all"
 ```
 
-## 基本概念
+## Basic Concepts
 
 ### epoch
 
-PoS 中也有 epoch 的概念，可以理解为纪元。但跟 PoW 的 epoch 概念不太一样。一个 epoch 代表一届委员的任期，从 `1` 开始递增，每个 epoch 平均对应`一个小时`, 每过一个 epoch，委员会中的部分委员会被替换。参与 PoS 共识获得的奖励也是按 epoch 来发放的。
+The concept of epoch is also used in PoS. However, different from the epoch in PoW, an epoch in PoS represents the term of a committee, starting from term `1`. Each epoch is equivalent to `one hour` on average. After each epoch, a part of the members of the committee are replaced. The rewards for participating in PoS consensus are also given on an epoch basis.
 
 ### round
 
-round 中文翻译为`轮`，PoS 链平均会`每分钟`进行一轮共识，即尝试产生一个 PoS 块。亦即每个 epoch 会有 `60` 个 round，且每个`新的 epoch`， round 会重新从 `1` 开始。
+A PoS chain will on average perform one round of consensus `every minute` (i.e. try to generate a PoS block). This means that each epoch will have `60` rounds, and with each `new epoch`, the round will start from `1` again.
 
-注意：并不是每个 round 都会产生一个区块，有可能会因为网络或共识失败导致无法出块。
+Note: Not every round will generate a block. there may be network or consensus failures preventing a block from generating.
 
 ### block.number
 
-block.number 也就是区块的 `height`，每产生一个新的区块，number 会加一。
+The block.number is the `height` of the block, and is added by one for each new block generated.
 
-PoS 区块被某个委员会成员提议之后，会发送到网络中进行投票，当区块收集到足够多的票数之后即为投票成功 `voted`，但此时区块还没被 commit，当三个 round 连续的区块被产生后，最初的 round 对应的区块会被提交，状态变为 committed。
+After a PoS block is proposed by a committee member, it will be sent to the network for voting. When the block collects enough votes, it is labeled as `voted`. However, the block has yet been committed. When three consecutive blocks are created, the block corresponding to the first round will be submitted. Then its state will change from `voted` to `committed`.
 
 ### pivotDecision
 
-pivotDecision 是 PoS 链对 PoW 链区块的最终决定（final decision）. 一旦 PoW 的某个区块被 PoS 所引用，则代表该 PoW 区块已经被 finalized，不会再发生 revert。PoS 链的区块会包含 PivotDecision 信息，表示该 PoS 区块对 PoW 主轴链的某个区块进行了 finalize。pivotDecision 信息是 PoW 主轴链的某个区块的 number 或者 hash。
+pivotDecision is the PoS chain's final decision on a block in the PoW chain. Once a block in the PoW is referenced by the PoS, the PoW block is finalized and there will be no further reversion. Blocks in the PoS chain will include PivotDecision attributes, indicating that this PoS block has finalized a block in the PoW chain. The pivotDecision is the block number or hash value of a block in the PoW chain.
 
 ### PoS Address
 
-PoS 账户地址跟 PoW 地址格式不同是一个 256 位 hash 值，例如：
+Unlike the format of the PoW address, the PoS account address is a 256-bit hash value, e.g:
 
 `0x046ca462890f25ed9394ca9f92c979ff48e1738a81822ecab96d83813c1a433c`
 
@@ -54,36 +54,37 @@ PoS 账户地址跟 PoW 地址格式不同是一个 256 位 hash 值，例如：
 
 ### AccountStatus
 
-一个账户注册参与 PoS 共识，或者增加质押的投票之后，票数首先会进入 `inQueue` 状态，经过`七天`时间变为 `locked` 状态。
-当用户发起解锁操作之后，待解锁的票券会先进入 `outQueue` 状态，同样需要经过`七天`时间变为 `unlocked` 状态。
+After an account registers to participate in PoS consensus, or adds staking to votes, the votes will first go into the `inQueue` state and then become `locked` after `seven days`.
+When the user makes an unlock command, the votes to be unlocked will first go into the `outQueue` state. Then it also takes `seven days` to become `unlocked`.
 
-* `availableVotes`: `QUANTITY` - 账户当前可用的票数, 等于 `sum inQueue` + `locked`
-* `forfeited`: `QUANTITY` - 账户被检测到作恶时，staked 票数会被锁死，无法提取的数量
-* `forceRetired`: [`QUANTITY`] - 账户被强制退休的票数
-* `inQueue`: `Array` of [VotesInQueue](#VotesInQueue) - 当前正在等待锁定的队列
-* `locked`: `QUANTITY` - 账户当前被锁定的票数
-* `outQueue`: `Array` of [VotesInQueue](#VotesInQueue) - 当前正在等待解锁的队列
-* `unlocked`: `QUANTITY` - 账户当前已解锁的票数
+
+* `availableVotes`: `QUANTITY` - the number of votes currently available for the account. Equals to `sum inQueue` + `locked`
+* `forfeited`: `QUANTITY` - the number of votes that are locked and cannot be retrieved if the account is identified as malicious.
+* `forceRetired`: [`QUANTITY`] - the block number when the votes was retired
+* `inQueue`: `Array` of [VotesInQueue](#VotesInQueue) - the number of votes that are currently waiting to be locked
+* `locked`: `QUANTITY` - the number of votes that are currently locked
+* `outQueue`: `Array` of [VotesInQueue](#VotesInQueue) - the number of votes that are currently waiting to be unlocked
+* `unlocked`: `QUANTITY` - the number of votes that are currently unlocked
 
 ### Decision
 
-PoS 链对 PoW 主轴链的高度的决定, 被决定的 PoW 的区块，即为 Finialized 的区块
+The PoS chain's decision on the height of the PoW chain. The block of the PoW that is decided by the PoS chain is the Finalized block.
 
-* `height`: `QUANTITY` - 主轴区块高度
-* `blockHash`: `HASH` - 主轴区块哈希
+* `height`: `QUANTITY` - the height of the PoW block
+* `blockHash`: `HASH` - the hash value of the PoW block
 
 #### VotesInQueue
 
-用户正在等待锁定或等待解锁票权信息。
+The information regarding a user's in-queue votes.
 
-* `endBlockNumber`: `QUANTITY` - 状态结束的区块号
-* `power`: `QUANTITY` - 当前状态票的数量
+* `endBlockNumber`: `QUANTITY` - block number when the state ends
+* `power`: `QUANTITY` - number of votes in the current status
 
 ## RPCs
 
 ### pos_getStatus
 
-返回 PoS 链当前的状态信息。
+Returns the current status of the PoS chain.
 
 #### Parameters
 
@@ -93,10 +94,10 @@ PoS 链对 PoW 主轴链的高度的决定, 被决定的 PoW 的区块，即为 
 
 `Object` - PoS status object.
 
-* `epoch`: `QUANTITY` - PoS 链当前的纪元号
-* `latestCommitted`: `QUANTITY` - 最新被 commit 的区块号，commit 的区块不会再发生 revert
-* `latestVoted`: [`QUANTITY`] - 最近被成功投票的区块号。如果当前没有完成投票的区块为 null
-* `pivotDecision`: [`Decision`](#Decision) - 当前 PoS 链所 finalize 的最新 PoW 链的`决定`
+* `epoch`: `QUANTITY` - The current epoch number of the PoS chain.
+* `latestCommitted`: `QUANTITY` - The number of the latest committed block. Committed blocks will not be reverted
+* `latestVoted`: [`QUANTITY`] - The number of the latest successfully voted block, or `null` (if there are no blocks completed voting).
+* `pivotDecision`: [`Decision`](#Decision) - The PoS chain's finalized decision about the latest PoW pivot block. 
 
 #### Example
 
@@ -133,12 +134,12 @@ Result
 
 ### pos_getAccount
 
-获取 PoS 的账户信息
+Get the PoS account information
 
 ### Parameters
 
-1. `ADDRESS`: 32 Bytes - PoS 账户地址
-2. [`QUANTITY`]: 可选的 block number，用于查询账户在某个区块高度时的状态
+1. `ADDRESS`: 32 Bytes - PoS account address
+2. [`QUANTITY`]: block number, optional for querying the status of the account at a certain block height
 
 ```json
 params: [
@@ -149,11 +150,11 @@ params: [
 
 #### Returns
 
-`Object` - 账户对象，或者 `null`（如果地址对应的账户不存在）
+`Object` - the account object, or `null` (if the account corresponding to the address does not exist)
 
-* `address`: `ADDRESS` - 账户地址
-* `blockNumber`: `QUANTITY` - 状态所对应的区块号
-* `status`: `OBJECT` - 用户当前的状态信息对象，参看 [Account Status](#AccountStatus)
+* `address`: `ADDRESS` - the account address
+* `blockNumber`: `QUANTITY` - the block number corresponding to the status
+* `status`: `OBJECT` - the user's current status, see [Account Status](#AccountStatus) for more information
 
 #### Example
 
@@ -194,38 +195,38 @@ Response
 
 ### pos_getCommittee
 
-默认获取当前的 PoS 委员会信息，也可以通过指定 blockNumber 获取历史某个区块时的委员会信息。
+Get the current PoS committee information in default. It is also able to get the committee information for a block in history by specifying the blockNumber.
 
 #### Parameters
 
-1. [`QUANTITY`]:  可选的 block number，用于查询某个区块高度时的委员会信息
+1. [`QUANTITY`]:  block number, optional for querying the committee information at a certain block height
 
 #### Returns
 
-* `currentCommittee`: `OBJECT` - 当前委员会成员, 参看 [CurrentCommittee](#CurrentCommittee)
-* `elections`: `Array` - 正在参选中的人员
+* `currentCommittee`: `OBJECT` -  current committee members, see [CurrentCommittee](#CurrentCommittee) for more information
+* `elections`: `Array` - nodes who are running for election
 
 ##### CurrentCommittee
 
-当前委员会信息
+Current committee information
 
-* `epochNumber`: `QUANTITY` - 委员会任期的 epoch 编号
-* `nodes`: `Array` of [CommitteNode](#CommitteNode) - 委员会成员列表
-* `quorumVotingPower`: `QUANTITY` - 区块投票达到共识所需最低票数
-* `totalVotingPower`: `QUANTITY` - 本届委员总共的票数
+* `epochNumber`: `QUANTITY` - epoch number of the committee term
+* `nodes`: `Array` of [CommitteNode](#CommitteNode) - list of committee members
+* `quorumVotingPower`: `QUANTITY` - the minimum number of votes needed to reach consensus
+* `totalVotingPower`: `QUANTITY` - the total number of votes of the current committee members
 
 ##### CommitteNode
 
-委员信息
+Committee member information
 
-* `address`: `ADDRESS` - 账户地址
-* `votingPower`: `QUANTITY` - 票数
+* `address`: `ADDRESS` - account address
+* `votingPower`: `QUANTITY` - number of votes
 
 ##### Election
 
-* `isFinalized`: `BOOLEAN` - 本轮选举是否被确定
-* `startBlockNumber`: `QUANTITY` - 开始的区块编号
-* `topElectingNodes`: `Array` of [CommitteNode](#CommitteNode) - 参选排名最靠前的 50 名用户
+* `isFinalized`: `BOOLEAN` - whether the election is finalized or not
+* `startBlockNumber`: `QUANTITY` - the starting block number
+* `topElectingNodes`: `Array` of [CommitteNode](#CommitteNode) - the top ranked 50 nodes after election
 
 #### Example
 
@@ -291,11 +292,11 @@ Response
 
 ### pos_getBlockByHash
 
-根据 hash 获取区块信息
+Get block information by its hash value
 
 #### Parameters
 
-1. `HASH`: 区块 hash
+1. `HASH`: the hash value of the block
 
 ```json
 params: [
@@ -305,23 +306,23 @@ params: [
 
 #### Returns
 
-* `epoch`: `QUANTITY` - 区块所在的纪元
-* `hash`: `HASH` - 区块 hash
-* `height`: `QUANTITY` - 区块高度
-* `miner`: [`ADDRESS`] - 区块的创建者，可能为 `null`
-* `nextTxNumber`: `QUANTITY` - 下一区块交易的其实编号
-* `parentHash`: `HASH` - 父区块 hash
-* `pivotDecision`: [`Decision`](#Decision) - 对 PoW 主轴链的决定
-* `round`: `QUANTITY` - 当前的轮次
-* `signatures`: `Array` of [Signature](#Signature) - 区块的签名信息
-* `timestamp`: `QUANTITY` - 时间戳
+* `epoch`: `QUANTITY` - the epoch that the block is in
+* `hash`: `HASH` - the hash value of the block
+* `height`: `QUANTITY` - the block height
+* `miner`: [`ADDRESS`] - block creator, can be `null`
+* `nextTxNumber`: `QUANTITY` - the number of the next block's first transaction
+* `parentHash`: `HASH` - the hash value of the parent block
+* `pivotDecision`: [`Decision`](#Decision) - the decision to PoW chain
+* `round`: `QUANTITY` - current round
+* `signatures`: `Array` of [Signature](#Signature) - the signatures of the block
+* `timestamp`: `QUANTITY` - the timestamp of the block
 
 ##### Signature
 
-区块签名信息
+Block signature info
 
-* `account`: `ADDRESS` - 签名的账户地址
-* `votes`: `QUANTITY` - 签名账户的票数
+* `account`: `ADDRESS` - the account address of the signature
+* `votes`: `QUANTITY` - the number of votes of the signing account
 
 #### Example
 
@@ -373,15 +374,15 @@ Response
 
 ### pos_getBlockByNumber
 
-根据区块号获取区块信息
+Get block information by its block number
 
 #### Parameters
 
-1. `QUANTITY|TAG`: 区块编号或者区块TAG（`latest_committed`, `latest_voted`）
+1. `QUANTITY|TAG`: block number or block TAG（`latest_committed`, `latest_voted`）
 
 #### Returns
 
-跟 [pos_getBlockByHash](#pos_getBlockByHash) 相同
+the same as [pos_getBlockByHash](#pos_getBlockByHash)
 
 #### Example
 
@@ -400,11 +401,11 @@ curl --location --request POST 'http://localhost:12537' \
 
 ### pos_getRewardsByEpoch
 
-返回某个 PoS epoch 发放奖励的具体信息
+returns the rewards information of a PoS epoch 
 
 #### Parameters
 
-1. `QUANTITY`: 纪元编号
+1. `QUANTITY`: epoch number
 
 ```json
 params: [
@@ -415,13 +416,13 @@ params: [
 #### Returns
 
 * `accountRewards`: `Array` of [AccountReward](#AccountReward)
-* `powEpochHash`: `HASH` - 奖励发放时 PoW 链主轴区块的 hash
+* `powEpochHash`: `HASH` - the hash value of the PoW block when the rewards are made
 
 ##### AccountReward
 
-* `posAddress`: `ADDRESS` - PoS 账户地址
-* `powAddress`: `BASE32` - PoW 账户地址
-* `reward`: `QUANTITY` - 获得的奖励数量，单位为 Drip
+* `posAddress`: `ADDRESS` - PoS account address
+* `powAddress`: `BASE32` - PoW account address
+* `reward`: `QUANTITY` - the number of rewards, in the unit of Drip
 
 ##### Example
 
@@ -464,11 +465,11 @@ Response
 
 ### pos_getTransactionByNumber
 
-根据交易编号获取交易信息
+Get the transaction information by transaction number
 
 #### Parameters
 
-1. `QUANTITY`: 交易编号
+1. `QUANTITY`: transaction number
 
 ```json
 params: [
@@ -480,22 +481,22 @@ params: [
 
 交易详情
 
-* `hash`: `HASH` - 交易 hash
-* `from`: `ADDRESS` - 发送方地址
-* `number`: `QUANTITY` - 交易号
-* `blockHash`: [`HASH`] - 交易所属区块 hash
-* `blockNumber`: [`QUANTITY`] - 交易所属区块编码
-* `payload`: [`OBJECT`] - 交易主要数据，payload 内容根据交易类型不同而不同
-* `status`: [`ENUM`] - 交易的状态，可能值：`Executed`, `Failed`, `Discard`
-* `timestamp`: [`QUANTITY`] - 交易时间戳
-* `type`: `ENUM` 交易的类型，可能值：`BlockMetadata`, `Election`, `Retire`, `Register`, `UpdateVotingPower`, `PivoteDecision`, `Dispute`, `Other`
+* `hash`: `HASH` - the hash value of the transaction
+* `from`: `ADDRESS` - the address of the sender
+* `number`: `QUANTITY` - transaction number
+* `blockHash`: [`HASH`] - the hash value of the block that the transaction belongs to
+* `blockNumber`: [`QUANTITY`] - the block number of the block that the transaction belongs to
+* `payload`: [`OBJECT`] - information of the transaction. The content of the payload differs with different transaction types.
+* `status`: [`ENUM`] - the status of the transaction. Possible values are `Executed`, `Failed`, `Discard`
+* `timestamp`: [`QUANTITY`] - the timestamp of the transaction
+* `type`: `ENUM` the type of the transaction. Possible values are `BlockMetadata`, `Election`, `Retire`, `Register`, `UpdateVotingPower`, `PivoteDecision`, `Dispute`, `Other`
 
-payload 一共有六种 （BlockMetadata类型的交易 payload 为 null）:
+There are six types of payload（the payload of BlockMetadata transactions is null）:
 
-Register: 注册
+Register: 
 
-* vrfPublicKey: `STRING` - VRF 公钥
-* publicKey: `STRING` - 公钥
+* vrfPublicKey: `STRING` - the VRF public key
+* publicKey: `STRING` - the public key
 
 ```json
 {
@@ -504,12 +505,12 @@ Register: 注册
 }
 ```
 
-Election: 选举
+Election:
 
-* publicKey: `STRING` - 公钥
-* targetTerm: `QUANTITY` - 计划参选的委员会编号（epoch）
-* vrfProof: `STRING` - VRF 证明
-* vrfPublicKey: `STRING` - VRF 公钥
+* publicKey: `STRING` - the public key
+* targetTerm: `QUANTITY` - the committee number under election (epoch)
+* vrfProof: `STRING` - the VRF proof
+* vrfPublicKey: `STRING` - the VRF public key
 
 ```json
 {
@@ -520,10 +521,10 @@ Election: 选举
 }
 ```
 
-UpdateVotingPower: 增加投票交易
+UpdateVotingPower:
 
-* address: `HASH` - PoS 账号地址
-* votingPower: `QUANTITY` - 增加的票数
+* address: `HASH` - PoS account address
+* votingPower: `QUANTITY` - the number of increased votes
 
 ```json
 {
@@ -532,10 +533,10 @@ UpdateVotingPower: 增加投票交易
 }
 ```
 
-Retire: 退休投票
+Retire: 
 
-* address: `HASH` - PoS 账号地址
-* votingPower: `QUANTITY` - 退休的票数
+* address: `HASH` - PoS account address
+* votingPower: `QUANTITY` - the number of retired votes
 
 ```json
 {
@@ -544,10 +545,10 @@ Retire: 退休投票
 }
 ```
 
-PivotDecision: 主轴区块决定
+PivotDecision: 
 
-* height: `QUANTITY` - PoS 对 PoW 主轴决定的高度
-* blockHash: `HASH` - PoS 对 PoW 主轴决定的哈希
+* height: `QUANTITY` - the height of the pivot decision
+* blockHash: `HASH` - the hash value of the pivot decision
 
 ```json
 {
@@ -556,18 +557,18 @@ PivotDecision: 主轴区块决定
 }
 ```
 
-Dispute: 争议
+Dispute: 
 
-* address: `HASH` - 账户地址
-* blsPublicKey: `STRING` - BLS 公钥
-* vrfPublicKey: `STRING` - VRF 公钥
-* conflictingVotes: `ConflictingVotes` - 有争议的投票信息
+* address: `HASH` - account address
+* blsPublicKey: `STRING` - the BLS public key
+* vrfPublicKey: `STRING` - the VRF public key
+* conflictingVotes: `ConflictingVotes` - information of the conflicting votes
 
-其中 ConflictingVotes 结构如下:
+The structure of ConflictingVotes is shown as below:
 
-* conflictVoteType: `STRING` - 争议类型可能值为 `proposal`, `vote`
-* first: `STRING` - 第一个投票
-* second: `STRING` - 第二个投票
+* conflictVoteType: `STRING` - the type of the conflict vote. Possible values are `proposal`, `vote`
+* first: `STRING` - the first vote
+* second: `STRING` - the second vote
 
 
 ##### Example

@@ -6,7 +6,7 @@ keywords:
   - pos-rpc
 ---
 
-`conflux-rust` 从 v1.2.0 开始引入 PoS finality 机制，用于加快区块的最终性，从而防止 51% 攻击。PoS finality 机制会引入一条独立的 PoS 链，用于实现 PoS 共识，并对 PoW 区块进行 finalize。相对应的 PoS 也有自己专门的 RPC 方法，用于获取 PoS 链的数据。
+`conflux-rust` 从 v2.0.0 开始引入 PoS finality 机制，用于加快区块的最终性，从而防止 51% 攻击。PoS finality 机制会引入一条独立的 PoS 链，用于实现 PoS 共识，并对 PoW 区块进行 finalize。相对应的 PoS 也有自己专门的 RPC 方法，用于获取 PoS 链的数据。
 
 目前只有 conflux-rust 的 archive node 可以对外提供 PoS RPC 服务，RPC 需要配置 `public_rpc_apis` 选项才能打开。
 
