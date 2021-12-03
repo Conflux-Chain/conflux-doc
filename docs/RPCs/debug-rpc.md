@@ -1,11 +1,9 @@
 ---
 id: debug_rpc
-title: Debug RPC
-custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/debug-rpc.md
+title: debug Namespace
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/RPCs/debug-rpc.md
 keywords:
-  - conflux
   - debug-rpc
-  - sdk
 ---
 
 ## RPCs

@@ -1,14 +1,12 @@
 ---
-id: pos_rpc
-title: PoS JSON RPC
-custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/pos-rpc.md
+id: pos_rpc_zh
+title: pos Namespace
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/RPCs/pos-rpc-zh.md
 keywords:
-  - conflux
   - pos-rpc
-  - sdk
 ---
 
-`conflux-rust` 从 v1.2.0 开始引入 PoS finality 机制，用于加快区块的最终性，从而防止 51% 攻击。PoS finality 机制会引入一条独立的 PoS 链，用于实现 PoS 共识，并对 PoW 区块进行 finalize。相对应的 PoS 也有自己专门的 RPC 方法，用于获取 PoS 链的数据。
+`conflux-rust` 从 v2.0.0 开始引入 PoS finality 机制，用于加快区块的最终性，从而防止 51% 攻击。PoS finality 机制会引入一条独立的 PoS 链，用于实现 PoS 共识，并对 PoW 区块进行 finalize。相对应的 PoS 也有自己专门的 RPC 方法，用于获取 PoS 链的数据。
 
 目前只有 conflux-rust 的 archive node 可以对外提供 PoS RPC 服务，RPC 需要配置 `public_rpc_apis` 选项才能打开。
 
@@ -61,11 +59,11 @@ PoS 账户地址跟 PoW 地址格式不同是一个 256 位 hash 值，例如：
 
 * `availableVotes`: `QUANTITY` - 账户当前可用的票数, 等于 `sum inQueue` + `locked`
 * `forfeited`: `QUANTITY` - 账户被检测到作恶时，staked 票数会被锁死，无法提取的数量
-* `forceRetired`: [`QUANTITY`] - 账户被强制退休的票数
+* `forceRetired`: [`QUANTITY`] - 账户被强制退休时的 blockNumber
 * `inQueue`: `Array` of [VotesInQueue](#VotesInQueue) - 当前正在等待锁定的队列
 * `locked`: `QUANTITY` - 账户当前被锁定的票数
 * `outQueue`: `Array` of [VotesInQueue](#VotesInQueue) - 当前正在等待解锁的队列
-* `unlocked`: `QUANTITY` - 账户当前已解锁的票数
+* `unlocked`: `QUANTITY` - 账户历史累计解锁的总票数
 
 ### Decision
 

@@ -1,6 +1,6 @@
 ---
 id: json_rpc
-title: JSON RPC
+title: cfx Namespace
 custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/json-rpc.md
 keywords:
   - conflux
@@ -73,7 +73,7 @@ The epoch number specifies a point in time and the corresponding state of the sy
 * `HEX String` - an integer epoch number. For example, `0x3e8` is epoch 1000.
 * `String "earliest"` for the epoch of the genesis block.
 * `String "latest_checkpoint"` for the earliest epoch stored in memory.
-* `String "latest_finalized"` - for the latest finalized (by PoS) epoch. (Added from conflux-rust `v1.2.0`)
+* `String "latest_finalized"` - for the latest finalized (by PoS) epoch. (Added from conflux-rust `v2.0.0`)
 * `String "latest_confirmed"` - for the latest confirmed epoch (using the confirmation meter's estimate).
 * `String "latest_state"` - for the latest epoch that has been executed.
 * `String "latest_mined"` - for the latest known epoch.
@@ -283,7 +283,7 @@ params: [
 * `transactionsRoot`: `DATA`, 32 Bytes - the Merkle root of the transactions in this block.
 * `custom`: `Array`- customized informtion.
 * `blockNumber`: `QUANTITY` - the number of this block's total order in the tree-graph. `null` when the order is not determined. Added from `Conflux-rust v1.1.5`
-* `posReference`: `DATA`, 32 Bytes - the hash of the PoS newest committed block. Added from `Conflux-rust v1.2.0`
+* `posReference`: `DATA`, 32 Bytes - the hash of the PoS newest committed block. Added from `Conflux-rust v2.0.0`
 
 Note that the fields `epochNumber` and `gasUsed` are provided by the node as they depend on the ledger. The rest of the fields are included in or derived from the block header directly.
 
@@ -672,13 +672,13 @@ Returns storage entries from a given contract.
 #### Parameters
 
 1. `BASE32` - address of the contract.
-2. `DATA`, 32 Bytes - a storage position (see [here](https://solidity.readthedocs.io/en/v0.7.1/internals/layout_in_storage.html) for more info).
+2. `QUANTITY` - a storage position (see [here](https://solidity.readthedocs.io/en/v0.7.1/internals/layout_in_storage.html) for more info).
 3. `QUANTITY|TAG` - (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_confirmed"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
 
 ```json
 params: [
     "cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp",
-    "0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9",
+    "0x100",
     "latest_state"
 ]
 ```
@@ -691,7 +691,7 @@ params: [
 
 ```json
 // Request
-curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStorageAt","params":["cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp","0x6661e9d6d8b923d5bbaab1b96e1dd51ff6ea2a93520fdc9eb75d059238b8c5e9","latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
+curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStorageAt","params":["cfx:type.contract:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp","0x100","latest_state"],"id":1}' -H "Content-Type: application/json" localhost:12539
 
 // Result
 {
@@ -1711,7 +1711,7 @@ params: [
 
 `Object` - Object include account's pending transaction info.
 
-* `firstTxStatus`: `OBJECT` - An object with only one field `pending`, it's value is the first pending transaction's status. Only have two case `futureNonce`, `notEnoughCash`
+* `firstTxStatus`: `OBJECT` - An object with only one field `pending`, it's value is the first pending transaction's status. Only have three case `futureNonce`, `notEnoughCash`. Or just a string `ready`
 * `pendingCount`: `QUANTITY` - Count of pending transactions
 * `pendingTransactions`: `ARRAY` - Array of pending [transaction](#cfx_gettransactionbyhash)
 
@@ -1750,7 +1750,7 @@ Returns information about a block, identified by its block number (block's tree-
 
 #### Parameters
 
-1. `QUANTITY|TAG` - the block number, or the string.
+1. `QUANTITY` - the block number.
 2. `Boolean` - if `true`, it returns the full transaction objects. If `false`, only the hashes of the transactions are returned
 
 ```json
@@ -1781,7 +1781,7 @@ Returns PoS economics summary info.
 
 #### Added at
 
-`Conflux-rust v1.2.0`
+`Conflux-rust v2.0.0`
 
 #### Parameters
 
@@ -1824,7 +1824,7 @@ Return fullnode's opened RPC method groups
 
 #### Added at
 
-`v1.2.0`
+`v2.0.0`
 
 #### Parameters
 
