@@ -61,9 +61,9 @@ When the user makes an unlock command, the votes to be unlocked will first go in
 * `availableVotes`: `QUANTITY` - the number of votes currently available for the account. Equals to `sum inQueue` + `locked`
 * `forfeited`: `QUANTITY` - the number of votes that are locked and cannot be retrieved if the account is identified as malicious.
 * `forceRetired`: [`QUANTITY`] - the block number when the votes was retired
-* `inQueue`: `Array` of [VotesInQueue](#VotesInQueue) - the number of votes that are currently waiting to be locked
+* `inQueue`: `Array` of [VotesInQueue](#votesinqueue) - the number of votes that are currently waiting to be locked
 * `locked`: `QUANTITY` - the number of votes that are currently locked
-* `outQueue`: `Array` of [VotesInQueue](#VotesInQueue) - the number of votes that are currently waiting to be unlocked
+* `outQueue`: `Array` of [VotesInQueue](#votesinqueue) - the number of votes that are currently waiting to be unlocked
 * `unlocked`: `QUANTITY` - the number of users total unlocked votes in history
 
 ### Decision
@@ -97,7 +97,7 @@ Returns the current status of the PoS chain.
 * `epoch`: `QUANTITY` - The current epoch number of the PoS chain.
 * `latestCommitted`: `QUANTITY` - The number of the latest committed block. Committed blocks will not be reverted
 * `latestVoted`: [`QUANTITY`] - The number of the latest successfully voted block, or `null` (if there are no blocks completed voting).
-* `pivotDecision`: [`Decision`](#Decision) - The PoS chain's finalized decision about the latest PoW pivot block. 
+* `pivotDecision`: [`Decision`](#decision) - The PoS chain's finalized decision about the latest PoW pivot block. 
 
 #### Example
 
@@ -154,7 +154,7 @@ params: [
 
 * `address`: `ADDRESS` - the account address
 * `blockNumber`: `QUANTITY` - the block number corresponding to the status
-* `status`: `OBJECT` - the user's current status, see [Account Status](#AccountStatus) for more information
+* `status`: `OBJECT` - the user's current status, see [Account Status](#accountstatus) for more information
 
 #### Example
 
@@ -203,7 +203,7 @@ Get the current PoS committee information in default. It is also able to get the
 
 #### Returns
 
-* `currentCommittee`: `OBJECT` -  current committee members, see [CurrentCommittee](#CurrentCommittee) for more information
+* `currentCommittee`: `OBJECT` -  current committee members, see [CurrentCommittee](#currentcommittee) for more information
 * `elections`: `Array` - nodes who are running for election
 
 ##### CurrentCommittee
@@ -211,7 +211,7 @@ Get the current PoS committee information in default. It is also able to get the
 Current committee information
 
 * `epochNumber`: `QUANTITY` - epoch number of the committee term
-* `nodes`: `Array` of [CommitteNode](#CommitteNode) - list of committee members
+* `nodes`: `Array` of [CommitteNode](#committenode) - list of committee members
 * `quorumVotingPower`: `QUANTITY` - the minimum number of votes needed to reach consensus
 * `totalVotingPower`: `QUANTITY` - the total number of votes of the current committee members
 
@@ -226,7 +226,7 @@ Committee member information
 
 * `isFinalized`: `BOOLEAN` - whether the election is finalized or not
 * `startBlockNumber`: `QUANTITY` - the starting block number
-* `topElectingNodes`: `Array` of [CommitteNode](#CommitteNode) - the top ranked 50 nodes after election
+* `topElectingNodes`: `Array` of [CommitteNode](#committenode) - the top ranked 50 nodes after election
 
 #### Example
 
@@ -312,9 +312,9 @@ params: [
 * `miner`: [`ADDRESS`] - block creator, can be `null`
 * `nextTxNumber`: `QUANTITY` - the number of the next block's first transaction
 * `parentHash`: `HASH` - the hash value of the parent block
-* `pivotDecision`: [`Decision`](#Decision) - the decision to PoW chain
+* `pivotDecision`: [`Decision`](#decision) - the decision to PoW chain
 * `round`: `QUANTITY` - current round
-* `signatures`: `Array` of [Signature](#Signature) - the signatures of the block
+* `signatures`: `Array` of [Signature](#signature) - the signatures of the block
 * `timestamp`: `QUANTITY` - the timestamp of the block
 
 ##### Signature
@@ -382,7 +382,7 @@ Get block information by its block number
 
 #### Returns
 
-the same as [pos_getBlockByHash](#pos_getBlockByHash)
+the same as [pos_getBlockByHash](#pos_getblockbyhash)
 
 #### Example
 
@@ -415,7 +415,7 @@ params: [
 
 #### Returns
 
-* `accountRewards`: `Array` of [AccountReward](#AccountReward)
+* `accountRewards`: `Array` of [AccountReward](#accountreward)
 * `powEpochHash`: `HASH` - the hash value of the PoW block when the rewards are made
 
 ##### AccountReward
