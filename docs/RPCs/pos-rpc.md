@@ -310,7 +310,7 @@ params: [
 * `hash`: `HASH` - the hash value of the block
 * `height`: `QUANTITY` - the block height
 * `miner`: [`ADDRESS`] - block creator, can be `null`
-* `nextTxNumber`: `QUANTITY` - the number of the next block's first transaction
+* `lastTxNumber`: `QUANTITY` - the number of the current block's last transaction
 * `parentHash`: `HASH` - the hash value of the parent block
 * `pivotDecision`: [`Decision`](#decision) - the decision to PoW chain
 * `round`: `QUANTITY` - current round
@@ -349,7 +349,7 @@ Response
         "hash": "0x2b8b9d33e79e1735817a1278a9c8c5be828101b281bd4190531686153bee317b",
         "height": "0x14ef",
         "miner": "0x046ca462890f25ed9394ca9f92c979ff48e1738a81822ecab96d83813c1a433c",
-        "nextTxNumber": "0x1da7",
+        "lastTxNumber": "0x1da7",
         "parentHash": "0x89cf3089296679dfef822d3dca037decab2a301de6f047e56c69cb34ae0b79e2",
         "pivotDecision": {
           "height": "0x113af0",
