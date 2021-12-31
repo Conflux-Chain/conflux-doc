@@ -198,7 +198,7 @@ params: [
 * `nonce`: `QUANTITY` - the number of transactions made by the sender prior to this one.
 * `r`: `DATA`, 32 Bytes - ECDSA signature r.
 * `s`: `DATA`, 32 Bytes - ECDSA signature s.
-* `status`: `QUANTITY` - 0 for success, 1 if an error occurred, `null` when the transaction is skipped or not packed.
+* `status`: `QUANTITY` - 0 for success, 1 if an error occurred, 2 for skiped, `null` when the transaction is skipped or not packed.
 * `storageLimit`: `QUANTITY` - the storage limit specified by the sender.
 * `to`: `BASE32` - address of the receiver. `null` when it is a contract deployment transaction.
 * `transactionIndex`: `QUANTITY` - the transaction's position in the block. `null` when the transaction is pending.
@@ -1085,7 +1085,7 @@ params: [
 * `storageReleased`: `Array`, array of storage change objects, each specifying an address and the corresponding amount of storage collateral released, e.g., `[{ 'address': 'CFX:TYPE.USER:AARC9ABYCUE0HHZGYRR53M6CXEDGCCRMMYYBJGH4XG', 'collaterals': '0x280' }]`
 * `contractCreated`: `BASE32` - address of the contract created. `null` when it is not a contract deployment transaction.
 * `stateRoot`: `DATA`, 32 Bytes - hash of the state root after the execution of the corresponding block. `0` if the state root is not available.
-* `outcomeStatus`: `QUANTITY` - the outcome status code. `0x0` means success.
+* `outcomeStatus`: `QUANTITY` - the outcome status code. `0x0` means success. `0x1` means failed. `0x2` means skipped
 * `logsBloom`: `DATA`, 256 Bytes - bloom filter for light clients to quickly retrieve related logs.
 * `logs`: `Array` - array of log objects that this transaction generated, see [cfx_getLogs](#cfx_getlogs).
 
