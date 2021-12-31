@@ -74,6 +74,12 @@ $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/inst
 $ brew install llvm
 ```
 
+You also need to install other dependencies with homebrew and set up the environment variables as described after the installation:
+
+```
+$ brew install openssl pkg-config cmake
+```
+
 ### Windows
 
 Make sure you have Visual Studio 2015 with C++ support installed. Next, download and run the `rustup` installer from [this link](https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe), start `VS2015 x64 Native Tools Command Prompt`, and use the following command to install and set up the `msvc` toolchain:
