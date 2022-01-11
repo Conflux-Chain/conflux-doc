@@ -74,7 +74,6 @@ EVM 子链实现了核心 RPC interface 层面兼容，能够支持主流的 SDK
 1. Block，Tx，Receipt 返回数据缺少部分字段
 2. Block 相关接口需要返回 Epoch 中所有 block 的交易，并且保证交易的 blockHash，transactionIndex 正确性
 3. getLogs 接口同样需要集合 Epoch 中的所有数据, 并且正确的设置 transactionIndex, logIndex 等字段
-4. 部分字段不兼容，无法进行验证比如 block.logBlooms 等等
 
 ### 数据可验证性
 
