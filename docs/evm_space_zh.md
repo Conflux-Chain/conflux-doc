@@ -76,10 +76,10 @@ EVM 子链实现了核心 RPC interface 层面兼容，能够支持主流的 SDK
 | eth_submitTransaction | ✅ | |
 | eth_call | ✅ | |
 | eth_estimateGas | ✅ | |
-| eth_getTransactionByHash | 👿 | 缺少字段：type, blockHash, blockNumber, transactionIndex |
+| eth_getTransactionByHash | 👿 |  |
 | eth_getTransactionReceipt | 👿 | 缺少字段：log.logIndex |
 | eth_getLogs | 👿 | |
-| eth_getBlockByHash | 👿 | 缺少字段：logsBloom, mixHash, nonce, totalDifficulty 未返回所有交易 |
+| eth_getBlockByHash | 👿 |  |
 | eth_getBlockByNumber | 👿 | |
 | eth_getBlockTransactionCountByHash | 👿 | |
 | eth_getBlockTransactionCountByNumber | 👿 | |
