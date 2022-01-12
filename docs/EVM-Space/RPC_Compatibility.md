@@ -81,7 +81,7 @@ Only `eth_getTransactionCount` method has supported `pending` tag. Other method 
 * eth_getStorageAt
 * eth_call
 
-## 数据可验证性
+## Data verifiability
 
 Beblow fields will not guarantee verifiability
 
