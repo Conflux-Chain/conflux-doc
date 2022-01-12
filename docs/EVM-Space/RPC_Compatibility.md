@@ -93,12 +93,6 @@ Beblow fields will not guarantee verifiability
 * logsBloom
 * totalDifficulty
 * nonce
-* author|miner
-* sha3Uncles
-* uncles
-* mixHash
-* extraData
-* baseFeePerGas
 
 ### Receipt
 
