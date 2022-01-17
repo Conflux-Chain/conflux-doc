@@ -56,7 +56,6 @@ The Conflux EVM space implements the Web3 JSON-RPC protocol.
 | eth_getCompilers | ❌ | |
 | eth_getProof | ❌ | EIP-1186 |
 | eth_getWork | ❌ | |
-| eth_mining | ❌ | |
 | eth_pendingTransactions | ❌ | |
 | db_* | ❌ | |
 | shh_* | ❌ | |
@@ -71,7 +70,7 @@ Legend: ❌ = not supported. 🚧 = work in progress. ✅ = supported.
 * The nonstandard Geth tracing APIs are not supported at present
 * The nonstandard Parity tracing APIs are not supported at present
 
-## `pending` tag
+### `pending` tag
 
 Only `eth_getTransactionCount` method has supported `pending` tag. Other method will treat `pending` tag as `latest`
 
