@@ -20,8 +20,8 @@ The Conflux EVM space implements the Web3 JSON-RPC protocol.
 | eth_submitTransaction | ✅ | |
 | eth_call | ✅ | |
 | eth_estimateGas | ✅ | |
-| eth_getTransactionByHash | 🚧 |  |
-| eth_getTransactionReceipt | 🚧 | Lacking fields: log.logIndex |
+| eth_getTransactionByHash | ✅ |  |
+| eth_getTransactionReceipt | ✅ |  |
 | eth_getLogs | 🚧 | |
 | eth_getBlockByHash | 🚧 |  |
 | eth_getBlockByNumber | 🚧 | |
@@ -83,7 +83,7 @@ Only `eth_getTransactionCount` method has supported `pending` tag. Other method 
 
 ## Data verifiability
 
-Beblow fields will not guarantee verifiability
+Beblow fields can not guarantee verifiability
 
 ### Block
 
@@ -92,7 +92,6 @@ Beblow fields will not guarantee verifiability
 * transactionsRoot
 * logsBloom
 * totalDifficulty
-* nonce
 
 ### Receipt
 
@@ -100,6 +99,8 @@ Beblow fields will not guarantee verifiability
 * logsBloom
 
 ## Error code & message
+
+TODO
 
 ## pub/sub
 
