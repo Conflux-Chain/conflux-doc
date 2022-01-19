@@ -22,11 +22,11 @@ The Conflux EVM space implements the Web3 JSON-RPC protocol.
 | eth_estimateGas | ✅ | |
 | eth_getTransactionByHash | ✅ |  |
 | eth_getTransactionReceipt | ✅ |  |
-| eth_getLogs | 🚧 | |
-| eth_getBlockByHash | 🚧 |  |
-| eth_getBlockByNumber | 🚧 | |
-| eth_getBlockTransactionCountByHash | 🚧 | |
-| eth_getBlockTransactionCountByNumber | 🚧 | |
+| eth_getLogs | ✅ | |
+| eth_getBlockByHash | ✅ |  |
+| eth_getBlockByNumber | ✅ | |
+| eth_getBlockTransactionCountByHash | ✅ | |
+| eth_getBlockTransactionCountByNumber | ✅ | |
 | eth_getTransactionByBlockHashAndIndex | ❌ | |
 | eth_getTransactionByBlockNumberAndIndex | ❌ | |
 | eth_syncing | ✅ |  |
@@ -89,12 +89,11 @@ Beblow fields can not guarantee verifiability
 * stateRoot
 * receiptsRoot
 * transactionsRoot
-* logsBloom
+* logsBloom ?
 * totalDifficulty
 
 ### Receipt
 
-* root
 * logsBloom
 
 ## Error code & message
