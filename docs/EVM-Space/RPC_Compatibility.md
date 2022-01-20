@@ -65,6 +65,7 @@ Legend: ❌ = not supported. 🚧 = work in progress. ✅ = supported.
 
 ## Notes
 
+* `eth_sendRawTransaction` only accept 155 transaction, `1559`, `1930` is not supported
 * Method not listed is also not supported.
 * There is no concept of uncle (aka ommer) blocks. The `eth_getUncleByBlockHashAndIndex` and `eth_getUncleByBlockNumberAndIndex` methods always return `null`. The `eth_getUncleCountByBlockHash` and `eth_getUncleCountByBlockNumber` methods return zero for valid block IDs and `null` for invalid block IDs. Additionally, uncle-related block metadata such as `sha3Uncles` is sha3 of empty hash array.
 * The nonstandard Geth tracing APIs are not supported at present
