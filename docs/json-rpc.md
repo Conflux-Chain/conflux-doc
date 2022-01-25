@@ -281,7 +281,7 @@ params: [
 * `timestamp`: `QUANTITY` - the unix timestamp for when the block was created.
 * `transactions`: `Array` - array of transaction objects, or 32-byte transaction hashes, depending on the second parameter.
 * `transactionsRoot`: `DATA`, 32 Bytes - the Merkle root of the transactions in this block.
-* `custom`: `Array`- customized informtion.
+* `custom`: `Array`- customized information.
 * `blockNumber`: `QUANTITY` - the number of this block's total order in the tree-graph. `null` when the order is not determined. Added from `Conflux-rust v1.1.5`
 * `posReference`: `DATA`, 32 Bytes - the hash of the PoS newest committed block. Added from `Conflux-rust v2.0.0`
 
