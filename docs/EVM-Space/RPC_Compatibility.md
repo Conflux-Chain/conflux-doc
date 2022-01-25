@@ -1,4 +1,10 @@
-# Compatibility with the Web3 JSON-RPC Protocol
+---
+id: evm_space_rpc_compatibility
+title: Compatibility with the Web3 JSON-RPC Protocol
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/EVM-Space/RPC_Compatibility.md
+keywords:
+  - RPC
+---
 
 The Conflux EVM space implements the Web3 JSON-RPC protocol.
 
@@ -67,10 +73,10 @@ Legend: ❌ = not supported. 🚧 = work in progress. ✅ = supported.
 ## Notes
 
 * `eth_sendRawTransaction` only accept 155 transaction, `1559`, `2930` is not supported
-* Method not listed is also not supported.
+* Methods not listed here are also not supported.
 * There is no concept of uncle (aka ommer) blocks. The `eth_getUncleByBlockHashAndIndex` and `eth_getUncleByBlockNumberAndIndex` methods always return `null`. The `eth_getUncleCountByBlockHash` and `eth_getUncleCountByBlockNumber` methods return zero for valid block IDs and `null` for invalid block IDs. Additionally, uncle-related block metadata such as `sha3Uncles` is sha3 of empty hash array.
 * The nonstandard Geth tracing APIs are not supported at present
-* The nonstandard Parity tracing APIs are not supported at present
+* The nonstandard Parity tracing APIs are not supported at present (Will be supported in future)
 
 ### `pending` tag
 
@@ -84,7 +90,7 @@ Only `eth_getTransactionCount` method has supported `pending` tag. Other method 
 
 ## Data verifiability
 
-Beblow fields can not guarantee verifiability
+Beblow fields can not guarantee the verifiability
 
 ### Block
 
@@ -97,10 +103,10 @@ Beblow fields can not guarantee verifiability
 
 * logsBloom
 
-## Error code & message
-
-TODO
-
 ## pub/sub
 
 Ethereum event pub/sub is not supported now.
+
+## Error code & message
+
+TODO

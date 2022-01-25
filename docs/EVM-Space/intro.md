@@ -1,13 +1,19 @@
-# EVM Space
+---
+id: intro_of_evm_space
+title: Introduction
+custom_edit_url: https://github.com/Conflux-Chain/conflux-doc/edit/master/docs/EVM-Space/intro.md
+keywords:
+  - Introduction
+---
 
-Conflux-rust 在 v2.0 版本引入了一条兼容 EVM 的子链，能够实现`虚拟机完全兼容`以及`核心 eth RPC 兼容`。加密用户和开发者可以直接使用以太坊生态的钱包(MetaMask)和开发工具(Truffle, Hardhat, web3.js, ethers.js等) 来跟 EVM 子网直接交互。使得以太坊生态用户和开发者可以很方便体验 Conflux 网络的高 TPS 和低手续费优势。
+The Conflux `EVM Space` is an Ethereum Virtual Machine (EVM) built in the Conflux `Native space`,
+that provides a solution for developers to deploy their apps on an Ethereum-compatible, high-throughput, scalable and future-safe platform,
+with low transaction costs for their users.
 
-底层实现上 EVM 子链同 Conflux 主链共用一套共识协议及数据账本，但从逻辑上看是独立的两条链。通过内置合约可以实现 CFX 在两条链之间互跨。并且可以实现一定程度的跨链合约调用（从 Conflux 链 call EVM 子链合约）。
+In Conflux EVM Space, Ethereum native applications can seamlessly be ported to Conflux network.
+Developers may enjoy familiar Ethereum tooling when working with their Solidity smart contracts on Conflux.
 
-* [CIP-90](https://forum.conflux.fun/t/cip-90-evm/13143)
+Besides the EVM, Conflux developed the [Space Bridge](https://evm.fluentwallet.com) which allows users to transfer CFX between Conflux Native Spance and EVM Space.
 
-## Menu
+Conflux EVM Space is introduced at [CIP-90](https://github.com/Conflux-Chain/CIPs/blob/master/CIPs/cip-90.md)
 
-1. basic intro
-2. MetaMask & truffle
-3. CFX 跨 Space 操作
