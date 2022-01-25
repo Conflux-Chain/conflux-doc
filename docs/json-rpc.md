@@ -198,7 +198,7 @@ params: [
 * `nonce`: `QUANTITY` - the number of transactions made by the sender prior to this one.
 * `r`: `DATA`, 32 Bytes - ECDSA signature r.
 * `s`: `DATA`, 32 Bytes - ECDSA signature s.
-* `status`: `QUANTITY` - 0 for success, 1 if an error occurred, `null` when the transaction is skipped or not packed.
+* `status`: `QUANTITY` - 0 for success, 1 if an error occurred, 2 for skiped, `null` when the transaction is skipped or not packed.
 * `storageLimit`: `QUANTITY` - the storage limit specified by the sender.
 * `to`: `BASE32` - address of the receiver. `null` when it is a contract deployment transaction.
 * `transactionIndex`: `QUANTITY` - the transaction's position in the block. `null` when the transaction is pending.
@@ -1085,7 +1085,7 @@ params: [
 * `storageReleased`: `Array`, array of storage change objects, each specifying an address and the corresponding amount of storage collateral released, e.g., `[{ 'address': 'CFX:TYPE.USER:AARC9ABYCUE0HHZGYRR53M6CXEDGCCRMMYYBJGH4XG', 'collaterals': '0x280' }]`
 * `contractCreated`: `BASE32` - address of the contract created. `null` when it is not a contract deployment transaction.
 * `stateRoot`: `DATA`, 32 Bytes - hash of the state root after the execution of the corresponding block. `0` if the state root is not available.
-* `outcomeStatus`: `QUANTITY` - the outcome status code. `0x0` means success.
+* `outcomeStatus`: `QUANTITY` - the outcome status code. `0x0` means success. `0x1` means failed. `0x2` means skipped
 * `logsBloom`: `DATA`, 256 Bytes - bloom filter for light clients to quickly retrieve related logs.
 * `logs`: `Array` - array of log objects that this transaction generated, see [cfx_getLogs](#cfx_getlogs).
 
@@ -1852,5 +1852,69 @@ curl --location --request POST 'http://localhost:12537' \
     "jsonrpc": "2.0",
     "result": ["cfx", "txpool", "pos", "trace", "pubsub"],
     "id": "15922956697249514502"
+}
+```
+
+### cfx_getPoSRewardByEpoch
+
+returns the rewards information of a PoS epoch 
+
+#### Parameters
+
+1. `QUANTITY`: epoch number
+
+```json
+params: [
+  "0x4a"
+]
+```
+
+#### Returns
+
+* `accountRewards`: `Array` of [AccountReward](#accountreward)
+* `powEpochHash`: `HASH` - the hash value of the PoW block when the rewards are made
+
+##### AccountReward
+
+* `posAddress`: `ADDRESS` - PoS account address
+* `powAddress`: `BASE32` - PoW account address
+* `reward`: `QUANTITY` - the number of rewards, in the unit of Drip
+
+##### Example
+
+Request
+
+```sh
+curl --location --request POST 'http://localhost:12537' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "id": 1,
+    "jsonrpc": "2.0",
+    "method": "cfx_getPoSRewardByEpoch",
+    "params": ["0x4a"]
+}'
+```
+
+Response
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "accountRewards": [
+            {
+                "posAddress": "0x459b19e745eb410c3696ff1ed15f9de9bb46aa5fefc27b0b6e8b8d7aaadfe8c0",
+                "powAddress": "NET8888:TYPE.USER:AAKSNR7XKKFFAM17MNESKAGU076T8FAG3YJ6PTHN16",
+                "reward": "0x14931d20aa21eae3e6f"
+            },
+            {
+                "posAddress": "0x046ca462890f25ed9394ca9f92c979ff48e1738a81822ecab96d83813c1a433c",
+                "powAddress": "NET8888:TYPE.USER:AAPXUPNXG96GZ4077DAV0151K7P8498N9A6DMAWK1N",
+                "reward": "0x2d49549e023888cd390"
+            }
+        ],
+        "powEpochHash": "0x361cb0f19fd13c30da467d20a84ef01aabcd55e9812c5e2fd0721ea11a52e9f1"
+    },
+    "id": 1
 }
 ```

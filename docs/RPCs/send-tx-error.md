@@ -128,6 +128,20 @@ To replace transaction in pool, specify a bigger gasPrice and resend.
 }
 ```
 
+## Incorrect `to` address
+
+```js
+{
+  "jsonrpc": "2.0",
+  "id": "15922956697249514502",
+  "error": {
+      "code": -32602,
+      "message": "Invalid parameters: tx",
+      "data": "Unsupported receiver address type"
+  }
+}
+```
+
 ## Incorrect `chainId`
 
 ```js

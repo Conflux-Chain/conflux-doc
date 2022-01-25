@@ -15,6 +15,8 @@ public_rpc_apis = "safe,trace"  // or public_rpc_apis = "all"
 
 Note: An existing archive node need clear all blockchain data to open `executive_trace` config.
 
+**Note**: From Conflux-rust v2.0 trace RPC have some breaking change, [Read below](#V2.0-trace-breaking-change) for details.
+
 ## Trace object
 
 A `Trace` trace object contain below field:
@@ -379,3 +381,173 @@ curl --location --request POST 'http://testnet-rpc:12537' \
 1. One `call` trace, will have one corresponding `call_result` trace. A `create` trace will also have one corresponding `create_result` trace
 2. `call` trace's `result` field have three possible value: `success`, `fail`, `revert`
 3. Only traces which's `callType` value is `call` and have `success` result status, that can indicate CFX transfer
+
+## V2.0 trace breaking change
+
+From Conflux-rust v2.0 the trace RPC have imported some breaking change, below is a quick introduction of the updates, there also is [detail document here](https://github.com/Conflux-Chain/CIPs/issues/88)
+
+### New added field `valid`
+
+A new field `valid` is added to trace to indicate whether the corresponding trace is reverted.
+
+### Gas consume and refund trace was introduced
+
+Any transaction bumping nonce during execution will generate one or two traces with type "internal_transfer_action" to indicate gas payment and gas refund.
+
+Consider a transaction has gas limit 40000 and gas price 3 Drip.
+
+```js
+{
+    "action": {
+        "from": <contract_address>,
+        "fromPocket": "sponsor_balance_for_gas",
+        "to": <zero_address>,
+        "toPocket": "gas_payment",
+        "value": 120000, 
+    }
+    "type": "internal_transfer_action"
+    ......
+}
+```
+
+If the transaction is not sponsored, the trace will be
+
+```js
+{
+    "action": {
+        "from": <sender_address>,
+        "fromPocket": "balance",
+        "to": <zero_address>,
+        "toPocket": "gas_payment",
+        "value": 120000, 
+    }
+    "type": "internal_transfer_action"
+    ......
+}
+```
+
+This should be the first trace of most transactions.
+
+After execution, if this transaction costs 25000 gas, up to 1/4 of gas limit, i.e., 10000 gas (30000 Drip when gas price = 3) will be refunded, then it will generate a trace
+
+```js
+{
+    "action": {
+        "from": <zero_address>,
+        "fromPocket": "gas_payment",
+        "to": ...,
+        "toPocket": ...,
+        "value": 30000, 
+    },
+    "type": "internal_transfer_action",
+    ...
+}
+```
+
+### Trace for storage collateral.
+
+Consider a transaction collateralize 10 Drip (it can not happen in a real Conflux system, just for example).
+
+If the transaction is sponsored,
+
+```js
+{
+    "action": {
+        "from": <contract_address>,
+        "fromPocket": "sponsor_balance_for_collateral",
+        "to": <contract_address>,
+        "toPocket": "storage_collateral",
+        "value": 10, 
+    },
+    "type": "internal_transfer_action",
+    ...
+}
+```
+
+If the transaction is not sponsored,
+
+```js
+{
+    "action": {
+        "from": <sender_address>,
+        "fromPocket": "balance",
+        "to": <sender_address>,
+        "toPocket": "storage_collateral",
+        "value": 10, 
+    },
+    "type": "internal_transfer_action",
+    ...
+}
+```
+
+When releasing storage, the value will be returned to the same route.
+
+### Indicator for kill contract
+
+Each time a contract is killed, it will produce such a trace,
+
+```js
+{
+    "action": {
+        "from": <contract_address>,
+        "fromPocket": "balance",
+        "to": <zero_address>, 
+        "toPocket": "mint_burn",
+        "value": ...,
+        ...
+    },
+    "type": "internal_transfer_action",
+    ...
+}
+```
+
+### New added `space` field
+
+The `call` and `create` type action will add a new field `space` indicate wich space the trace is occured, the possible value are:
+
+* `native`
+* `ethereum`
+* `none`
+
+### Four new field added to `internal_transfer_action`
+
+* `fromPocket`
+* `toPocket`
+* `fromSpace`
+* `toSpace`
+
+#### Specification for pocket
+
+In Conflux, each account could have several pockets to store CFX.
+
+* `balance`
+* `staking_balance`
+* `storage_collateral`
+* `sponsor_balance_for_gas`
+* `sponsor_balance_for_collateral`
+
+The fromPocket field and toPocket field could be one of them.
+
+Besides these five values, the "pocket" could be two special values `mint_burn` and `gas_payment`.
+
+* fromPocket = `mint_burn`: mint CFX, e.g., generate staking interest
+* toPocket = `mint_burn`: burn CFX, e.g., when a contract is killed, its staking balance will be burnt.
+* fromPocket = `gas_payment`: gas payment, usually equals to gas_price * gas_limit
+* toPocket = `gas_payment`: gas refund after transaction execution.
+
+#### Specification for space
+
+* native
+* ethereum
+* none
+
+### Changes in integrity constraints
+
+#### Before change
+
+* The balance increasing (or decreasing) of an address (except the internal contract) during transaction execution corresponds to a trace whose "to" (or "from") is this address.
+
+#### After change
+
+* The balance increasing (or decreasing) of an address (all the address) during transaction execution corresponds to a trace whose "to" (or "from") is this address and "toPocket" (or "fromPocket") is "balance". (Note: for trace type except "interal_transfer_action", the "fromPocket" and "toPocket" equal to "balance" implicitly.)
+* The staking balance/collateral balance/sponsor balance for gas/sponsor balance for collateral increasing (or decreasing) of an address during transaction execution corresponds to an internal_transfer type trace whose "to" (or "from") is this address and "toPocket" (or "fromPocket") is "sponsor_balance"/"storage_collateral"/"sponsor_balance_for_gas"/"sponsor_balance_for_collateral".
