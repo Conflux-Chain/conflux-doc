@@ -6,15 +6,14 @@ keywords:
   - endpoint
 ---
 
-Ethereum Virtual Machine (EVM) support is currently available on the
-following networks:
+Ethereum Virtual Machine (EVM) Space status:
 
 <div class="networks-table"></div>
 
-Network  | Chain ID                | Endpoint URL
--------- | ----------------------- | ------------
-[Mainnet](#mainnet) | 1030 (0x406) | <https://evm.confluxrpc.com>
-[Testnet](#testnet) | 71 (0x47) | <https://evmtest.confluxrpc.com>
+Network  | Chain ID                | Endpoint URL | Status
+-------- | ----------------------- | ------------ | -----------
+[Mainnet](#mainnet) | 1030 (0x406) | <https://evm.confluxrpc.com> | Not Deployed
+[Testnet](#testnet) | 71 (0x47) | <https://evmtest.confluxrpc.com> | Online <br/> Forked at EpochNumber 61465000 and BlockNumber 77340000
 
 ## Endpoints
 
