@@ -47,4 +47,79 @@ Address | ID          | Name                                 | Spec           | 
 
 ## Phantom transactions
 
-TO UPDATE
+A *cross-space transaction* is a transaction in the Conflux space that, at some point during its execution, calls one of the state-changing (i.e., not `view`) methods of the `CrossSpaceCall` internal contract.
+Such transactions can change CFX balances and contract storage in both spaces, Conflux and EVM.
+
+As EVM clients are not aware of Conflux space transactions (the two spaces use different transaction formats), we construct one or more *phantom* transactions (aka *virtual* transactions) for each call to the `CrossSpaceCall` internal contract.
+These phantom transactions are derived from the corresponding Conflux space transaction, they do not exist in the ledger.
+Phantom transactions have the following special properties:
+
+- `gas` and `gasPrice` are `0`. Gas for cross-space transactions is charged in the Conflux space. Therefore, the corresponding phantom transactions do not consume any gas.
+- Invalid signature (`r`, `s`, `v`, `standardV`). The Conflux protocol is unable to sign transactions on behalf of the sender of the cross-space transaction. Therefore, phantom transactions use a fake signature that will not pass ECDSA verification.
+
+### Example
+
+When we retrieve epoch `0x72819` in the Conflux space, we see it contains a single Conflux transaction.
+
+```
+cfx_getBlockByEpochNumber(0x72819, true)
+
+{
+  "epochNumber": "0x72819",
+  "hash": "0x7440c9e8ebb2e87a7d187e4ad6d09027d860b3948cf4364bb883c028b6c3a858",
+  "transactions": [
+    {
+      "hash": "0xe89ef4b61434ec331b621b8687033f9e4058e76759a3522bdc50e0cb358f505e",
+      "blockHash": "0x7440c9e8ebb2e87a7d187e4ad6d09027d860b3948cf4364bb883c028b6c3a858",
+      "from": "NET8888:TYPE.USER:AAJFT5SK5RGK2KTJPMPUEJ69989N15KCCY7JAJEUP2",
+      "to": "NET8888:TYPE.CONTRACT:ACAP3N9KXZ7C4TU5NUU8G65FJ7A09MG1FY77ZAYSVW",
+      "gasPrice": "0x1",
+      "gas": "0x8b28d",
+      "storageLimit": "0x54",
+      "r": "0x2b943e84111cd5f95fbdf15667329ac546c9e5b99548d3c3702aeced4f07de6d",
+      "s": "0x2f47ae3c15ec2d1cbcf5bde3870aa21e1df54e8b7b926840a54faa9951cb3321",
+      "v": "0x0",
+      ...
+    }
+  ],
+  ...
+}
+```
+
+When we retrieve the corresponding block in the EVM space, we see it contains two phantom transactions.
+
+```
+eth_getBlockByNumber(0x72819, true)
+
+{
+  "hash": "0x7440c9e8ebb2e87a7d187e4ad6d09027d860b3948cf4364bb883c028b6c3a858",
+  "number": "0x72819",
+  "transactions": [
+    {
+      "hash": "0xfcdcf304b6b9dc263625b0924efaf3a7eb7044a17d27c0b8d631025b55d1147e",
+      "blockHash": "0x7440c9e8ebb2e87a7d187e4ad6d09027d860b3948cf4364bb883c028b6c3a858",
+      "from": "0x0000000000000000000000000000000000000000",
+      "to": "0xf709629eee416c2d2a53692d38f1568538d8022f",
+      "gasPrice": "0x0",
+      "gas": "0x0",
+      "r": "0x1",
+      "s": "0x1",
+      "v": "0x4593",
+      ...
+    },
+    {
+      "hash": "0xca2f5c5848458bea556f99e626db7108377d600e24add1920c4106358a1a5502",
+      "blockHash": "0x7440c9e8ebb2e87a7d187e4ad6d09027d860b3948cf4364bb883c028b6c3a858",
+      "from": "0xf709629eee416c2d2a53692d38f1568538d8022f",
+      "to": "0xdacf3af269b55ece5fe3239626a27f2a76c48245",
+      "gasPrice": "0x0",
+      "gas": "0x0",
+      "r": "0x1",
+      "s": "0x1",
+      "v": "0x4593",
+      ...
+    }
+  ],
+  ...
+}
+```
