@@ -6,14 +6,8 @@ keywords:
   - Introduction
 ---
 
-The Conflux `EVM Space` is an Ethereum Virtual Machine (EVM) built in the Conflux `Native space`,
-that provides a solution for developers to deploy their apps on an Ethereum-compatible, high-throughput, scalable and future-safe platform,
-with low transaction costs for their users.
+Conflux has a virtual machine that is similar to EVM. However, there are still some differences between Conflux VM and Ethereum VM. Conflux has a different transaction format and a different rule for generating addresses from public keys. This impedes the EVM compatible dApps porting to Conflux. The previous CIP-72 and CIP-80 try to solve these obstacles. But that will influence the current applications. So the CIP-90 introduces a new space to construct a space that is fully EVM-compatible without changing the existing accounts and transactions.
 
-In Conflux EVM Space, Ethereum native applications can seamlessly be ported to Conflux network.
-Developers may enjoy familiar Ethereum tooling when working with their Solidity smart contracts on Conflux.
+The [CIP-90](https://github.com/Conflux-Chain/CIPs/blob/master/CIPs/cip-90.md) has introduced a new fully EVM-compatible space. The new space is called `EVM Space`, and the current space is called `Native Space`. The EVM Space follows the same rule as EVM and supports eth rpc like eth_getBalance, so the tools from ethereum ecosystem can be used on Conflux directly.
 
-Besides the EVM, Conflux developed the [Space Bridge](https://evm.fluentwallet.com) which allows users to transfer CFX between Conflux Native Spance and EVM Space.
-
-Conflux EVM Space is introduced at [CIP-90](https://github.com/Conflux-Chain/CIPs/blob/master/CIPs/cip-90.md)
-
+The accounts in two spaces are `separated`. A native space account can only interact with the other accounts in native space with the original conflux transaction type. An EVM space account can only interact with the other accounts in EVM space with Ethereum transaction type `EIP-155`. A new internal contract will be deployed for `assets and data cross-space`. Unlike cross-chain operations, the cross-space operations are `atomic` and with `layer 1 security`.

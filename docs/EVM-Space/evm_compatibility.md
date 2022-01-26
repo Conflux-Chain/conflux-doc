@@ -7,9 +7,9 @@ keywords:
   - VM
 ---
 
-The EVM space implements an Ethereum Virtual Machine (EVM). Below are some difference between EVM space and Ethereum:
+The EVM space implements an Ethereum Virtual Machine (EVM). Below are some differences between EVM space and Ethereum:
 
-* The `NUMBER` opcode will return the `epoch number`.
+* The `NUMBER` opcode will return the tree-graph `epoch number`.
 * The `BLOCKHASH` opcode can only take `NUMBER-1` as input. (Unlike Ethereum, which takes any integer in `NUMBER-256` to `NUMBER-1` as input)
 * Block generate rate is 1.25s per block (mainnet)
 * Contract max code size is `49152` double as Ethereum
