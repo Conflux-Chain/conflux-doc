@@ -13,7 +13,7 @@ Ethereum Virtual Machine (EVM) Space status:
 Network  | Chain ID                | Endpoint URL | Status
 -------- | ----------------------- | ------------ | -----------
 [Mainnet](#mainnet) | 1030 (0x406) | <https://evm.confluxrpc.com> | Not Deployed
-[Testnet](#testnet) | 71 (0x47) | <https://evmtest.confluxrpc.com> | Online <br/> Forked at EpochNumber 61465000 and BlockNumber 77340000
+[Testnet](#testnet) | 71 (0x47) | <https://evmtestnet.confluxrpc.com> | Online <br/> Forked at EpochNumber 61465000 BlockNumber 77340000
 
 ## Endpoints
 
