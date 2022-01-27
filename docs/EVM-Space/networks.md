@@ -23,4 +23,4 @@ The Mainnet Web3 endpoint is at: `https://evm.confluxrpc.com` (port 443)
 
 ### Testnet
 
-The Testnet Web3 endpoint is at: `https://evmtest.confluxrpc.com` (port 443)
+The Testnet Web3 endpoint is at: `https://evmtestnet.confluxrpc.com` (port 443)
