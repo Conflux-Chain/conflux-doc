@@ -15,7 +15,7 @@ public_rpc_apis = "safe,trace"  // or public_rpc_apis = "all"
 
 Note: An existing archive node need clear all blockchain data to open `executive_trace` config.
 
-**Note**: From Conflux-rust v2.0 trace RPC have some breaking change, [Read below](#V2.0-trace-breaking-change) for details.
+**Note**: From Conflux-rust v2.0 trace RPC have some breaking change, [Read below](#v20-trace-breaking-change) for details.
 
 ## Trace object
 
