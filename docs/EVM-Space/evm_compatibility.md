@@ -7,7 +7,7 @@ keywords:
   - VM
 ---
 
-The EVM space implements an Ethereum Virtual Machine (EVM). Below are some differences between EVM space and Ethereum:
+The eSpace implements an Ethereum Virtual Machine (EVM). Below are some differences between eSpace and Ethereum:
 
 * The `NUMBER` opcode will return the tree-graph `epoch number`.
 * The `BLOCKHASH` opcode can only take `NUMBER-1` as input. (Unlike Ethereum, which takes any integer in `NUMBER-256` to `NUMBER-1` as input)
@@ -47,19 +47,19 @@ Address | ID          | Name                                 | Spec           | 
 
 ## Phantom transactions
 
-A *cross-space transaction* is a transaction in the Conflux space that, at some point during its execution, calls one of the state-changing (i.e., not `view`) methods of the `CrossSpaceCall` internal contract.
-Such transactions can change CFX balances and contract storage in both spaces, Conflux and EVM.
+A *cross-space transaction* is a transaction in the Conflux core space that, at some point during its execution, calls one of the state-changing (i.e., not `view`) methods of the `CrossSpaceCall` internal contract.
+Such transactions can change CFX balances and contract storage in both spaces, core and eSpace.
 
 As EVM clients are not aware of Conflux space transactions (the two spaces use different transaction formats), we construct one or more *phantom* transactions (aka *virtual* transactions) for each call to the `CrossSpaceCall` internal contract.
-These phantom transactions are derived from the corresponding Conflux space transaction, they do not exist in the ledger.
+These phantom transactions are derived from the corresponding core space transaction, they do not exist in the ledger.
 Phantom transactions have the following special properties:
 
-- `gas` and `gasPrice` are `0`. Gas for cross-space transactions is charged in the Conflux space. Therefore, the corresponding phantom transactions do not consume any gas.
+- `gas` and `gasPrice` are `0`. Gas for cross-space transactions is charged in the core space. Therefore, the corresponding phantom transactions do not consume any gas.
 - Invalid signature (`r`, `s`, `v`, `standardV`). The Conflux protocol is unable to sign transactions on behalf of the sender of the cross-space transaction. Therefore, phantom transactions use a fake signature that will not pass ECDSA verification.
 
 ### Example
 
-When we retrieve epoch `0x72819` in the Conflux space, we see it contains a single Conflux transaction.
+When we retrieve epoch `0x72819` in the Conflux core space, we see it contains a single Conflux transaction.
 
 ```
 cfx_getBlockByEpochNumber(0x72819, true)
@@ -86,7 +86,7 @@ cfx_getBlockByEpochNumber(0x72819, true)
 }
 ```
 
-When we retrieve the corresponding block in the EVM space, we see it contains two phantom transactions.
+When we retrieve the corresponding block in the eSpace, we see it contains two phantom transactions.
 
 ```
 eth_getBlockByNumber(0x72819, true)

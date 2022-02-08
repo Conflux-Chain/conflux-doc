@@ -28,7 +28,7 @@ The Conflux EVM space implements the Web3 JSON-RPC protocol.
 | eth_estimateGas | ✅ | |
 | eth_getTransactionByHash | ✅ |  |
 | eth_getTransactionReceipt | ✅ |  |
-| eth_getLogs | ✅ | |
+| eth_getLogs | ✅ | The max gap between fromBlock and toBlock is limited to 1000|
 | eth_getBlockByHash | ✅ |  |
 | eth_getBlockByNumber | ✅ | |
 | eth_getBlockTransactionCountByHash | ✅ | |
