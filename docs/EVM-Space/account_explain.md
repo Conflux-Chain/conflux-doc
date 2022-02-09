@@ -1,13 +1,14 @@
-# 两个 Space 的账户关系
+# Correspondence between addresses in two spaces
 
-CIP-90 引入的 eSpace 是一个独立的空间，其与 core space 是逻辑上隔绝开的。eSpace 中的账户有自己的 balance 和状态。
+The eSpace introduced by CIP-90 is an independent space that is logically isolated from the Core space.  Accounts in the eSpace have their own balance and status.
 
-与 core space 交互需要使用 `base32` 格式的账户地址。而与 eSpace 交互则需要使用 `hex40` 格式的 地址。一个私钥可以同时在两个 Space 使用，但在两个 Space 中是两个账户。
-另外`需要注意`的是：**虽然 base32 地址也可以转换成 hex40 格式，但同一个私钥导入 Conflux 钱包获取的 base32 地址转换为 hex40 格式之后，`大概率`与该私钥导入以太坊钱包获取的地址`不相同`**。因此如果对两种地址（两个账户）的对应关系不熟悉的话，不要随意互相转换格式混用。
+Interacting with the Core space requires base32 account addresses. Interacting with the eSpace requires hex40 addresses.  A private key can be used in both spaces simultaniously.  But in both spaces, they are two accounts.
 
-## 用于跨 Space 操作的`映射地址`
+Notes: Although the base32 address can be converted to hex40 format, the base32 address obtained from the private key imported in Conflux wallet will most likey be different from the address obtained from the same private key imported in Ethereum wallet with hex40 format. **Therefore, if you are not familiar with the correspondence between these two addresses (two accounts), don't mix them in the same format**.
 
-虽然两个 Space 是独立的，但通过内置合约 CrossSpaceCall 可以实现 CFX 和 数据的原子互跨。通过该合约的以下三个方法可实现 CFX 在两个 Space 互跨。（该内置合约只能在 Core Space 进行交互）
+## Mapped Address for Cross-Space Operations
+
+Although the two Spaces are independent, atomic-crossing of CFX and data can be achieved through CrossSpaceCall (A built-in contract). The following three methods of this contract enable CFX to span between the two Spaces. (This built-in contract can only be interacted with in Core Space)
 
 ```js
 function transferEVM(bytes20 to) external payable returns (bytes memory output);
@@ -15,17 +16,17 @@ function mappedBalance(address addr) external view returns (uint256);
 function withdrawFromMapped(uint256 value) external;
 ```
 
-CFX 从 Core Space 跨入 eSpace 需要调用该合约的 `transferEVM(bytes20 to)` 方法，目标地址通过方法参数 `to` 来指定，整个操作一步即可完成。
+To cross CFX from Core Space to eSpace, the `transferEVM(bytes20 to)` method of this contract need to be called. And the destination address is specified by the method parameter to. The whole crossing operation will be done in one step.
 
-若想将 CFX 从 eSpace 跨会 Core Space 则需要分成两步来实现。每个 Core Space 的账户`在 EVM Space` 都有一个一一对应的`映射账户(hex40)`。跨回 CFX，需要首先在 eSpace 将 CFX 转给`跨回目标地址`在 eSpace 的`映射地址`, 然后在 Core Space 调用 CrossSpaceCall 内置合约的 `withdrawFromMapped(uint256 value)` 方法，将 CFX 从映射地址跨回接受地址。
+There will be two steps while crossing CFX from eSpace to Core Space. Each account in Core Space has a mapped account(hex40) in eSpace. First of all, you should transfer CFX to mapped account of the target crossing back address in eSpace(This action in eSpace). And then call the `withdrawFromMapped(uint256 value)` method of the `CrossSpaceCall` (The built-in contract) in Core Space to cross the CFX from the mapped address back to the receiving address.
 
-映射地址是通过 Core Space base32 地址计算出来的，计算规则如下：
+The mapped address is calculated from the base32 address in Native Space. The rules are as follows:
 
-1. 将 base32 地址转换为 hex 格式，进而转换为 bytes 类型
-2. 对上一步的 bytes 进行 keccak 计算得到 hash
-3. 取 hash 的后 160 位，然后转换为 hex40 格式，即为在 eSpace 的映射地址。
+1. Convert the base32 address to hex format, and then convert to bytes type
+2. Keccak the bytes from the previous step to get the hash.
+3. Take the last 160 bits of the hash and convert it to hex40 format, which is the mapped address in EVM Space.
 
-`js-conflux-sdk v2.0` 提供了方法，获取 base32 地址的映射地址
+`js-conflux-sdk v2.0` provides a method to get the mapped address of the base32 address
 
 ```js
 const { address } = require('js-conflux-sdk');
@@ -34,8 +35,8 @@ const mappedAddress = address.cfxMappedEVMSpaceAddress(base32Address);
 // 0x12Bf6283CcF8Ad6ffA63f7Da63EDc217228d839A
 ```
 
-关于映射地址需要注意的几个地方：
+Notes about the mapped address:
 
-1. 映射地址是一个 eSpace 地址，所以格式为 hex40
-2. 映射地址的作用是，在 CFX 跨回 Core Space 时作为中转地址
-3. **切记`不要`直接把 base32 地址转换为 hex40 格式作为映射地址，此操作会导致资产丢失**
+1. The mapped address is an address in eSpace, so it has a hex40 format.
+2. The purpose of the mapped address is to serve as a transit address when crossing CFX back to Core space.
+3. **Remember NOT to convert the base32 address directly to hex40 format as the mapped address. This action will result in the loss of your assets**

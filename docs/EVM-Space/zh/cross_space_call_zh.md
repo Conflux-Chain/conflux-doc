@@ -85,29 +85,6 @@ main().catch(console.log);
 1. 在 eSpace 将 CFX 转到 Core Space 接受地址的 `eSpace 映射地址`
 2. 在 Core Space 使用接受地址调用 `CrossSpaceCall.withdrawFromMapped(amount)` 即可取回 CFX
 
-#### 映射地址
-
-映射地址是通过 Core Space 账户的 base32 地址计算出来的，计算规则如下：
-
-1. 将 base32 地址转换为 hex 格式，进而转换为 bytes 类型
-2. 对上一步的 bytes 进行 keccak 计算得到 hash
-3. 取 hash 的后 160 位，然后转换为 hex40 格式，即为在 eSpace 的映射地址。
-
-`js-conflux-sdk v2.0` 提供了方法，获取 base32 地址的映射地址
-
-```js
-const { address } = require('js-conflux-sdk');
-const base32Address = 'cfx:aak2rra2njvd77ezwjvx04kkds9fzagfe6ku8scz91';
-const mappedAddress = address.cfxMappedEVMSpaceAddress(base32Address);
-// 0x12Bf6283CcF8Ad6ffA63f7Da63EDc217228d839A
-```
-
-关于映射地址需要注意的几个地方：
-
-1. 映射地址是一个 eSpace 地址，所以格式为 hex40
-2. 映射地址的作用是在 CFX 跨回 Core Space 时作为中转地址
-3. **切记`不要`直接把 base32 地址转换为 hex40 格式作为映射地址，此操作会导致资产丢失**
-
 使用 `js-conflux-sdk v2` 跨回 CFX 的例子：
 
 ```js
