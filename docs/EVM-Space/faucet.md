@@ -6,4 +6,4 @@ keywords:
   - faucet
 ---
 
-If developers want to get some testnet EVM Space token for developing contracts, they can use [faucet.confluxnetwork.org](http://faucet.confluxnetwork.org/) to get some Native space CFX first, then transfer CFX to EVM Space with [Space Bridge](https://evm.fluentwallet.com)
+If developers want to get some testnet eSpace token for developing contracts, they can use [faucet.confluxnetwork.org](http://faucet.confluxnetwork.org/) to get some core space CFX first, then transfer CFX to eSpace with [Space Bridge](https://evm.fluentwallet.com)

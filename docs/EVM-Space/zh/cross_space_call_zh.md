@@ -1,6 +1,6 @@
 # CrossSpaceCall 内置合约
 
-CIP-90 同时还引入了一个新内置合约 `CrossSpaceCall (0x0888000000000000000000000000000000000006)`，该内置合约位于 Native Space，即只能在 Native Space 进行调用。
+CIP-90 同时还引入了一个新内置合约 `CrossSpaceCall (0x0888000000000000000000000000000000000006)`，该内置合约位于 Core Space，即只能在 Core Space 进行调用。
 通过 CrossSpaceCall 可实现 CFX 和数据 在两个 Space 互跨。
 
 ```js
@@ -40,9 +40,9 @@ interface CrossSpaceCall {
 
 ## CFX 跨 Space
 
-### Native 跨入 EVM Space
+### Core 跨入 eSpace
 
-将 CFX 从 Conflux Native Space 跨到 EVM Space 可以调用 `CrossSpaceCall.transferEVM(targetAddress)` 方法，通过参数指定`接受地址`并通过`交易的 value` 指定跨入的金额。
+将 CFX 从 Conflux Core Space 跨到 eSpace 可以调用 `CrossSpaceCall.transferEVM(targetAddress)` 方法，通过参数指定`接受地址`并通过`交易的 value` 指定跨入的金额。
 
 以 js-conflux-sdk(v2) 为例：
 
@@ -59,7 +59,7 @@ const account = conflux.wallet.addPrivateKey(process.env.PRIVATE_KEY);  // Repla
 const CrossSpaceCall = conflux.InternalContract('CrossSpaceCall');
 
 async function main() {
-  // The EVM Space receiver address
+  // The eSpace receiver address
   const receiverAddress = "0x02e1A5817ABf2812f04c744927FC91F03099C0f4";
 
   const receipt = await CrossSpaceCall
@@ -76,22 +76,22 @@ async function main() {
 main().catch(console.log);
 ```
 
-只要 `CrossSpaceCall.transferEVM(targetAddress)` 方法调用成功，在 EVM Space 查询 `receiverAddress` 的余额就应该可以看到变化。
+只要 `CrossSpaceCall.transferEVM(targetAddress)` 方法调用成功，在 eSpace 查询 `receiverAddress` 的余额就应该可以看到变化。
 
-### EVM 跨回 Native Space
+### eSpace 跨回 Core Space
 
-将 CFX 从 EVM Space 跨回 Native Space 需要分成两步来完成。
+将 CFX 从 eSpace 跨回 Core Space 需要分成两步来完成。
 
-1. 在 EVM Space 将 CFX 转到 Native Space 接受地址的 `EVM Space 映射地址`
-2. 在 Native Space 使用接受地址调用 `CrossSpaceCall.withdrawFromMapped(amount)` 即可取回 CFX
+1. 在 eSpace 将 CFX 转到 Core Space 接受地址的 `eSpace 映射地址`
+2. 在 Core Space 使用接受地址调用 `CrossSpaceCall.withdrawFromMapped(amount)` 即可取回 CFX
 
 #### 映射地址
 
-映射地址是通过 Native Space 账户的 base32 地址计算出来的，计算规则如下：
+映射地址是通过 Core Space 账户的 base32 地址计算出来的，计算规则如下：
 
 1. 将 base32 地址转换为 hex 格式，进而转换为 bytes 类型
 2. 对上一步的 bytes 进行 keccak 计算得到 hash
-3. 取 hash 的后 160 位，然后转换为 hex40 格式，即为在 EVM Space 的映射地址。
+3. 取 hash 的后 160 位，然后转换为 hex40 格式，即为在 eSpace 的映射地址。
 
 `js-conflux-sdk v2.0` 提供了方法，获取 base32 地址的映射地址
 
@@ -104,8 +104,8 @@ const mappedAddress = address.cfxMappedEVMSpaceAddress(base32Address);
 
 关于映射地址需要注意的几个地方：
 
-1. 映射地址是一个 EVM Space 地址，所以格式为 hex40
-2. 映射地址的作用是在 CFX 跨回 Native Space 时作为中转地址
+1. 映射地址是一个 eSpace 地址，所以格式为 hex40
+2. 映射地址的作用是在 CFX 跨回 Core Space 时作为中转地址
 3. **切记`不要`直接把 base32 地址转换为 hex40 格式作为映射地址，此操作会导致资产丢失**
 
 使用 `js-conflux-sdk v2` 跨回 CFX 的例子：
