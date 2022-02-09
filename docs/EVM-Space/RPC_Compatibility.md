@@ -107,6 +107,11 @@ Beblow fields can not guarantee the verifiability
 
 Ethereum event pub/sub is not supported now.
 
-## Error code & message
+## ETH RPC doc
 
-TODO
+* [Ethereum JSON-RPC Specification](https://playground.open-rpc.org/?schemaUrl=https://raw.githubusercontent.com/ethereum/eth1.0-apis/assembled-spec/openrpc.json&uiSchema%5BappBar%5D%5Bui:splitView%5D=false&uiSchema%5BappBar%5D%5Bui:input%5D=false&uiSchema%5BappBar%5D%5Bui:examplesDropdown%5D=false)
+* [ethereum/execution-apis](https://github.com/ethereum/execution-apis)
+* [Infura JSON-RPC doc](https://infura.io/docs/ethereum#tag/JSON-RPC-Methods)
+* [eth wiki](https://eth.wiki/json-rpc/API)
+* [geth RPC doc](https://geth.ethereum.org/docs/rpc/server)
+* [Parity RPC doc](https://openethereum.github.io/JSONRPC)

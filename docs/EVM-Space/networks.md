@@ -13,7 +13,7 @@ eSpace status:
 Network  | Chain ID                | RPC Endpoint URL | Explorer | Status
 -------- | ----------------------- | ------------ |------------ | -----------
 [Mainnet](#mainnet) | 1030 (0x406) | <https://evm.confluxrpc.com> | <https://evm.confluxscan.net> | Not Deployed
-[Testnet](#testnet) | 71 (0x47) | <https://evmtestnet.confluxrpc.com> | <https://evmtestnet.confluxscan.net> | Online <br/> Forked at EpochNumber 61465000 BlockNumber 77340000
+[Testnet](#testnet) | 71 (0x47) | <https://evmtestnet.confluxrpc.com> | <https://evmtestnet.confluxscan.net> | Online <br/> Forked at EpochNumber 61465000 <br/> BlockNumber 77340000
 
 ## Endpoints
 
