@@ -49,6 +49,9 @@ The Conflux EVM space implements the Web3 JSON-RPC protocol.
 | parity_getBlockReceipts | ✅ |  |
 | eth_pendingTransactions | 🚧 | |
 | web3_sha3 | 🚧 | |
+| trace_block | ✅ | Parity RPC |
+| trace_filter | ✅ | Parity RPC  |
+| trace_transaction | ✅ | Parity RPC  |
 | eth_feeHistory | ❌ | |
 | eth_getFilterChanges | ❌ | |
 | eth_getFilterLogs | ❌ | |
@@ -76,7 +79,7 @@ Legend: ❌ = not supported. 🚧 = work in progress. ✅ = supported.
 * Methods not listed here are also not supported.
 * There is no concept of uncle (aka ommer) blocks. The `eth_getUncleByBlockHashAndIndex` and `eth_getUncleByBlockNumberAndIndex` methods always return `null`. The `eth_getUncleCountByBlockHash` and `eth_getUncleCountByBlockNumber` methods return zero for valid block IDs and `null` for invalid block IDs. Additionally, uncle-related block metadata such as `sha3Uncles` is sha3 of empty hash array.
 * The nonstandard Geth tracing APIs are not supported at present
-* The nonstandard Parity tracing APIs are not supported at present (Will be supported in future)
+* The nonstandard Parity tracing APIs are in progress
 
 ### `pending` tag
 
@@ -90,10 +93,11 @@ Only `eth_getTransactionCount` method has supported `pending` tag. Other method 
 
 ## Data verifiability
 
-Beblow fields can not guarantee the verifiability
+Below fields can not guarantee the verifiability
 
 ### Block
 
+* hash
 * stateRoot
 * receiptsRoot
 * transactionsRoot
@@ -107,11 +111,11 @@ Beblow fields can not guarantee the verifiability
 
 Ethereum event pub/sub is not supported now.
 
-## ETH RPC doc
+## ETH RPC docs
 
 * [Ethereum JSON-RPC Specification](https://playground.open-rpc.org/?schemaUrl=https://raw.githubusercontent.com/ethereum/eth1.0-apis/assembled-spec/openrpc.json&uiSchema%5BappBar%5D%5Bui:splitView%5D=false&uiSchema%5BappBar%5D%5Bui:input%5D=false&uiSchema%5BappBar%5D%5Bui:examplesDropdown%5D=false)
 * [ethereum/execution-apis](https://github.com/ethereum/execution-apis)
 * [Infura JSON-RPC doc](https://infura.io/docs/ethereum#tag/JSON-RPC-Methods)
-* [eth wiki](https://eth.wiki/json-rpc/API)
+* [eth RPC wiki](https://eth.wiki/json-rpc/API)
 * [geth RPC doc](https://geth.ethereum.org/docs/rpc/server)
 * [Parity RPC doc](https://openethereum.github.io/JSONRPC)
