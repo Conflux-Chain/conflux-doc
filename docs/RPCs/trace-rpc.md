@@ -538,7 +538,7 @@ Besides these five values, the "pocket" could be two special values `mint_burn` 
 #### Specification for space
 
 * native
-* ethereum
+* evm
 * none
 
 ### Changes in integrity constraints

@@ -281,7 +281,7 @@ params: [
 * `timestamp`: `QUANTITY` - the unix timestamp for when the block was created.
 * `transactions`: `Array` - array of transaction objects, or 32-byte transaction hashes, depending on the second parameter.
 * `transactionsRoot`: `DATA`, 32 Bytes - the Merkle root of the transactions in this block.
-* `custom`: `Array`- customized information.
+* `custom`: `Array`- customized information. Note from v2.0 `custom`'s type has changed from array of `number array` to array of `hex string`.
 * `blockNumber`: `QUANTITY` - the number of this block's total order in the tree-graph. `null` when the order is not determined. Added from `Conflux-rust v1.1.5`
 * `posReference`: `DATA`, 32 Bytes - the hash of the PoS newest committed block. Added from `Conflux-rust v2.0.0`
 
@@ -320,7 +320,9 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getBlockByHash","params":["0
     "transactions": [
       "0xedfa5b9c38ba51e791cc72b8f75ff758533c8c38f426eddee3fd95d984dd59ff"
     ],
-    "transactionsRoot": "0xfb245dae4539ea49812e822adbffa9dd2ee9b3de8f3d9a7d186d351dcc9a6ed4"
+    "custom": ["0x12"],
+    "transactionsRoot": "0xfb245dae4539ea49812e822adbffa9dd2ee9b3de8f3d9a7d186d351dcc9a6ed4",
+    "posReference": "0xd1c2ff79834f86eb4bc98e0e526de475144a13719afba6385cf62a4023c02ae3",
   },
   "id": 1
 }
@@ -1382,9 +1384,11 @@ None.
 * `blockNumber`: `QUANTITY` - total block number
 * `chainId`: `QUANTITY` - chainId
 * `networkId`: `QUANTITY` - networkId
+* `ethereumSpaceChainId`: `QUANTITY` - eSpace's chainId (Added from v2.0)
 * `epochNumber`: `QUANTITY` - latest epoch number
 * `latestCheckpoint`: `QUANTITY` - latest checkpoint epoch number
 * `latestConfirmed`: `QUANTITY` - latest confirmed epoch number
+* `latestFinalized`: `QUANTITY` - latest finallized epoch number (Added from v2.0)
 * `latestState`: `QUANTITY` - latest state epoch number
 * `pendingTxNumber`: `QUANTITY` - current pending transaction count
 
@@ -1406,6 +1410,8 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getStatus","id":1}' -H "Cont
     "latestCheckpoint": "0xada520",
     "latestConfirmed": "0xaf2885",
     "latestState": "0xaf28a7",
+    "latestFinalized": "0x2a420c",
+    "ethereumSpaceChainId": "0x22b9",
     "pendingTxNumber": "0x0"
   },
   "id": 1
@@ -1811,7 +1817,7 @@ curl --location --request POST 'http://localhost:12537' \
     "jsonrpc": "2.0",
     "result": {
         "distributablePosInterest": "0x6fd7fd91140603a45caff2",
-        "lastDistributeBlock": 0,
+        "lastDistributeBlock": "0x100",
         "totalPosStakingTokens": "0x29cbb85e5a6e849c00000"
     },
     "id": "15922956697249514502"
