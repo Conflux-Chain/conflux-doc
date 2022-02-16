@@ -386,9 +386,13 @@ curl --location --request POST 'http://testnet-rpc:12537' \
 
 From Conflux-rust v2.0 the trace RPC have imported some breaking change, below is a quick introduction of the updates, there also is [detail document here](https://github.com/Conflux-Chain/CIPs/issues/88)
 
+**Note: To use the new trace data, the fullnode data should be cleaned and resynchronization.**
+
 ### New added field `valid`
 
 A new field `valid` is added to trace to indicate whether the corresponding trace is reverted.
+
+**Note: If the old trace data is not cleaned and resynchronization, the `valid` filed will always be true.**
 
 ### Gas consume and refund trace was introduced
 
