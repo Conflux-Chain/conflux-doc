@@ -1,4 +1,6 @@
-## Correspondence Conflux Core and Conflux eSpace Addresses
+# Overview of Core and eSpace Addresses
+
+## Correspondence between Conflux Core and Conflux eSpace Addresses
 
 The eSpace introduced in [CIP-90](https://github.com/Conflux-Chain/CIPs/blob/master/CIPs/cip-90.md) is an independent space that is logically isolated from the Core space.  Accounts in the eSpace have their own balance and status.
 
