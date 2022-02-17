@@ -9,7 +9,7 @@ keywords:
 
 ## Overview
 
-**Node version: `conflux-rust v1.0.3`.**
+**Node version: `conflux-rust v2.0.0`.**
 
 Light nodes are special nodes in the Conflux network that store block headers only, and retrieve everything else from their peers on-demand. This means that by default, light nodes do not store transactions, nor do they store the state trees. This can drastically reduce the disk and bandwidth use of light nodes compared to full and archive nodes, especially under high TPS. As a trade-off, RPC queries have a higher latency on light nodes.
 
@@ -26,7 +26,7 @@ Please start by downloading the latest release from the [conflux-rust](https://g
 
 ```
 > cd run
-> ./conflux --config tethys.toml --light 2> stderr.txt
+> ./conflux --config hydra.toml --light 2> stderr.txt
 ```
 
 Alternatively, if you want your node to connect to the testnet, you will need to pass `testnet.toml` instead. Similarly to full nodes, you will know when your node is fully synced with the network once it prints:

@@ -15,7 +15,7 @@ Here we walk through how to quickly setup conflux full node to join the conflux 
 
 First, please [Get a Conflux Client](../../run-a-node/en/how-to-get.md) or [Compile from Source](install.md).
 
-To start Conflux manually, you need to edit the default configuration file `run/tethys.toml`:
+To start Conflux manually, you need to edit the default configuration file `run/hydra.toml`:
 
 * Set `public_address` according to your public IP. The port should be 32323 by default.
 * Set `mining_author` to the account address to receive mining reward.
@@ -25,7 +25,7 @@ Then you can run the following commands:
 
 ```bash
 $ cd run
-$ ../target/release/conflux --config tethys.toml
+$ ../target/release/conflux --config hydra.toml
 ```
 
 It will start an archive node and begin syncing the Conflux mainnet blockchain. 
@@ -38,7 +38,7 @@ To restart a node, just run the same command line in the same directory.
 
 Conflux can be configured using either the CLI options or a config file. Should the CLI flags and the config file disagree about a setting, the CLI takes precedence.  
 
-The config file follows the format of [TOML](https://github.com/toml-lang/toml). The path of the configuration file can be set with the CLI option `--config path/to/conflux.toml`. A default configuration file `tethys.toml` with every configuration explained has been provided in the directory `run`, and you can start customizing your configuration from there.
+The config file follows the format of [TOML](https://github.com/toml-lang/toml). The path of the configuration file can be set with the CLI option `--config path/to/conflux.toml`. A default configuration file `hydra.toml` with every configuration explained has been provided in the directory `run`, and you can start customizing your configuration from there.
 
 You can list all CLI options by running  `$ ./conflux --help`. The vast majority of CLI options map to a setting in the TOML file, for example `--public-address 127.0.0.1:32323` can be set by creating a config file:
 
@@ -46,7 +46,7 @@ You can list all CLI options by running  `$ ./conflux --help`. The vast majority
 public_address="127.0.0.1:32323"
 ```
 
-If you are going to set up a node and let it join the Conflux mainnet(testnet), you need to set the `public_address` appropriately. It should be set as the IP address of your node which can be accessed publicly from Internet. If your node is covered under a public gateway, you can get its public address by searching "ip" in [Baidu](https://www.baidu.com).
+If you are going to set up a node and let it join the Conflux mainnet(testnet), you need to set the `public_address` appropriately. It should be set as the IP address of your node which can be accessed publicly from Internet. If your node is covered under a public gateway, you can get its public address by searching "ip" in [Google](https://www.google.com/).
 
 If you want to let your node participate the mining process, you need to enable it by setting `start_mining` as "true" and `mining_author` as the account address that receives the mining reward. 
 
@@ -81,14 +81,13 @@ Then you can run the tests as follows
 
 ## Creating a wallet
 
-You can use [Conflux Portal](https://portal.conflux-chain.org) to create a wallet.
+You can use [Fluent Wallet](https://fluentwallet.com/) to create a wallet.
 It will provide you a seed phrase
 (used to restore your wallet if you close it) and a password (used to unlock your wallet if you lock it 
 when you leave your computer). Once a wallet is created, you can then manage your account addresses,
 send transactions, and deploy smart contract.
 
 In order to issue on-chain operations, you will need Conflux tokens. 
-On the testnet, you can periodically (100 CFX token per hour) get CFX tokens from a faucet account.
-You can use the faucet through Conflux Portal by clicking on "Deposit".
+On the testnet, you can periodically (100 CFX token per hour) get CFX tokens from the [faucet Dapp](http://faucet.confluxnetwork.org/).
 
 For developing smart contracts, you can use [Conflux Studio](https://github.com/ObsidianLabs/ConfluxStudio) to write, compile, and deploy your contract.
