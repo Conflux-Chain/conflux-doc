@@ -1,4 +1,6 @@
-## The CrossSpaceCall Internal Contract
+# The CrossSpaceCall Internal Contract
+
+## CrossSpaceCall Interface
 
 [CIP-90](https://github.com/Conflux-Chain/CIPs/blob/master/CIPs/cip-90.md) introduces a new internal contract: `CrossSpaceCall`. This contract is located at address `cfx:aaejuaaaaaaaaaaaaaaaaaaaaaaaaaaaa2sn102vjv` (`0x0888000000000000000000000000000000000006`) in the Core Space. `CrossSpaceCall` enables **CFX and data** to be transferred between the two spaces.
 
