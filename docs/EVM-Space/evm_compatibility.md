@@ -9,7 +9,7 @@ keywords:
 
 The eSpace implements an Ethereum Virtual Machine (EVM). Below are some differences between eSpace and Ethereum:
 
-* The `NUMBER` opcode will return the tree-graph `epoch number`.
+* The `NUMBER` opcode will return the tree-graph `epoch number`. As a result, `block.number` used in eSpace contracts will not grow at a stable and predictable rate, and so it might not be suitable for measuring time.
 * The `BLOCKHASH` opcode can only take `NUMBER-1` as input. (Unlike Ethereum, which takes any integer in `NUMBER-256` to `NUMBER-1` as input)
 * Block generate rate is 1.25s per block (mainnet)
 * Contract max code size is `49152` double as Ethereum
