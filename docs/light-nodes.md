@@ -26,7 +26,7 @@ Please start by downloading the latest release from the [conflux-rust](https://g
 
 ```
 > cd run
-> ./conflux --config tethys.toml --light 2> stderr.txt
+> ./conflux --config hydra.toml --light 2> stderr.txt
 ```
 
 Alternatively, if you want your node to connect to the testnet, you will need to pass `testnet.toml` instead. Similarly to full nodes, you will know when your node is fully synced with the network once it prints:
