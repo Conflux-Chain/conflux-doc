@@ -136,7 +136,7 @@ Result
 
 Get the PoS account information
 
-### Parameters
+#### Parameters
 
 1. `ADDRESS`: 32 Bytes - PoS account address
 2. [`QUANTITY`]: block number, optional for querying the status of the account at a certain block height

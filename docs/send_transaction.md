@@ -43,10 +43,8 @@ The following document will use [js-conflux-sdk](https://github.com/Conflux-Chai
 ```javascript
 const { Conflux, Drip } = require('js-conflux-sdk');
 
-const cfx = new Conflux({
+const conflux = new Conflux({
   url: 'https://test.confluxrpc.com',
-  defaultGasPrice: 100, // The default gas price of your following transactions
-  defaultGas: 1000000, // The default gas of your following transactions
   logger: console,
   networkId: 1,
 });
@@ -57,7 +55,7 @@ const cfx = new Conflux({
 ```javascript
 const PRIVATE_KEY = 'Your Private Key';
 // const PRIVATE_KEY = '0x5f15f9e52fc5ec6f77115a9f306c120a7e80d83115212d33a843bb6b7989c261';
-const account = cfx.wallet.addPrivateKey(PRIVATE_KEY); // create account instance
+const account = conflux.wallet.addPrivateKey(PRIVATE_KEY); // create account instance
 const receiver = 'cfxtest:aarc9abycue0hhzgyrr53m6cxedgccrmmy8m50bu1p'
 ```
 
@@ -92,7 +90,7 @@ let txParams = {
 
 ```javascript
 async function main() {
-  const txHash = await cfx.sendTransaction(txParams);
+  const txHash = await conflux.cfx.sendTransaction(txParams);
   console.log(txHash);
 }
 

@@ -9,7 +9,7 @@ keywords:
 
 ## Overview
 
-**Node version: `conflux-rust v1.0.3`.**
+**Node version: `conflux-rust v2.0.0`.**
 
 Light nodes are special nodes in the Conflux network that store block headers only, and retrieve everything else from their peers on-demand. This means that by default, light nodes do not store transactions, nor do they store the state trees. This can drastically reduce the disk and bandwidth use of light nodes compared to full and archive nodes, especially under high TPS. As a trade-off, RPC queries have a higher latency on light nodes.
 
