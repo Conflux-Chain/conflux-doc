@@ -1635,6 +1635,7 @@ None.
 * `totalCollateral`: `QUANTITY` - Amount of total storage collateraled CFX in Drip
 * `totalStaking`: `QUANTITY` - Amount of total staking CFX in Drip
 * `totalCirculating`: `QUANTITY` - Amount: `TotalIssued` - `FourYearUnlock` - `TwoYearUnlock`
+* `totalEspaceTokens`: `QUANTITY` - Amount of total eSpace CFX in Drip (Added in Conflux-Rust v2.0.1)
 
 #### Example
 
@@ -1820,43 +1821,6 @@ curl --location --request POST 'http://localhost:12537' \
         "lastDistributeBlock": "0x100",
         "totalPosStakingTokens": "0x29cbb85e5a6e849c00000"
     },
-    "id": "15922956697249514502"
-}
-```
-
-### cfx_openedMethodGroups
-
-Return fullnode's opened RPC method groups
-
-#### Added at
-
-`v2.0.0`
-
-#### Parameters
-
-None
-
-#### Returns
-
-Method prefix array
-
-#### Example
-
-```shell
-curl --location --request POST 'http://localhost:12537' \
---header 'Content-Type: application/json' \
---data-raw ' {
-    "jsonrpc": "2.0",
-    "id": "15922956697249514502",
-    "method": "cfx_openedMethodGroups",
-    "params": []
-  }'
-```
-
-```json
-{
-    "jsonrpc": "2.0",
-    "result": ["cfx", "txpool", "pos", "trace", "pubsub"],
     "id": "15922956697249514502"
 }
 ```
