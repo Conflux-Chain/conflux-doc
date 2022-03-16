@@ -1,6 +1,8 @@
-# The CrossSpaceCall InternalContract
+# The CrossSpaceCall Internal Contract
 
-CIP-90 also introduces a new internal contract: `CrossSpaceCall` (0x0888000000000000000000000000000000000006) , which is located in the Core Space. CrossSpaceCall enables `CFX and data` to be crossed between the two spaces. 
+## CrossSpaceCall Interface
+
+[CIP-90](https://github.com/Conflux-Chain/CIPs/blob/master/CIPs/cip-90.md) introduces a new internal contract: `CrossSpaceCall`. This contract is located at address `cfx:aaejuaaaaaaaaaaaaaaaaaaaaaaaaaaaa2sn102vjv` (`0x0888000000000000000000000000000000000006`) in the Core Space. `CrossSpaceCall` enables **CFX and data** to be transferred between the two spaces.
 
 ```js
 // SPDX-License-Identifier: MIT
@@ -15,46 +17,48 @@ interface CrossSpaceCall {
 
     event Outcome(bool success);
 
-    // Create contract in EVM Space
+    // Create contract in eSpace
     function createEVM(bytes calldata init) external payable returns (bytes20);
-    
-    // Transfer CFX to EVM address
+
+    // Transfer CFX to eSpace address
     function transferEVM(bytes20 to) external payable returns (bytes memory output);
 
-    // Call EVM contract method
+    // Call eSpace contract method
     function callEVM(bytes20 to, bytes calldata data) external payable returns (bytes memory output);
 
     function staticCallEVM(bytes20 to, bytes calldata data) external view returns (bytes memory output);
 
-    // Widthdraw CFX from EVM Space's mapped account
+    // Widthdraw CFX from the sender's mapped account in eSpace
     function withdrawFromMapped(uint256 value) external;
 
-    // Query EVM Space mapped account's CFX balance
+    // Query eSpace mapped account's CFX balance
     function mappedBalance(address addr) external view returns (uint256);
 
-    // Query EVM Space mapped account's nonce
+    // Query eSpace mapped account's nonce
     function mappedNonce(address addr) external view returns (uint256);
 }
 ```
 
-## Cross space of CFX
+## Cross-Space CFX Transfer
 
 ### From Core to eSpace
 
-Crossing CFX from Conflux Core to eSpace can be done by calling the `CrossSpaceCall.transferEVM(targetAddress)` method. While calling this method, you also need to specify the receiverAddress with parameters and the amount to be crossed in with the value of this transaction. 
+Transferring CFX from Conflux Core to eSpace can be done by calling the `CrossSpaceCall.transferEVM(bytes20 to)` method. When calling this method, you also need to specify the destination address (`to`). The amount of CFX to be transferred is specified as the value of this transaction.
 
-Take js-conflux-sdk(v2) as an example：
+Take js-conflux-sdk (v2) as an example：
 
 ```js
 const { Conflux, format, Drip, CONST } = require('js-conflux-sdk');
-// Init conflux instance
+
+// Init Conflux instance
 const conflux = new Conflux({
   url: "https://test.confluxrpc.com",
   networkId: 1
 });
+
 // Add account private key
 const account = conflux.wallet.addPrivateKey(process.env.PRIVATE_KEY);  // Replace PRIVTE_KEY with your own private key
-// CrossCall
+
 const CrossSpaceCall = conflux.InternalContract('CrossSpaceCall');
 
 async function main() {
@@ -69,22 +73,22 @@ async function main() {
     })
     .executed();
 
-  console.log('Cross transfer: ', receipt.outcomeStatus === CONST.TX_STATUS.SUCCESS ? 'Success' : 'Fail');
+  console.log('Cross-space transfer: ', receipt.outcomeStatus === CONST.TX_STATUS.SUCCESS ? 'Success' : 'Fail');
 }
 
 main().catch(console.log);
 ```
 
-As long as the `CrossSpaceCall.transferEVM(targetAddress)` method is called successfully, you can see the change by looking up the balance of the receiverAddress in eSpace.
+As long as the `CrossSpaceCall.transferEVM(bytes20 to)` method is called successfully, you can see the change by looking up the balance of the desination address in eSpace.
 
 ### From eSpace back to Core
 
-There will be two steps while crossing CFX from eSpace back to Core.
+Transferring CFX from eSpace back to Conflux Core requires two steps.
 
-1. Transfer CFX to the mapped account of the receiver Core space address in eSpace.
+1. Transfer CFX to the mapped account of the receiver Core Space address in eSpace.
 2. Call `CrossSpaceCall.withdrawFromMapped(amount)` in Core with the receiver address to withdraw the CFX.
 
-Example of using js-conflux-sdk v2 to cross back CFX:
+Example of using js-conflux-sdk (v2) to cross back CFX:
 
 ```js
 // Check above init code
@@ -96,11 +100,11 @@ async function main() {
     })
     .executed();
 
-  console.log('Cross transfer: ', receipt.outcomeStatus === CONST.TX_STATUS.SUCCESS ? 'Success' : 'Fail');
+  console.log('Cross-space transfer: ', receipt.outcomeStatus === CONST.TX_STATUS.SUCCESS ? 'Success' : 'Fail');
 }
 
 main().catch(console.log);
 ```
 
-The above example is intended to demonstrate the technical details of crossing CFX between two spaces. Users can use the [Space Bridge Dapp](https://evm.fluentwallet.com) to cross CFX directly through their wallets.
+The above example is intended to demonstrate the technical details of transferring CFX between Conflux Core and Conflux eSpace. Users can use the [Space Bridge Dapp](https://evm.fluentwallet.com) to cross CFX directly through their wallets.
 

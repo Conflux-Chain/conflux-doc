@@ -37,7 +37,7 @@ The Conflux EVM space implements the Web3 JSON-RPC protocol.
 | eth_getTransactionByBlockNumberAndIndex | ✅ | |
 | eth_syncing | ✅ |  |
 | eth_hashrate | ✅ |  |
-| eht_coinbase | ✅ |  |
+| eth_coinbase | ✅ |  |
 | eth_mining | ✅ |  |
 | eth_maxPriorityFeePerGas | ✅ |  |
 | eth_accounts | ✅ |  |
