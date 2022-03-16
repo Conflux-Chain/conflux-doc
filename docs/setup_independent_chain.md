@@ -22,14 +22,14 @@ latest source code). You can refer to the document
 [Installation](https://conflux-chain.github.io/conflux-doc/install/).
 
 2. Create a directory and prepare a configuration file `development.toml`. You
-can copy the `tethys.toml` provided in the directory and start from there
+can copy the `hydra.toml` provided in the directory and start from there
 following the guide [Getting
 Started](https://conflux-chain.github.io/conflux-doc/get_started/).
 
 3. Set the `bootnodes` parameter in the configuration file to empty (or comment
 the setting line).
 
-4. Set the `mode` parameter to "dev". If you copy from `tethys.toml`, you
+4. Set the `mode` parameter to "dev". If you copy from `hydra.toml`, you
 should find the line being commented and you can uncomment it.
 
 5. Set the `dev_block_interval_ms` parameter to the block generation interval
@@ -77,7 +77,7 @@ Started](https://conflux-chain.github.io/conflux-doc/get_started/).
     # Put Conflux executable `conflux` and the configuration file `bootnode.toml` under `run`
     ```
 
-    If you are editing based on our provided `tethys.toml`, you need to
+    If you are editing based on our provided `hydra.toml`, you need to
     comment out the `bootnode` entry. Otherwise the node will connect to the
     existing Conflux net.
 
