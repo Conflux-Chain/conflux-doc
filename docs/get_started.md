@@ -21,6 +21,8 @@ To start Conflux manually, you need to edit the default configuration file `run/
 * Set `mining_author` to the account address to receive mining reward.
 * Conflux team has maintained some full nodes for the test net, and they have been provided as `bootnodes`. If you want to use other nodes to bootstrap your new node, you should edit this entry.
 
+Note that the default max open file limit on Linux/Mac may not be enough for a Conflux node, and it's suggested to set the value to 10000. You can set this by running `ulimit -n 10000` on the command line window before continuing.
+
 Then you can run the following commands:
 
 ```bash
