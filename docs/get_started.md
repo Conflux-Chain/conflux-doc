@@ -15,6 +15,12 @@ Here we walk through how to quickly setup conflux full node to join the conflux 
 
 First, please [Get a Conflux Client](../../run-a-node/en/how-to-get.md) or [Compile from Source](install.md).
 
+On Linux and Mac systems, before running a node, make sure that you increase the number of open file descriptors allowed for each process.
+
+```bash
+$ ulimit -n 10000
+```
+
 To start Conflux manually, you need to edit the default configuration file `run/hydra.toml`:
 
 * Set `public_address` according to your public IP. The port should be 32323 by default.
