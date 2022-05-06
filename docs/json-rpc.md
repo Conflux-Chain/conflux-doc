@@ -1279,7 +1279,7 @@ params: [
 
 #### Returns
 
-* `isBalanceEnough`: `Boolean` - indicate balance is enough
+* `isBalanceEnough`: `Boolean` - indicate balance is enough for gas fee and collateral storage
 * `willPayCollateral`: `Boolean` - false if the transaction is eligible for storage collateral sponsorship, true otherwise.
 * `willPayTxFee`: `Boolean` - false if the transaction is eligible for gas sponsorship, true otherwise.
 
