@@ -15,11 +15,19 @@ Here we walk through how to quickly setup conflux full node to join the conflux 
 
 First, please [Get a Conflux Client](../../run-a-node/en/how-to-get.md) or [Compile from Source](install.md).
 
+On Linux and Mac systems, before running a node, make sure that you increase the number of open file descriptors allowed for each process.
+
+```bash
+$ ulimit -n 10000
+```
+
 To start Conflux manually, you need to edit the default configuration file `run/hydra.toml`:
 
 * Set `public_address` according to your public IP. The port should be 32323 by default.
 * Set `mining_author` to the account address to receive mining reward.
 * Conflux team has maintained some full nodes for the test net, and they have been provided as `bootnodes`. If you want to use other nodes to bootstrap your new node, you should edit this entry.
+
+Note that the default max open file limit on Linux/Mac may not be enough for a Conflux node, and it's suggested to set the value to 10000. You can set this by running `ulimit -n 10000` on the command line window before continuing.
 
 Then you can run the following commands:
 

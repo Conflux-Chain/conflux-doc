@@ -6,21 +6,23 @@ keywords:
   - endpoint
 ---
 
-eSpace status:
+## Hong Kong
 
-<div class="networks-table"></div>
+Network  | Chain ID                | RPC Endpoint URL | Explorer 
+-------- | ----------------------- | ------------ |------------ 
+[Mainnet](#mainnet) | 1030 (0x406) | <https://evm.confluxrpc.com> | <https://evm.confluxscan.net> 
+[Testnet](#testnet) | 71 (0x47) | <https://evmtestnet.confluxrpc.com> | <https://evmtestnet.confluxscan.net> 
 
-Network  | Chain ID                | RPC Endpoint URL | Explorer | Status
--------- | ----------------------- | ------------ |------------ | -----------
-[Mainnet](#mainnet) | 1030 (0x406) | <https://evm.confluxrpc.com> | <https://evm.confluxscan.net> | Forked at EpochNumber 36935000 <br/> BlockNumber 92060600
-[Testnet](#testnet) | 71 (0x47) | <https://evmtestnet.confluxrpc.com> | <https://evmtestnet.confluxscan.net> | Online <br/> Forked at EpochNumber 61465000 <br/> BlockNumber 77340000
+## US East
 
-## Endpoints
+Network  | Chain ID                | RPC Endpoint URL | Explorer 
+-------- | ----------------------- | ------------ |------------ 
+[Mainnet](#mainnet) | 1030 (0x406) | <https://evm.confluxrpc.org> | <https://evm.confluxscan.io> 
+[Testnet](#testnet) | 71 (0x47) | <https://evmtestnet.confluxrpc.org> | <https://evmtestnet.confluxscan.io> 
 
-### Mainnet
+## Hardfork number
 
-The Mainnet Web3 endpoint is at: `https://evm.confluxrpc.com` (port 443)
+* Mainnet: EpochNumber 36935000, BlockNumber 92060600
+* Testnet: EpochNumber 61465000, BlockNumber 77340000
 
-### Testnet
 
-The Testnet Web3 endpoint is at: `https://evmtestnet.confluxrpc.com` (port 443)
