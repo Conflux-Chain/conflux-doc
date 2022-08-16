@@ -1952,6 +1952,10 @@ Response
 
 Returns DAO vote params info
 
+#### Added at
+
+`Conflux-rust v2.1.0`
+
 #### Parameters
 
 1. `QUANTITY`: (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_confirmed"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
