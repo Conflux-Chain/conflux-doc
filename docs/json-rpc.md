@@ -8,19 +8,21 @@ keywords:
   - sdk
 ---
 
-**IMPORTANT NOTICE (February 2021): Starting from `conflux-rust v1.1.1`, all hex addresses used in the RPCs below have been updated to base32 addresses, as defined in [CIP-37](https://github.com/Conflux-Chain/CIPs/blob/master/CIPs/cip-37.md). For converting legacy hex addresses into base32 addresses, please refer to [conflux-address-js](https://www.npmjs.com/package/conflux-address-js) or use the [conversion tool](https://confluxscan.io/address-converter) on Conflux Scan.**
+In order for a software application to interact with the Conflux blockchain - either by reading blockchain data or sending transactions to the network - it must connect to an Conflux node.
 
-The Conflux JSON-RPC API is a collection of interfaces that allow you to interact with a local or remote Conflux node. You can use this API through an HTTP, TCP, or WebSocket connection.
+For this purpose, every [Conflux client](https://github.com/conflux-chain/conflux-rust) implements a [JSON-RPC specification](https://github.com/Conflux-Chain/jsonrpc-spec), so there are a uniform set of methods that applications can rely on regardless of the specific node or client implementation.
 
-The following is an API reference documentation with examples.
+[JSON-RPC](https://www.jsonrpc.org/specification) is a stateless, light-weight remote procedure call (RPC) protocol. It defines several data structures and the rules around their processing. It is transport agnostic in that the concepts can be used within the same process, over sockets, over HTTP, or in many various message passing environments. It uses JSON (RFC 4627) as data format.
 
-## JSON-RPC
+## CONVENIENCE LIBRARIES
 
-JSON is a lightweight data-interchange format. It can represent numbers, strings, ordered sequences of values, and collections of name/value pairs.
+While you may choose to interact directly with Conflux clients via the JSON-RPC API, there are often easier options for dapp developers. Many [JavaScript](https://github.com/conflux-chain/js-conflux-sdk) and [backend API](https://github.com/conflux-chain/go-conflux-sdk) libraries exist to provide wrappers on top of the JSON-RPC API. With these libraries, developers can write intuitive, one-line methods in the programming language of their choice to initialize JSON-RPC requests (under the hood) that interact with Conflux.
 
-JSON-RPC is a stateless, light-weight remote procedure call (RPC) protocol. Primarily this specification defines several data structures and the rules around their processing. It is transport-agnostic in that the concepts can be used within the same process, over sockets, over HTTP, or in many various message passing environments. It uses JSON (RFC 4627) as its data format.
+## SPEC
 
-### JSON-RPC endpoints
+[Read the full JSON-RPC API spec on GitHub.](https://github.com/Conflux-Chain/jsonrpc-spec)
+
+## JSON-RPC endpoints
 
 Currently, Conflux has a [Rust implementation](https://github.com/Conflux-Chain/conflux-rust) that supports JSON-RPC 2.0 over an HTTP, TPC, or WebSocket connection.
 
@@ -36,9 +38,13 @@ If you are a node operator, you can enable and configure various RPC interfaces 
 
 The examples in the rest of this document will use the HTTP endpoint.
 
+## CONVENTIONS
+
 ### HEX value encoding
 
-At present, there are two key data types that are passed over JSON: unformatted byte arrays and quantities. While both are encoded as hex strings, they have different formatting requirements:
+Two key data types get passed over JSON: unformatted byte arrays and quantities. Both are passed with a hex encoding but with different requirements for formatting.
+
+#### Quantities
 
 When encoding **QUANTITIES** (integers, numbers): encode as hex using the most compact representation and prefix with `"0x"`. Zero should be represented as `"0x0"`. Examples:
 
@@ -47,6 +53,8 @@ When encoding **QUANTITIES** (integers, numbers): encode as hex using the most c
 * **WRONG**: `0x` (should always have at least one digit - zero is `"0x0"`)
 * **WRONG**: `0x0400` (no leading zeroes allowed)
 * **WRONG**: `ff` (missing `0x` prefix)
+
+#### Unformatted data
 
 When encoding **UNFORMATTED DATA** (byte arrays, hashes, bytecode arrays): encode as hex using two hex digits per byte and prefix with `"0x"`. Examples:
 
@@ -58,13 +66,15 @@ When encoding **UNFORMATTED DATA** (byte arrays, hashes, bytecode arrays): encod
 
 Note that block and transaction hashes are represented using 32 bytes.
 
+### Base32 Address
+
 `BASE32`: Base32 **addresses** should be encoded as an ASCII string of 42-characters plus network prefix, separators, and optional fields. Please note the following constraints for base32 addresses as RPC parameters:
 
 * The network-prefix should match the node's network, i.e. `cfx:acc7uawf5ubtnmezvhu9dhc6sghea0403y2dgpyfjp` can be sent to mainnet nodes and `cfxtest:acc7uawf5ubtnmezvhu9dhc6sghea0403ywjz6wtpg` can be sent to testnet nodes. Note that these two example addresses correspond to the same account on different networks.
 * Including and omitting the address-type are both accepted, i.e. `cfx:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg` and `cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg` are equivalent. However, addresses with an incorrect type, e.g. `cfx:type.contract:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg`, are rejected.
 * Both lowercase (`cfx:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg`) and uppercase (`CFX:AARC9ABYCUE0HHZGYRR53M6CXEDGCCRMMYYBJGH4XG`) addresses are accepted. Mixed-case addresses are rejected.
 
-### The epoch number parameter
+### The default epochNumber parameter
 
 Several RPC methods have an epoch number parameter. The concept of epochs in Conflux is somewhat analogous to the concept of block numbers (height) in other ledgers, but one epoch might contain multiple blocks.
 
@@ -84,7 +94,21 @@ TODO: Add links to deferred execution documentation.
 
 Please note that due to performance optimization, the latest mined epochs are not executed, so there is no state available for these epochs. For most RPCs related to state query, `"latest_state"` is recommended.
 
-### State and transaction availability
+## EXAMPLES
+
+On this page we provide examples of how to use individual JSON_RPC API endpoints using the command line tool, [curl](https://curl.se/). These individual endpoint examples are found below in the Curl examples section. Further down the page, we also provide an end-to-end example for compiling and deploying a smart contract using a Geth node, the JSON_RPC API and curl.
+
+## CURL EXAMPLES
+
+Examples of using the JSON_RPC API by making [curl](https://curl.se/) requests to an Conflux node are provided below. Each example includes a description of the specific endpoint, its parameters, return type, and a worked example of how it should be used.
+
+The curl requests might return an error message relating to the content type. This is because the --data option sets the content type to application/x-www-form-urlencoded. If your node does complain about this, manually set the header by placing -H "Content-Type: application/json" at the start of the call. The examples also do not include the URL/IP & port combination which must be the last argument given to curl (e.g. 127.0.0.1:12537). A complete curl request including these additional data takes the following form:
+
+```shell
+$ curl -H "Content-Type: application/json" -X POST --data '{"jsonrpc":"2.0","method":"cfx_clientVersion","params":[],"id":67}' 127.0.0.1:12537
+```
+
+## State and transaction availability
 
 Conflux archive and full nodes remove historical state tries to reduce storage use. Full nodes will also discard transactions and receipts for historical blocks. As a result, some RPC interfaces might be unavailable for historical queries.
 
@@ -165,6 +189,38 @@ There is a correspondence between some JSON-RPCs from Ethereum and Conflux. Even
 | `eth_getTransactionCount`   | [`cfx_getNextNonce`](#cfx_getnextnonce)                         |
 | `eth_getTransactionReceipt` | [`cfx_getTransactionReceipt`](#cfx_gettransactionreceipt)       |
 | `eth_sendRawTransaction`    | [`cfx_sendRawTransaction`](#cfx_sendrawtransaction)             |
+
+## GOSSIP, STATE, HISTORY
+
+A handful of core JSON-RPC methods require data from the Conflux network, and fall neatly into three main categories: Gossip, State, and History. Use the links in these sections to jump to each method, or use the table of contents to explore the whole list of methods.
+
+### Gossip Method
+
+These methods track the head of the chain. This is how transactions make their way around the network, find their way into blocks, and how clients find out about new blocks.
+
+* cfx_getStatus
+* cfx_epochNumber
+* cfx_sendRawTransaction
+
+### State Methods
+
+Methods that report the current state of all the data stored. The "state" is like one big shared piece of RAM, and includes account balances, contract data, and gas estimations.
+
+* cfx_getBalance
+* cfx_getStorageAt
+* cfx_getNonce
+* cfx_getCode
+* cfx_call
+* cfx_estimateGasAndCollateral
+
+### History Methods
+
+Fetches historical records of every block back to genesis. This is like one large append-only file, and includes all block headers, block bodies, uncle blocks, and transaction receipts.
+
+* cfx_getBlockByHash
+* cfx_getBlockByEpochNumber
+* cfx_getTransactionByHash
+* cfx_getTransactionReceipt
 
 ## JSON-RPC methods
 
@@ -1090,6 +1146,8 @@ params: [
 * `outcomeStatus`: `QUANTITY` - the outcome status code. `0x0` means success. `0x1` means failed. `0x2` means skipped
 * `logsBloom`: `DATA`, 256 Bytes - bloom filter for light clients to quickly retrieve related logs.
 * `logs`: `Array` - array of log objects that this transaction generated, see [cfx_getLogs](#cfx_getlogs).
+* `txExecErrorMsg`: `String`, tx exec fail message, if transaction exec success this will be null.
+
 
 ##### Example
 
@@ -1124,7 +1182,8 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getTransactionReceipt","para
       "collaterals": "0x40"
     }],
     "to": "CFX:TYPE.CONTRACT:ACC7UAWF5UBTNMEZVHU9DHC6SGHEA0403Y2DGPYFJP",
-    "transactionHash": "0x53fe995edeec7d241791ff32635244e94ecfd722c9fe90f34ddf59082d814514"
+    "transactionHash": "0x53fe995edeec7d241791ff32635244e94ecfd722c9fe90f34ddf59082d814514",
+    "txExecErrorMsg": null
   },
   "id": 1
 }
@@ -1888,3 +1947,61 @@ Response
     "id": 1
 }
 ```
+
+### cfx_getParamsFromVote
+
+Returns DAO vote params info
+
+#### Added at
+
+`Conflux-rust v2.1.0`
+
+#### Parameters
+
+1. `QUANTITY`: (optional, default: `"latest_state"`) integer epoch number, or the string `"latest_state"`, `"latest_confirmed"`, `"latest_checkpoint"` or `"earliest"`, see the [epoch number parameter](#the-epoch-number-parameter)
+
+```json
+params: [
+  "0x4a"
+]
+```
+
+#### Returns
+
+* `powBaseReward`: `QUANTITY` - The PoW base reward amount
+* `interestRate`: `QUANTITY` - The PoS interest rate
+
+##### Example
+
+Request
+
+```sh
+curl --location --request POST 'http://localhost:12537' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "id": 1,
+    "jsonrpc": "2.0",
+    "method": "cfx_getParamsFromVote",
+    "params": ["0x4a"]
+}'
+```
+
+Response
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "powBaseReward": "0x1",
+        "interestRate": "0x2",
+    },
+    "id": 1
+}
+```
+
+## Related Topics
+
+* [JSON-RPC specification](https://github.com/conflux-chain/jsonrpc-spec)
+* [Nodes and clients](https://github.com/conflux-chain/conflux-rust)
+* [JavaScript APIs](https://github.com/conflux-chain/js-conflux-sdk)
+* [Backend APIs](https://github.com/conflux-chain/go-conflux-sdk)
