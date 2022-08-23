@@ -61,7 +61,7 @@ Light nodes support most Conflux RPC APIs, and support for the rest is also [on 
 Light nodes support most of the functionalities of the JavaScript SDK ([js-conflux-sdk](https://www.npmjs.com/package/js-conflux-sdk)). You can install the SDK using the following command:
 
 ```
-> npm install --save js-conflux-sdk@1.0.0-beta.1
+> npm install --save js-conflux-sdk
 ```
 
 Then, you can query the blockchain and send transactions:
@@ -70,7 +70,7 @@ Then, you can query the blockchain and send transactions:
 const { Conflux, Drip } = require('js-conflux-sdk');
 
 const PRIVATE_KEY = '0x...';
-const RECEIVER = 'cfx:type.user:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg';
+const RECEIVER = 'cfx:aarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg';
 
 async function main() {
   const conflux = new Conflux({ url: 'http://localhost:12539' });
