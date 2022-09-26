@@ -705,7 +705,7 @@ params: [
 
 #### Returns
 
-`DATA` - byte code of the contract, or `0x` if the account has no code. This RPC will raise an error if the account does not exist.
+`DATA` - byte code of the contract, or `0x` if the account has no code.
 
 ##### Example
 
@@ -850,8 +850,8 @@ curl -X POST --data '{"jsonrpc":"2.0","method":"cfx_getSponsorInfo","params":["c
   "result": {
     "sponsorBalanceForCollateral": "0x0",
     "sponsorBalanceForGas": "0x0",
-    "sponsorForCollateral": "0x0000000000000000000000000000000000000000",
-    "sponsorForGas": "0x0000000000000000000000000000000000000000",
+    "sponsorForCollateral": "CFX:TYPE.NULL:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0SFBNJM2",
+    "sponsorForGas": "CFX:TYPE.NULL:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0SFBNJM2",
     "sponsorGasBound": "0x0"
   },
   "id": 1
@@ -1886,11 +1886,15 @@ curl --location --request POST 'http://localhost:12537' \
 
 ### cfx_getPoSRewardByEpoch
 
-returns the rewards information of a PoS epoch 
+Get rewards information of a PoS epoch by it's correspond PoW epoch number. Only PoW epoch happen's at PoS epoch end will have rewards information. Others will return null.
+
+#### Added at
+
+`Conflux-rust v2.0.0`
 
 #### Parameters
 
-1. `QUANTITY`: epoch number
+1. `QUANTITY`: PoW epoch number
 
 ```json
 params: [
