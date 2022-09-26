@@ -109,7 +109,7 @@ Below fields can not guarantee the verifiability
 
 ## pub/sub
 
-Ethereum event pub/sub is not supported now.
+Starting from v2.1.0 `newHeads` and `logs` is supported
 
 ## ETH RPC docs
 
