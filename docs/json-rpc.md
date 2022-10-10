@@ -2006,6 +2006,7 @@ Response
 ## Related Topics
 
 * [JSON-RPC specification](https://github.com/conflux-chain/jsonrpc-spec)
+* [JSON-RPC changelog](https://github.com/Conflux-Chain/conflux-rust/blob/master/changelogs/JSONRPC.md)
 * [Nodes and clients](https://github.com/conflux-chain/conflux-rust)
 * [JavaScript APIs](https://github.com/conflux-chain/js-conflux-sdk)
 * [Backend APIs](https://github.com/conflux-chain/go-conflux-sdk)
