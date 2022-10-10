@@ -53,12 +53,12 @@ The Conflux EVM space implements the Web3 JSON-RPC protocol.
 | trace_filter | ✅ | Parity RPC  |
 | trace_transaction | ✅ | Parity RPC  |
 | eth_feeHistory | ❌ | |
-| eth_getFilterChanges | ❌ | |
-| eth_getFilterLogs | ❌ | |
-| eth_newBlockFilter | ❌ | |
-| eth_newFilter | ❌ | |
-| eth_newPendingTransactionFilter | ❌ | |
-| eth_uninstallFilter | ❌ | |
+| eth_getFilterChanges | ✅ | Supported at v2.1.1 |
+| eth_getFilterLogs | ✅ | Supported at v2.1.1 |
+| eth_newBlockFilter | ✅ | Supported at v2.1.1 |
+| eth_newFilter | ✅ | Supported at v2.1.1 |
+| eth_newPendingTransactionFilter | ✅ | Supported at v2.1.1 |
+| eth_uninstallFilter | ✅ | Supported at v2.1.1 |
 | net_listening | ❌ | |
 | net_peerCount | ❌ | |
 | eth_compileLLL | ❌ | |
@@ -90,6 +90,8 @@ Only `eth_getTransactionCount` method has supported `pending` tag. Other method 
 * eth_getCode
 * eth_getStorageAt
 * eth_call
+
+Note: filter related methods also not support `pending` tag
 
 ## Data verifiability
 
