@@ -2,7 +2,9 @@
 
 ## CrossSpaceCall Interface
 
-[CIP-90](https://github.com/Conflux-Chain/CIPs/blob/master/CIPs/cip-90.md) introduces a new internal contract: `CrossSpaceCall`. This contract is located at address `cfx:aaejuaaaaaaaaaaaaaaaaaaaaaaaaaaaa2sn102vjv` (`0x0888000000000000000000000000000000000006`) in the Core Space. `CrossSpaceCall` enables **CFX and data** to be transferred between the two spaces.
+[CIP-90](https://github.com/Conflux-Chain/CIPs/blob/master/CIPs/cip-90.md) introduces a new internal contract: `CrossSpaceCall`. This contract is located at address `cfx:aaejuaaaaaaaaaaaaaaaaaaaaaaaaaaaa2sn102vjv` (`0x0888000000000000000000000000000000000006`) `in the Core Space`. `CrossSpaceCall` enables **CFX and data** to be transferred between the two spaces.
+
+NOTE: The `CrossSpaceCall` contract is deployed in the Core Space. It can only be call from the Core Space.
 
 ```js
 // SPDX-License-Identifier: MIT
@@ -17,24 +19,54 @@ interface CrossSpaceCall {
 
     event Outcome(bool success);
 
-    // Create contract in eSpace
+    /**
+     * @dev Deploy a contract in eSpace
+     * @param init bytes -  The contract init bytecode
+     * @return bytes20 - The hex address of the deployed contract
+     */
     function createEVM(bytes calldata init) external payable returns (bytes20);
 
-    // Transfer CFX to eSpace address
+    /**
+     * @dev Transfer CFX from Core space to eSpace specify address. Transfer amount is specified by transaction value.
+     * @param to bytes20 - The hex address of the receiver address in eSpace
+     * @return output bytes
+     */
     function transferEVM(bytes20 to) external payable returns (bytes memory output);
 
-    // Call eSpace contract method
+    /**
+     * @dev Call eSpace contract method from Core space
+     * @param to bytes20 - The hex address of the contract in eSpace
+     * @param data bytes - The contract method call data
+     * @return output bytes - Method call result
+     */ 
     function callEVM(bytes20 to, bytes calldata data) external payable returns (bytes memory output);
 
+    /**
+     * @dev Static call eSpace contract method from Core space
+     * @param to bytes20 - The hex address of the contract in eSpace
+     * @param data bytes - The contract method call data
+     * @return output bytes - Method call result
+     */ 
     function staticCallEVM(bytes20 to, bytes calldata data) external view returns (bytes memory output);
 
-    // Widthdraw CFX from the sender's mapped account in eSpace
+    /**
+     * @dev Widthdraw CFX from eSpace mapped account's balance
+     * @param value uint256 - The amount of CFX to be withdrawn
+     */ 
     function withdrawFromMapped(uint256 value) external;
 
-    // Query eSpace mapped account's CFX balance
+    /**
+     * @dev Query eSpace mapped account's CFX balance
+     * @param addr address - The core address to query
+     * @return uint256 - Balance
+     */
     function mappedBalance(address addr) external view returns (uint256);
 
-    // Query eSpace mapped account's nonce
+    /**
+     * @dev Query eSpace mapped account's nonce
+     * @param addr address - The core address to query
+     * @return uint256 - Balance
+     * */ 
     function mappedNonce(address addr) external view returns (uint256);
 }
 ```
@@ -93,6 +125,9 @@ Example of using js-conflux-sdk (v2) to cross back CFX:
 ```js
 // Check above init code
 async function main() {
+  const mappedBalance = await CrossSpaceCall.mappedBalance(account.address);
+  console.log('Mapped account balance: ', Drip.toCFX(`${mappedBalance}`));
+
   const receipt = await CrossSpaceCall
     .withdrawFromMapped(Drip.fromCFX(1))
     .sendTransaction({
@@ -106,5 +141,9 @@ async function main() {
 main().catch(console.log);
 ```
 
-The above example is intended to demonstrate the technical details of transferring CFX between Conflux Core and Conflux eSpace. Users can use the [Space Bridge Dapp](https://evm.fluentwallet.com) to cross CFX directly through their wallets.
+The above example is intended to demonstrate the technical details of transferring CFX between Conflux Core and Conflux eSpace. Users can use the [Space Bridge Dapp](https://confluxhub.io/espace-bridge/cross-space) to cross CFX directly through their wallets.
 
+## Refers
+
+* [Mainnet Space Bridge](https://confluxhub.io/espace-bridge/cross-space)
+* [Testnet Space Bridge](https://test.confluxhub.io/espace-bridge/cross-space)
