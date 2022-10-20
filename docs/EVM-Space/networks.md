@@ -6,14 +6,16 @@ keywords:
   - endpoint
 ---
 
-## Hong Kong
+## Confura
+
+### Hong Kong
 
 Network  | Chain ID                | RPC Endpoint URL | Explorer 
 -------- | ----------------------- | ------------ |------------ 
 [Mainnet](#mainnet) | 1030 (0x406) | <https://evm.confluxrpc.com> | <https://evm.confluxscan.net> 
 [Testnet](#testnet) | 71 (0x47) | <https://evmtestnet.confluxrpc.com> | <https://evmtestnet.confluxscan.net> 
 
-## US East
+### US East
 
 Network  | Chain ID                | RPC Endpoint URL | Explorer 
 -------- | ----------------------- | ------------ |------------ 
@@ -21,7 +23,7 @@ Network  | Chain ID                | RPC Endpoint URL | Explorer
 [Testnet](#testnet) | 71 (0x47) | <https://evmtestnet.confluxrpc.org> | <https://evmtestnet.confluxscan.io> 
 
 
-## Rate Limits
+### Rate Limits
 
 To ensure the service availability, we've added several rate limiters (implemented with token bucket algorithm) to mitigrate against bursts of incoming traffic. Users who send many requests in quick succession may see error responses that show up as status code `429`.
 
@@ -44,6 +46,13 @@ Rate limiting can occur under a variety of conditions, but it’s most common in
 ### Other Notes
 
 * The `eth_getLogs` method no longer restrict the maximum gap between `from_block` and `to_block` for log query filter. Instead the query is now bounded with reasonable queryset size, 3s maximum running time and no more than 10,000 resultset size, under other circumstance you may need to narrow down your search condition.
+
+## Confura
+
+Network  | Chain ID                | RPC Endpoint URL | Explorer 
+-------- | ----------------------- | ------------ |------------ 
+[Mainnet](#mainnet) | 1030 (0x406) | <https://conflux-espace-public.unifra.io> | <https://evm.confluxscan.net> 
+
 
 ## Hardfork number
 
