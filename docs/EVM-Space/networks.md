@@ -36,6 +36,17 @@ To ensure the service availability, we've added several rate limiters (implement
 | eth_getTransactionCount | 50 | 500 | limits the number of `eth_getTransactionCount` requests per second |
 | eth_getBlockByNumber | 5 | 500 | limits the number of `eth_getBlockByNumber` requests per second |
 
+If you are in the demand for higher QPS need, please visit [Conflux Hub](https://test.confluxhub.io/payment/consumer/apps) to buy our VIP subscription (testnet supported only for the moment):
+
+| Method | QPS | Burst | Comment |
+| -------- | -------- | --------| -------- |
+| all | 200 | 1000 |  limits the number of all requests per second |
+| eth_getLogs | 20 | 20 | limits the number of `eth_getLogs` requests per second |
+| eth_call | 20 | 200 | limits the number of `eth_call` requests per second |
+| eth_sendRawTransaction | 50 | 500 | limits the number of `eth_sendRawTransaction` requests per second |
+| eth_getTransactionCount | 100 | 500 | limits the number of `eth_getTransactionCount` requests per second |
+| eth_getBlockByNumber | 20 | 50 | limits the number of `eth_getBlockByNumber` requests per second |
+
 ### Common causes and mitigations
 
 Rate limiting can occur under a variety of conditions, but it’s most common in these scenarios:
