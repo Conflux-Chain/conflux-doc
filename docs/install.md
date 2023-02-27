@@ -82,7 +82,9 @@ $ brew install openssl pkg-config cmake
 
 ### Windows
 
-Download and run the `rustup` installer from [this link](https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe). If there is not Visual Studio installed in the machine, it will also has a prompt where you can choose to install a community version. Following the installer you will have tool chain version `stable-x86_64-pc-windows-msvc` installed and the environment variable `PATH` updated.
+For some compatibility issues of `rocksdb`, we'll need Visual Studio 15 2017 installed ([installer link](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&rel=15)).
+
+Download and run the `rustup` installer from [this link](https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe). It will also has a prompt where you can choose to install a community version. Following the installer you will have tool chain version `stable-x86_64-pc-windows-msvc` installed and the environment variable `PATH` updated.
 
 You also need to have `git`, `cmake`, `openssl`, and `clang` installed. `git` can be downloaded from [Git for Windows](https://git-scm.com/download/win), and `cmake` can be downloaded from [cmake-3.25.2](https://github.com/Kitware/CMake/releases/download/v3.25.2/cmake-3.25.2-windows-x86_64.msi). `clang` can be installed with LLVM. Pre-built binaries can be downloaded from [Download LLVM](https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.7/LLVM-15.0.7-win64.exe). Make sure to choose to add `LLVM` and `cmake` to the system PATH during the installation process. `openssl` can be downloaded from [Win64 OpenSSL v3.0.8](https://slproweb.com/download/Win64OpenSSL-3_0_8.exe). Make sure to choose to copy the OpenSSL DLL to the Windows system directory. And you also need to set the environment variable `OPENSSL_DIR` to the installation directory, which by default is `C:\Program Files\OpenSSL-Win64`.
 
