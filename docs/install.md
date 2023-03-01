@@ -97,7 +97,7 @@ After installing the dependencies mentioned above, now you can clone our reposit
 # download Conflux code
 $ git clone https://github.com/Conflux-Chain/conflux-rust
 $ cd conflux-rust
-$ git checkout v2.0.0
+$ git checkout v2.2.1-fixpos
 
 
 # build in release mode
